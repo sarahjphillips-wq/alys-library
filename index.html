@@ -41,7 +41,7 @@
     height:100vh;height:100dvh;
     display:flex;flex-direction:column;
   }
-  .wrap{max-width:960px;margin:0 auto;padding:14px 20px 14px;position:relative;z-index:1;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;}
+  .wrap{max-width:960px;margin:0 auto;padding:14px 20px 14px;position:relative;z-index:1;flex:1 1 auto;display:flex;flex-direction:column;}
   #bg-scrim{
     position:fixed;inset:0;z-index:0;pointer-events:none;
     background:rgba(234,245,251,0.74);
@@ -210,7 +210,7 @@
   .btn-small.primary{background:linear-gradient(160deg,var(--accent-bright),var(--accent) 70%,#4d7a94);color:#fff;border:none;box-shadow:0 3px 10px rgba(126,169,194,0.4);}
 
   /* SHELF SECTION */
-  .shelf-section{margin-top:10px;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;}
+  .shelf-section{margin-top:10px;flex:1 1 auto;display:flex;flex-direction:column;}
   .shelf-heading{
     display:flex;align-items:baseline;gap:8px;margin-bottom:6px;padding:0 4px;
     flex-shrink:0;
@@ -247,8 +247,8 @@
     display:flex;
     align-items:flex-end;
     gap:3px;
-    min-height:230px;
-    padding:20px 16px 0;
+    min-height:110px;
+    padding:10px 16px 0;
     position:relative;
   }
   .bookcase .shelf::before, .bookcase .shelf::after{
@@ -345,7 +345,7 @@
   .spine-tab.st-want{background:#c9a13b;}
   .spine-tab.st-reading{background:#4a86ad;}
   .add-spine{
-    flex:0 0 auto;width:44px;height:150px;
+    flex:0 0 auto;width:36px;height:95px;
     border:none;
     border-radius:6px;
     background:linear-gradient(160deg,#9cc6dd,var(--accent) 60%,#3d6c86);
@@ -354,7 +354,7 @@
     font-size:1.4rem;color:#fff;font-weight:700;
     cursor:pointer;
     align-self:flex-end;
-    margin-bottom:16px;
+    margin-bottom:8px;
   }
   .add-spine:hover{filter:brightness(1.08);}
   .add-spine:active{transform:translateY(-2px);}
@@ -423,7 +423,7 @@
     background:rgba(255,255,255,0.15);
     padding:6px 10px 0;
     box-shadow:inset 0 3px 8px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.1);
-    flex:1 1 auto;min-height:0;
+    flex:1 1 auto;
   }
   .bookcase .shelf-scroll{
     border-bottom:2px solid rgba(111,135,152,0.3);
@@ -604,7 +604,7 @@
   .btn-ghost{background:none;border:1.5px solid #b9c6cc;color:#5a7484;}
 
   footer{text-align:center;margin-top:20px;flex-shrink:0;}
-  #shelf-sections{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;}
+  #shelf-sections{flex:1 1 auto;display:flex;flex-direction:column;}
   .footer-note{font-family:var(--serif);font-size:0.68rem;color:rgba(28,43,58,0.5);letter-spacing:0.05em;}
   .bottom-bar{
     flex-shrink:0;
@@ -1147,7 +1147,7 @@ function colorForId(id){
 }
 function heightForId(id){
   let h=0; for(let i=0;i<id.length;i++){h=(h*17+id.charCodeAt(i))>>>0;}
-  return 140 + (h % 55);
+  return 65 + (h % 35);
 }
 
 function esc(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
@@ -1856,11 +1856,9 @@ function renderShelf(){
   const bookcaseEl = document.getElementById('bookcase-live');
   const SPINE_STEP = 41; // 38px spine + 3px gap
   const ORNAMENT_STEP = 67; // 64px ornament + 3px gap
-  const ROW_STEP = 220; // tallest spine (~195px) + shelf padding/border
+  const ROWS_PER_PAGE = 4; // fixed, matches the empty-state bookcase regardless of screen size
   const availWidth = bookcaseEl.clientWidth - 20; // minus left+right padding
-  const availHeight = bookcaseEl.clientHeight;
   const capacity = Math.max(1, Math.floor(availWidth / SPINE_STEP)); // used for capacity indicator text
-  const rowsPerPage = Math.max(1, Math.floor(availHeight / ROW_STEP));
 
   const sorted = sortBooks(sectionBooks);
   const decorated = withOrnaments(sorted);
@@ -1884,7 +1882,7 @@ function renderShelf(){
     lastRowCount < capacity ? `${lastRowCount}/${capacity} on last shelf` : `last shelf full — next book starts a new one`;
 
   const pages = [];
-  for(let i=0;i<rows.length;i+=rowsPerPage){ pages.push(rows.slice(i,i+rowsPerPage)); }
+  for(let i=0;i<rows.length;i+=ROWS_PER_PAGE){ pages.push(rows.slice(i,i+ROWS_PER_PAGE)); }
   if(currentPage >= pages.length) currentPage = pages.length-1;
   if(currentPage < 0) currentPage = 0;
 
@@ -1901,7 +1899,7 @@ function renderShelf(){
   }
 
   // add-tile always appears on the current page, not just the last page overall
-  const ADD_TILE_STEP = 47; // 44px add tile + 3px gap
+  const ADD_TILE_STEP = 39; // 36px add tile + 3px gap
   const currentPageRows = (pages[currentPage] || []).map(r=>[...r]);
   const lastRow = currentPageRows[currentPageRows.length-1];
   const lastRowWidth = lastRow ? lastRow.reduce((sum,item)=> sum + (item.__ornament ? ORNAMENT_STEP : SPINE_STEP), 0) : 0;
@@ -1912,9 +1910,8 @@ function renderShelf(){
   }
 
   // pad out with empty shelf rows so the cabinet always looks fully furnished —
-  // matches the empty-state bookcase, which always shows 4 shelves regardless of screen height
-  const MIN_SHELF_ROWS = 4;
-  while(currentPageRows.length < Math.max(rowsPerPage, MIN_SHELF_ROWS)){
+  // always exactly 4, matching the empty-state bookcase, regardless of screen size
+  while(currentPageRows.length < ROWS_PER_PAGE){
     currentPageRows.push([]);
   }
 
