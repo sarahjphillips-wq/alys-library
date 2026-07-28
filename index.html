@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#bfe3f0">
 <title>Alys's Library</title>
-<link rel="icon" type="image/png" sizes="32x32" href="alys-library-favicon-32.png">
-<link rel="apple-touch-icon" href="alys-library-apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/alys-library-favicon-32.png">
+<link rel="apple-touch-icon" href="icons/alys-library-apple-touch-icon.png">
 <link rel="manifest" href="alys-library-manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cinzel+Decorative:wght@700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1500,11 +1500,14 @@ function withOrnaments(list){
   const out = [];
   list.forEach((b,i)=>{
     out.push(b);
-    if((i+1) % 5 === 0){
-      const orn = userOrnaments[Math.floor(i/5) % userOrnaments.length];
+    if((i+1) % 3 === 0){
+      const orn = userOrnaments[Math.floor(i/3) % userOrnaments.length];
       out.push({__ornament: orn});
     }
   });
+  if(list.length && list.length < 3){
+    out.push({__ornament: userOrnaments[0]});
+  }
   return out;
 }
 
@@ -1906,6 +1909,13 @@ function renderShelf(){
     lastRow.push({__addTile:true});
   } else {
     currentPageRows.push([{__addTile:true}]);
+  }
+
+  // pad out with empty shelf rows so the cabinet always looks fully furnished —
+  // matches the empty-state bookcase, which always shows 4 shelves regardless of screen height
+  const MIN_SHELF_ROWS = 4;
+  while(currentPageRows.length < Math.max(rowsPerPage, MIN_SHELF_ROWS)){
+    currentPageRows.push([]);
   }
 
   currentPageRows.forEach(rowItems=>{
