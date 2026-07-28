@@ -1911,8 +1911,9 @@ function renderShelf(){
 
   // pad out with empty shelf rows so the cabinet always looks fully furnished —
   // always exactly 4, matching the empty-state bookcase, regardless of screen size
+  const GHOST_FILLER_HEIGHTS = [72,58,80,64];
   while(currentPageRows.length < ROWS_PER_PAGE){
-    currentPageRows.push([]);
+    currentPageRows.push(GHOST_FILLER_HEIGHTS.map(h=>({__ghostFiller:h})));
   }
 
   currentPageRows.forEach(rowItems=>{
@@ -1925,6 +1926,13 @@ function renderShelf(){
     bookcaseEl.appendChild(scrollDiv);
 
     rowItems.forEach(item=>{
+      if(item.__ghostFiller){
+        const g = document.createElement('div');
+        g.className='spine ghost';
+        g.style.height = item.__ghostFiller+'px';
+        shelfDiv.appendChild(g);
+        return;
+      }
       if(item.__ornament){
         const orn = document.createElement('div');
         const data = item.__ornament;
