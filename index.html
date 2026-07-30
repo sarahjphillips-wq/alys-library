@@ -2805,9 +2805,11 @@ function stopScan(){
   overlay.classList.remove('show');
   if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream=null; }
 }
+const GOOGLE_BOOKS_API_KEY = 'AIzaSyAwMgLKNxQI3hnVFIWlH6cinPCYTe-fErk';
+
 async function lookupIsbn(isbn){
   try{
-    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(isbn)}`);
+    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(isbn)}&key=${GOOGLE_BOOKS_API_KEY}`);
     const data = await res.json();
     const item = (data.items||[])[0];
     if(!item){ return; }
@@ -2835,7 +2837,7 @@ async function lookupByTitle(){
   if(authorEl.value.trim() && isbnEl.value.trim() && pagesEl.value.trim() && pendingCover){ statusEl.textContent=''; return; }
   statusEl.textContent = 'Searching…';
   try{
-    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}`);
+    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}&key=${GOOGLE_BOOKS_API_KEY}`);
     if(!res.ok){ statusEl.textContent = `Search failed (${res.status})`; return; }
     const data = await res.json();
     const item = (data.items||[])[0];
