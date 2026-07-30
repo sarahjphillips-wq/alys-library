@@ -75,12 +75,12 @@
   /* HEADER */
   header{
     flex-shrink:0;
-    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
     background:linear-gradient(135deg,var(--ink3),var(--steel));
     padding:calc(10px + env(safe-area-inset-top)) 20px 10px;
     box-shadow:0 4px 14px rgba(0,0,0,0.25);
   }
-  .header-left{display:flex;align-items:center;gap:10px;text-align:left;min-width:0;}
+  .header-left{display:flex;align-items:center;gap:10px;text-align:left;min-width:0;flex:1 1 0;}
   .crest{font-size:1.9rem;display:inline-block;filter:drop-shadow(0 0 8px rgba(0,0,0,0.3));}
   h1{
     font-family:var(--display);
@@ -188,7 +188,7 @@
   .controls{
     display:flex;gap:10px;align-items:flex-end;margin:0 0 8px;flex-wrap:wrap;
   }
-  .controls-compact{display:flex;gap:8px;align-items:center;}
+  .controls-compact{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
   .ctrl-group{display:flex;flex-direction:column;}
   .ctrl-caption{
     font-family:var(--serif);font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;
