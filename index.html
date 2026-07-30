@@ -41,7 +41,7 @@
     height:100vh;height:100dvh;
     display:flex;flex-direction:column;
   }
-  .wrap{max-width:960px;margin:0 auto;padding:14px 20px 14px;position:relative;z-index:1;flex:1 1 auto;display:flex;flex-direction:column;}
+  .wrap{max-width:960px;margin:0 auto;padding:14px 20px 14px;position:relative;z-index:1;flex:1 1 auto;display:flex;flex-direction:column;min-width:0;width:100%;}
   #bg-scrim{
     position:fixed;inset:0;z-index:0;pointer-events:none;
     background:rgba(234,245,251,0.74);
@@ -66,7 +66,6 @@
     background:rgba(255,255,255,0.72);border:1px solid rgba(22,34,44,0.25);
     border-radius:14px;color:#16222c;
   }
-  body.photo-active .reading-now-wrap{background:rgba(255,255,255,0.72);border-color:rgba(22,34,44,0.3);}
   body.photo-active .gap-filler{color:rgba(22,34,44,0.4);}
 
   /* HEADER */
@@ -157,6 +156,24 @@
   .series-card .sc-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent-bright),var(--accent));}
   .series-card .sc-meta{font-size:0.72rem;color:#5a7484;margin-top:4px;}
 
+  .wishlist-row{
+    display:flex;align-items:center;gap:10px;
+    background:rgba(255,255,255,0.55);border:1px solid rgba(111,135,152,0.3);border-radius:12px;
+    padding:12px 14px;margin-bottom:10px;
+  }
+  .wishlist-row-text{flex:1;cursor:pointer;min-width:0;}
+  .wishlist-row-title{font-family:var(--serif);font-size:0.95rem;color:var(--text-dark);}
+  .wishlist-row-meta{font-size:0.72rem;color:#5a7484;margin-top:3px;}
+  .wishlist-row-notes{font-size:0.72rem;color:#5a7484;margin-top:3px;font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .wishlist-got-it{
+    flex-shrink:0;background:var(--accent,#4a86ad);color:#fff;border:none;border-radius:8px;
+    padding:8px 10px;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap;
+  }
+  .wishlist-remove{
+    flex-shrink:0;background:none;color:#c1573f;border:1.5px solid rgba(193,87,63,0.4);border-radius:8px;
+    width:32px;height:32px;font-size:0.85rem;cursor:pointer;
+  }
+
   .stats-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
   .stats-label{width:120px;flex-shrink:0;font-size:0.78rem;color:var(--text-dark);}
   .stats-bar-track{flex:1;height:16px;border-radius:6px;background:rgba(111,135,152,0.15);overflow:hidden;}
@@ -197,7 +214,7 @@
   .search-box{flex:1;min-width:160px;}
   .search-box::placeholder{color:rgba(28,43,58,0.45);}
   .search-box:focus, select.ctrl-select:focus{border-color:var(--steel);background:rgba(255,255,255,0.9);}
-  select.ctrl-select{padding-right:24px;background-image:linear-gradient(45deg,transparent 50%,var(--steel) 50%),linear-gradient(135deg,var(--steel) 50%,transparent 50%);background-position:calc(100% - 12px) center, calc(100% - 7px) center;background-size:5px 5px,5px 5px;background-repeat:no-repeat;}
+  select.ctrl-select{padding-right:24px;min-width:0;background-image:linear-gradient(45deg,transparent 50%,var(--steel) 50%),linear-gradient(135deg,var(--steel) 50%,transparent 50%);background-position:calc(100% - 12px) center, calc(100% - 7px) center;background-size:5px 5px,5px 5px;background-repeat:no-repeat;}
 
   /* GENRE / SHELF TABS */
   .tab-scroll{margin-top:4px;}
@@ -251,40 +268,34 @@
     padding:10px 16px 0;
     position:relative;
   }
+  .bookcase .shelf-scroll .shelf{flex:1 1 auto;}
   .bookcase .shelf::before, .bookcase .shelf::after{
-    content:'';
-    position:absolute;
-    bottom:14px;
-    width:8px;height:28px;
-    background:linear-gradient(180deg,#8a98a2,#5f6d76);
-    border-radius:2px;
-    box-shadow:0 1px 2px rgba(0,0,0,0.3);
-    z-index:1;
+    display:none;
   }
   .bookcase .shelf::before{left:2px;}
   .bookcase .shelf::after{right:2px;}
   .bookcase.empty-cabinet .shelf::before, .bookcase.empty-cabinet .shelf::after{
-    height:16px;bottom:8px;width:6px;
+    height:14px;bottom:8px;width:4px;
   }
   .shelf-plank{
-    position:absolute;left:0;right:0;bottom:0;height:16px;
-    background:linear-gradient(180deg,#c7d2d8 0%,#9aa8b0 55%,#7c8b94 100%);
+    position:absolute;left:0;right:0;bottom:0;height:22px;
+    background:linear-gradient(180deg,#ffffff 0%,#ffffff 40%,#f0f0f0 75%,#e2e2e2 100%);
     border-radius:0 0 4px 4px;
-    box-shadow:0 6px 14px rgba(0,0,0,0.25),inset 0 2px 2px rgba(255,255,255,0.3);
+    box-shadow:0 8px 16px rgba(0,0,0,0.3),inset 0 2px 2px rgba(255,255,255,0.9),inset 0 -3px 3px rgba(0,0,0,0.1);
   }
   .shelf-plank::before{
     content:'';position:absolute;left:0;right:0;top:0;height:3px;
-    background:linear-gradient(90deg,rgba(255,255,255,0.5),rgba(255,255,255,0.1),rgba(255,255,255,0.5));
+    background:linear-gradient(90deg,rgba(255,255,255,0.9),rgba(230,230,230,0.6),rgba(255,255,255,0.9));
   }
   .spine{
     position:relative;
     flex:0 0 auto;
-    width:38px;
+    width:14px;
     border-radius:3px 3px 1px 1px;
     display:flex;
     align-items:flex-start;
     justify-content:center;
-    padding-top:20px;
+    padding-top:7px;
     cursor:pointer;
     box-shadow:1px 0 0 rgba(0,0,0,0.15) inset, -1px 0 3px rgba(0,0,0,0.2);
     transition:transform 0.15s ease;
@@ -315,15 +326,17 @@
   }
   .got-it-btn:active{transform:translateX(-50%) scale(0.92);}
   .spine-title{
-    writing-mode:vertical-rl;
-    text-orientation:mixed;
+    position:absolute;
+    left:50%;
+    transform:translate(-50%,-50%) rotate(90deg);
+    transform-origin:center center;
     font-family:var(--serif);
     font-weight:600;
-    font-size:0.7rem;
+    font-size:0.52rem;
     letter-spacing:0.02em;
     color:rgba(244,248,251,0.95);
     text-shadow:0 1px 1px rgba(0,0,0,0.25);
-    max-height:100%;
+    max-width:600px;
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
@@ -338,26 +351,36 @@
   }
   .spine-tab{
     position:absolute;top:-9px;left:50%;transform:translateX(-50%);
-    width:22px;height:11px;border-radius:3px 3px 0 0;
+    width:15px;height:11px;border-radius:3px 3px 0 0;
     box-shadow:0 -1px 3px rgba(0,0,0,0.2);
   }
   .spine-tab.st-read{background:#5b8a63;}
   .spine-tab.st-want{background:#c9a13b;}
   .spine-tab.st-reading{background:#4a86ad;}
+  .spine-tab.st-rereading{background:#8a5ba8;}
+  .spine-tab.st-onhold{background:#c98a3a;}
+  .spine-tab.st-dnf{background:#8a5a52;}
+  .spine-tab.st-own{background:#8a97a3;}
+  .spine-tab.st-borrowed{background:#3a9a8a;}
   .add-spine{
-    flex:0 0 auto;width:36px;height:95px;
+    flex:0 0 auto;width:18px;height:95px;
     border:none;
     border-radius:6px;
-    background:linear-gradient(160deg,#9cc6dd,var(--accent) 60%,#3d6c86);
-    box-shadow:0 3px 10px rgba(61,108,134,0.4);
+    background:linear-gradient(160deg,#7dd8f0,var(--amethyst) 60%,#2e7a94);
+    box-shadow:0 3px 10px rgba(79,168,201,0.5);
     display:flex;align-items:center;justify-content:center;
     font-size:1.4rem;color:#fff;font-weight:700;
     cursor:pointer;
     align-self:flex-end;
     margin-bottom:8px;
+    animation:add-spine-pulse 2.2s ease-in-out infinite;
   }
   .add-spine:hover{filter:brightness(1.08);}
   .add-spine:active{transform:translateY(-2px);}
+  @keyframes add-spine-pulse{
+    0%,100%{box-shadow:0 3px 10px rgba(79,168,201,0.5);}
+    50%{box-shadow:0 3px 18px rgba(79,168,201,0.9);}
+  }
   .ornament{
     flex:0 0 auto;width:64px;
     display:flex;align-items:flex-end;justify-content:center;
@@ -366,34 +389,69 @@
     z-index:2;cursor:pointer;
   }
   .ornament:active{transform:scale(0.94);}
-  .ornament.ornament-compact{width:38px;font-size:1.8rem;padding-bottom:4px;}
+  .ornament.ornament-compact{width:48px;height:88px;font-size:3rem;padding-bottom:6px;}
   .ornament.ornament-photo{
     width:58px;height:58px;margin-bottom:16px;
     background-size:cover;background-position:center;
     border-radius:8px;border:2px solid rgba(255,255,255,0.6);
     box-shadow:0 3px 8px rgba(0,0,0,0.35);
   }
-  .ornament.ornament-compact.ornament-photo{width:32px;height:32px;margin-bottom:6px;border-width:1.5px;}
+  .ornament.ornament-compact.ornament-photo{width:48px;height:88px;margin-bottom:0;border-width:1.5px;}
+  .ornament.ornament-ghost{
+    background:none !important;
+    border:2px dashed rgba(111,135,152,0.5);
+    border-radius:8px;
+    box-shadow:none;filter:none;
+    color:rgba(58,90,108,0.55);
+    font-size:1.4rem;font-weight:600;
+    align-items:center;
+  }
 
   .ornament-grid{
     display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 16px;
   }
   .ornament-tile{
-    position:relative;width:52px;height:52px;
+    position:relative;width:52px;height:52px;margin-top:16px;
     background:rgba(255,255,255,0.55);border:1.5px solid rgba(111,135,152,0.35);
     border-radius:10px;display:flex;align-items:center;justify-content:center;
     font-size:1.6rem;background-size:cover;background-position:center;
     cursor:pointer;
   }
+  .ornament-slot-label{
+    position:absolute;top:-16px;left:0;right:0;text-align:center;
+    font-size:0.6rem;color:#5a7484;font-weight:600;letter-spacing:0.02em;
+  }
+  .ornament-tile-empty{
+    background:none;border:2px dashed rgba(111,135,152,0.5);
+    color:rgba(58,90,108,0.55);font-size:1.2rem;
+  }
   .ornament-tile.selected{
     border:2.5px solid var(--amethyst);
     box-shadow:0 0 0 3px rgba(79,168,201,0.25);
+  }
+  .ornament-tile.flash{ animation:ornament-flash 1.6s ease-out; }
+  @keyframes ornament-flash{
+    0%{ box-shadow:0 0 0 4px rgba(255,210,80,0.9); }
+    100%{ box-shadow:0 0 0 4px rgba(255,210,80,0); }
   }
   .ornament-tile .ornament-remove{
     position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;
     background:#c1573f;color:#fff;border:none;font-size:0.7rem;line-height:1;cursor:pointer;
     box-shadow:0 2px 4px rgba(0,0,0,0.3);
   }
+  .ornament-tile .ornament-replace{
+    position:absolute;top:-6px;left:-6px;width:20px;height:20px;border-radius:50%;
+    background:#4a86ad;color:#fff;border:none;font-size:0.6rem;line-height:1;cursor:pointer;
+    box-shadow:0 2px 4px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;
+  }
+  .ornament-tile .ornament-move{
+    position:absolute;bottom:-6px;width:20px;height:20px;border-radius:50%;
+    background:var(--steel,#5a7484);color:#fff;border:none;font-size:0.75rem;line-height:1;cursor:pointer;
+    box-shadow:0 2px 4px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;
+  }
+  .ornament-tile .ornament-move:disabled{opacity:0.3;cursor:default;}
+  .ornament-tile .ornament-move-left{left:-6px;}
+  .ornament-tile .ornament-move-right{right:-6px;}
   .ornament-empty-note{font-size:0.8rem;color:#5a7484;font-style:italic;margin:8px 0 16px;}
   .ornament-emoji-picker{
     display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px;
@@ -418,20 +476,23 @@
 
   /* BOOKCASE (shared frame for empty + real library) */
   .bookcase{
-    border:3px solid rgba(111,135,152,0.4);
+    border:6px solid #ffffff;
     border-radius:8px;
     background:rgba(255,255,255,0.15);
     padding:6px 10px 0;
-    box-shadow:inset 0 3px 8px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow:inset 0 3px 8px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.2), 0 0 0 2px rgba(60,80,95,0.5);
     flex:1 1 auto;
+    display:flex;flex-direction:column;
   }
   .bookcase .shelf-scroll{
-    border-bottom:2px solid rgba(111,135,152,0.3);
+    flex:1 1 0;
+    display:flex;flex-direction:column;
+    border-bottom:2px solid rgba(255,255,255,0.6);
     overflow-x:hidden;
   }
   .bookcase .shelf-scroll:last-child{border-bottom:none;}
 
-  /* empty-state only: flex-fill rows to exactly occupy available space */
+  /* empty-state only: extra reset (real bookcase now shares the same flex row-fill approach) */
   .bookcase.empty-cabinet{
     display:flex;flex-direction:column;
   }
@@ -490,7 +551,7 @@
     padding:0;
     animation:page-in 0.2s ease-out;
     display:flex;flex-direction:column;
-    overflow-y:auto;
+    overflow:hidden;
   }
   #overlay .sheet::before, #settings-overlay .sheet::before, #stats-overlay .sheet::before, #picker-overlay .sheet::before, #genre-colors-overlay .sheet::before, #ornaments-overlay .sheet::before{display:none;}
 
@@ -509,7 +570,7 @@
     color:var(--parchment);border-radius:50%;width:34px;height:34px;
     font-size:1rem;cursor:pointer;flex-shrink:0;position:static;float:none;
   }
-  .screen-content{flex:1 1 auto;padding:16px 22px calc(16px + env(safe-area-inset-bottom));}
+  .screen-content{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 22px calc(16px + env(safe-area-inset-bottom));}
   .screen-footer{
     flex-shrink:0;
     display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
@@ -673,21 +734,19 @@
   <div class="header-actions">
     <button class="stats-btn" onclick="openStats()" title="Reading stats">📊</button>
     <button class="settings-btn" onclick="openSettings()" title="Background & settings">⚙️</button>
+    <button class="settings-btn" onclick="pickNextRead()" title="Pick my next read">🎲</button>
   </div>
 </header>
 <div class="wrap">
-  <div id="reading-now-wrap" class="panel" style="display:none;">
-    <div class="panel-label">Currently reading</div>
-    <div class="reading-now-row" id="reading-now-row"></div>
-  </div>
 
   <div id="shelf-sections"></div>
   <div id="series-view" style="display:none;flex-shrink:0;"></div>
+  <div id="wishlist-view" style="display:none;flex-shrink:0;"></div>
 
   <section class="panel">
     <div class="controls-compact">
       <button class="search-toggle-btn" id="search-toggle-btn" onclick="toggleSearchBar()" title="Find a book">🔍</button>
-      <button class="search-toggle-btn" onclick="pickNextRead()" title="Pick my next read">🎲</button>
+      <button class="search-toggle-btn" onclick="openAddWishlist()" title="Add to wishlist">🛒</button>
       <select class="ctrl-select" id="sort-select" onchange="currentPage=0;renderShelf()" title="Sort by" style="flex:1;">
         <option value="custom" selected>Custom order</option>
         <option value="title">Title A–Z</option>
@@ -709,12 +768,23 @@
 
 
 <!-- QUICK ACTIONS -->
+<div class="overlay" id="confirm-overlay">
+  <div class="sheet" style="text-align:center;">
+    <p id="confirm-message" style="font-size:0.95rem;line-height:1.4;margin:10px 0 20px;"></p>
+    <div class="sheet-actions" style="flex-direction:column;">
+      <button class="btn btn-danger" id="confirm-yes-btn" onclick="confirmYes()">Yes</button>
+      <button class="btn btn-ghost" onclick="confirmNo()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="quick-actions-overlay">
   <div class="sheet" style="text-align:center;">
     <button class="sheet-close" onclick="closeQuickActions()">✕</button>
     <h2 style="clear:both;">Add to your shelf</h2>
     <div class="sheet-actions" style="flex-direction:column;">
       <button class="btn btn-primary" onclick="closeQuickActions(); openAdd();">+ Add a book</button>
+      <button class="btn btn-ghost" onclick="closeQuickActions(); openAddWishlist();">🛒 Add to wishlist</button>
       <button class="btn btn-ghost" onclick="closeQuickActions(); scanBarcode();">📷 Scan barcode</button>
     </div>
   </div>
@@ -747,8 +817,8 @@
           <input type="text" id="f-title" placeholder="The book's title">
         </div>
       </div>
-      <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none" onchange="onPhotoChosen(event)">
-      <div class="photo-hint" onclick="document.getElementById('photo-input').click()">📷 Tap the cover to take or choose a photo of her actual book</div>
+      <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="onPhotoChosen(event)">
+      <div class="photo-hint" onclick="document.getElementById('photo-input').click()">📷 Tap the cover to take or choose a photo of your book</div>
       <div class="field-label">Author</div>
       <input type="text" id="f-author" placeholder="Who wrote it">
 
@@ -784,76 +854,115 @@
         </div>
       </div>
 
-      <div class="field-label">Status</div>
-      <select class="field-select" id="f-status" onchange="onStatusChange()">
-        <option value="reading">Currently reading</option>
-        <option value="read">Read it</option>
-        <option value="want-to-read">Own it, want to read</option>
-        <option value="need-to-get">Don't own it — need to get</option>
-      </select>
-      <div id="progress-wrap" style="display:none;margin-top:10px;" class="field-row">
-        <div>
-          <div class="field-label" style="margin-top:0;">Current page</div>
-          <input type="number" id="f-current-page" min="0" placeholder="0">
+      <div class="wishlist-hide">
+        <div class="field-label">Status</div>
+        <select class="field-select" id="f-status" onchange="onStatusChange()">
+          <option value="reading">Currently reading</option>
+          <option value="rereading">Re-reading</option>
+          <option value="on-hold">On hold / paused</option>
+          <option value="read">Read it</option>
+          <option value="dnf">Did not finish</option>
+          <option value="own">Own it</option>
+          <option value="want-to-read">Own it, want to read</option>
+          <option value="borrowed">Borrowed</option>
+          <option value="need-to-get">Don't own it — need to get</option>
+        </select>
+        <div id="progress-wrap" style="display:none;margin-top:10px;" class="field-row">
+          <div>
+            <div class="field-label" style="margin-top:0;">Current page</div>
+            <input type="number" id="f-current-page" min="0" placeholder="0">
+          </div>
+          <div>
+            <div class="field-label" style="margin-top:0;">Total pages</div>
+            <input type="number" id="f-total-pages" min="0" placeholder="0">
+          </div>
         </div>
-        <div>
-          <div class="field-label" style="margin-top:0;">Total pages</div>
-          <input type="number" id="f-total-pages" min="0" placeholder="0">
+        <div id="date-read-wrap" style="display:none;margin-top:10px;">
+          <div class="field-label" style="margin-top:0;">Date finished</div>
+          <input type="date" id="f-date-read">
         </div>
-      </div>
-      <div id="date-read-wrap" style="display:none;margin-top:10px;">
-        <div class="field-label" style="margin-top:0;">Date finished</div>
-        <input type="date" id="f-date-read">
       </div>
 
       <div class="field-label">ISBN</div>
       <input type="text" id="f-isbn" placeholder="Filled automatically by search or scan">
 
-      <div class="field-label">How much do you love it?</div>
-      <div class="flame-row" id="flame-row">
-        <span class="flame" data-v="1">❤️</span>
-        <span class="flame" data-v="2">❤️</span>
-        <span class="flame" data-v="3">❤️</span>
-        <span class="flame" data-v="4">❤️</span>
-        <span class="flame" data-v="5">❤️</span>
+      <div class="wishlist-hide">
+        <div class="field-label">How much do you love it?</div>
+        <div class="flame-row" id="flame-row">
+          <span class="flame" data-v="1">❤️</span>
+          <span class="flame" data-v="2">❤️</span>
+          <span class="flame" data-v="3">❤️</span>
+          <span class="flame" data-v="4">❤️</span>
+          <span class="flame" data-v="5">❤️</span>
+        </div>
       </div>
 
-      <div class="field-label">Would you recommend it?</div>
-      <select class="field-select" id="f-recommend">
-        <option value="">— Choose one —</option>
-        <option value="yes">Yes, loved it</option>
-        <option value="maybe">Maybe, depends on the reader</option>
-        <option value="no">No, not for me</option>
-      </select>
+      <div class="wishlist-hide">
+        <div class="field-label">Would you recommend it?</div>
+        <select class="field-select" id="f-recommend">
+          <option value="">— Choose one —</option>
+          <option value="yes">Yes, loved it</option>
+          <option value="maybe">Maybe, depends on the reader</option>
+          <option value="no">No, not for me</option>
+        </select>
+      </div>
 
-      <div class="field-label">Vibe / mood tags</div>
-      <div class="chip-row" id="mood-row"></div>
+      <div class="wishlist-hide">
+        <div class="field-label">Vibe / mood tags</div>
+        <div class="chip-row" id="mood-row"></div>
+      </div>
 
-      <div class="field-label">Favorite quote</div>
-      <textarea id="f-quote" rows="2" placeholder="A line worth remembering..."></textarea>
+      <div class="wishlist-hide">
+        <div class="field-label">Favorite quote</div>
+        <textarea id="f-quote" rows="2" placeholder="A line worth remembering..."></textarea>
+      </div>
 
       <div class="field-label">Anything else</div>
       <textarea id="f-notes" rows="3" placeholder="What you think of it, your favourite bit, anything at all..."></textarea>
 
-      <div class="keepsake-toggle">
-        <input type="checkbox" id="f-keepsake">
-        <label for="f-keepsake">✨ This copy is special — decorated, has a figurine with it, a signed/rare edition, or anything else that makes it one-of-a-kind</label>
+      <div class="wishlist-hide">
+        <div class="field-label">Ornament after this book</div>
+        <div class="byline" style="margin:0 0 8px;">Pins a little decoration right after this book on the shelf, wherever it sorts</div>
+        <div class="cover-row">
+          <div class="cover-preview" id="book-ornament-preview" onclick="toggleBookOrnamentPicker()">➕</div>
+          <div style="flex:1;">
+            <button class="btn-small" id="book-ornament-remove-btn" style="display:none;" onclick="removeBookOrnament()">Remove ornament</button>
+          </div>
+        </div>
+        <div id="book-ornament-picker" style="display:none;margin-top:10px;">
+          <div style="font-size:0.78rem;color:#5a7484;margin:0 0 6px;">Pick any emoji — tap the box, then use your keyboard's 🌐/😀 icon</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="text" id="book-ornament-custom-input" placeholder="😀" maxlength="16"
+              style="width:56px;flex:0 0 auto;padding:10px 0;text-align:center;border-radius:10px;border:1.5px solid rgba(111,135,152,0.35);background:rgba(255,255,255,0.55);font-size:1.4rem;">
+            <button class="btn-small primary" onclick="addCustomBookOrnamentEmoji()">Use this</button>
+          </div>
+          <div id="book-ornament-custom-error" style="display:none;font-size:0.78rem;color:#c1573f;margin-top:6px;"></div>
+          <button class="btn-small primary" style="width:100%;margin-top:10px;" onclick="document.getElementById('book-ornament-photo-input').click()">📷 Use a photo instead</button>
+          <input type="file" id="book-ornament-photo-input" accept="image/*" style="display:none" onchange="onBookOrnamentPhotoChosen(event)">
+        </div>
       </div>
-      <div class="keepsake-text" id="keepsake-text-wrap" style="display:none;">
-        <input type="text" id="f-keepsake-text" placeholder="What makes it special? (e.g. bedazzled cover, 3D printed dragon on top)">
+
+      <div class="wishlist-hide">
+        <div class="keepsake-toggle">
+          <input type="checkbox" id="f-keepsake">
+          <label for="f-keepsake">✨ This copy is special — decorated, has a figurine with it, a signed/rare edition, or anything else that makes it one-of-a-kind</label>
+        </div>
+        <div class="keepsake-text" id="keepsake-text-wrap" style="display:none;">
+          <input type="text" id="f-keepsake-text" placeholder="What makes it special? (e.g. bedazzled cover, 3D printed dragon on top)">
         <div class="cover-row" style="margin-top:10px;">
           <div class="cover-preview" id="keepsake-preview" onclick="document.getElementById('keepsake-photo-input').click()">✨</div>
           <div style="flex:1;">
             <div class="photo-hint" style="margin:0;" onclick="document.getElementById('keepsake-photo-input').click()">📷 Tap to add a photo of the special part itself</div>
           </div>
         </div>
-        <input type="file" id="keepsake-photo-input" accept="image/*" capture="environment" style="display:none" onchange="onKeepsakePhotoChosen(event)">
+        <input type="file" id="keepsake-photo-input" accept="image/*" style="display:none" onchange="onKeepsakePhotoChosen(event)">
+      </div>
       </div>
     </div>
     </div>
     <div class="screen-footer">
       <button class="btn btn-danger" id="delete-btn" style="display:none;" onclick="deleteCurrent()">Remove</button>
-      <button class="btn btn-primary" onclick="saveBook()">Save to shelf</button>
+      <button class="btn btn-primary" id="save-btn" onclick="saveBook()">Save to shelf</button>
     </div>
   </div>
 </div>
@@ -995,12 +1104,19 @@
     <div class="ornament-grid" id="ornament-list"></div>
     <div class="ornament-empty-note" id="ornament-edit-hint" style="display:none;color:var(--amethyst);"></div>
 
-    <div class="panel-sub-label">Add an emoji ornament</div>
-    <div class="ornament-emoji-picker" id="ornament-emoji-picker"></div>
+    <div class="panel-sub-label">Pick any emoji</div>
+    <div style="font-size:0.78rem;color:#5a7484;margin:-4px 0 8px;">Tap the box, then tap the 🌐 or 😀 icon on your keyboard to switch to emoji</div>
+    <div style="display:flex;gap:8px;align-items:center;margin:0 0 4px;">
+      <input type="text" id="custom-emoji-input" placeholder="😀" maxlength="16"
+        onkeydown="if(event.key==='Enter') addCustomEmojiOrnament()"
+        style="width:56px;flex:0 0 auto;padding:10px 0;text-align:center;border-radius:10px;border:1.5px solid rgba(111,135,152,0.35);background:rgba(255,255,255,0.55);font-size:1.4rem;">
+      <button class="btn-small primary" onclick="addCustomEmojiOrnament()">Add</button>
+    </div>
+    <div id="custom-emoji-error" style="display:none;font-size:0.78rem;color:#c1573f;margin:0 0 12px;"></div>
 
     <div class="panel-sub-label">Or add a photo of a real one</div>
     <button class="btn-small primary" style="width:100%;" onclick="document.getElementById('ornament-photo-input').click()">📷 Take or choose a photo</button>
-    <input type="file" id="ornament-photo-input" accept="image/*" capture="environment" style="display:none" onchange="onOrnamentPhotoChosen(event)">
+    <input type="file" id="ornament-photo-input" accept="image/*" style="display:none" onchange="onOrnamentPhotoChosen(event)">
     </div>
     <div class="screen-footer">
       <button class="btn btn-primary" onclick="closeOrnaments()">Done</button>
@@ -1049,8 +1165,8 @@
     <h2 style="clear:both;">🎲 Your next read</h2>
     <div id="pick-content" style="margin-top:16px;"></div>
     <div class="sheet-actions">
-      <button class="btn btn-ghost" onclick="pickNextRead()">Pick again</button>
-      <button class="btn btn-primary" onclick="startPickedBook()">Start reading</button>
+      <button class="btn btn-ghost" id="pick-again-btn" onclick="pickNextRead()">Pick again</button>
+      <button class="btn btn-primary" id="start-reading-btn" onclick="startPickedBook()">Start reading</button>
     </div>
   </div>
 </div>
@@ -1061,17 +1177,116 @@ const TITLE_KEY='alys_library_title_v1';
 const BG_KEY='alys_library_bg_v1';
 const GOAL_KEY='alys_library_goal_v1';
 const ORNAMENTS_KEY='alys_library_ornaments_v1';
-const DEFAULT_ORNAMENT_EMOJIS = ['🕯️','🪴','🏺','⏳','🦉','🌵','🖼️','🕰️','🐚','🧸'];
+const DEFAULT_ORNAMENT_EMOJIS = ['🕯️','🪴'];
 let userOrnaments = JSON.parse(localStorage.getItem(ORNAMENTS_KEY) || 'null')
   || DEFAULT_ORNAMENT_EMOJIS.map(e=>({id:'o'+Math.random().toString(36).slice(2,8), type:'emoji', value:e}));
+// Migration: assign a stable slot to any ornament saved before slots existed, so this
+// only ever runs once per person and their existing shelf arrangement is preserved as-is.
+if(userOrnaments.some(o=>o.slot===undefined)){
+  userOrnaments.forEach((o,i)=>{ if(o.slot===undefined) o.slot = i; });
+  localStorage.setItem(ORNAMENTS_KEY, JSON.stringify(userOrnaments));
+}
+function nextOrnamentSlot(){
+  const used = new Set(userOrnaments.map(o=>o.slot));
+  let s = 0;
+  while(used.has(s)) s++;
+  return s;
+}
+function repairOrnamentSlotsIfBroken(){
+  // If slot numbers have drifted past what can actually be displayed (only ~4 decoration
+  // spots exist when there are few/no books), ornaments silently vanish. Compact them back
+  // into a dense range, preserving relative order, so every ornament is visible again.
+  if(userOrnaments.length && maxOrnamentSlot() >= 4){
+    const sorted = [...userOrnaments].sort((a,b)=>a.slot-b.slot);
+    sorted.forEach((o,i)=>{ o.slot = i; });
+    persistOrnaments();
+  }
+}
+repairOrnamentSlotsIfBroken();
+function ornamentAtSlot(slot){
+  return userOrnaments.find(o=>o.slot===slot);
+}
 function persistOrnaments(){ localStorage.setItem(ORNAMENTS_KEY, JSON.stringify(userOrnaments)); }
 let books = JSON.parse(localStorage.getItem(STORAGE_KEY) || migrateOldData());
 let editingId = null;
 let pendingCover = '';
+let pendingBookOrnament = null; // {type:'emoji'|'photo', value:'...'} or null
+
+function updateBookOrnamentPreview(){
+  const preview = document.getElementById('book-ornament-preview');
+  const removeBtn = document.getElementById('book-ornament-remove-btn');
+  if(pendingBookOrnament){
+    if(pendingBookOrnament.type==='photo'){
+      preview.style.backgroundImage = `url(${pendingBookOrnament.value})`;
+      preview.textContent = '';
+    } else {
+      preview.style.backgroundImage = '';
+      preview.textContent = pendingBookOrnament.value;
+    }
+    removeBtn.style.display = '';
+  } else {
+    preview.style.backgroundImage = '';
+    preview.textContent = '➕';
+    removeBtn.style.display = 'none';
+  }
+}
+function toggleBookOrnamentPicker(){
+  const picker = document.getElementById('book-ornament-picker');
+  const isOpen = picker.style.display !== 'none';
+  picker.style.display = isOpen ? 'none' : '';
+}
+function setBookOrnamentEmoji(emoji){
+  pendingBookOrnament = {type:'emoji', value:emoji};
+  updateBookOrnamentPreview();
+  document.getElementById('book-ornament-picker').style.display = 'none';
+}
+function addCustomBookOrnamentEmoji(){
+  const input = document.getElementById('book-ornament-custom-input');
+  const errorEl = document.getElementById('book-ornament-custom-error');
+  const val = input.value.trim();
+  if(!val) return;
+  if(!looksLikeEmoji(val)){
+    errorEl.textContent = '"'+val+'" isn\'t an emoji — switch your keyboard to 🌐/😀 first, then pick one.';
+    errorEl.style.display = '';
+    input.value = '';
+    return;
+  }
+  errorEl.style.display = 'none';
+  setBookOrnamentEmoji(val);
+  input.value = '';
+}
+function onBookOrnamentPhotoChosen(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = evt=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const maxDim = 300;
+      let w = img.width, h = img.height;
+      if(w > h && w > maxDim){ h = h*(maxDim/w); w = maxDim; }
+      else if(h > maxDim){ w = w*(maxDim/h); h = maxDim; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      pendingBookOrnament = {type:'photo', value: canvas.toDataURL('image/jpeg', 0.72)};
+      updateBookOrnamentPreview();
+      document.getElementById('book-ornament-picker').style.display = 'none';
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+function removeBookOrnament(){
+  pendingBookOrnament = null;
+  updateBookOrnamentPreview();
+}
 let pendingKeepsakePhoto = '';
 let currentFlames = 0;
 let activeTab = 'all';
 let currentPage = 0;
+let pendingOrnamentFocusId = null; // set whenever an ornament is added/moved, so the next renderShelf() jumps to whichever page it landed on
 let scanStream = null;
 
 function migrateOldData(){
@@ -1147,7 +1362,7 @@ function colorForId(id){
 }
 function heightForId(id){
   let h=0; for(let i=0;i<id.length;i++){h=(h*17+id.charCodeAt(i))>>>0;}
-  return 65 + (h % 35);
+  return 70 + (h % 45); // random floor purely for shelf variety; the box grows taller automatically to fit the title, this just sets a minimum
 }
 
 function esc(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
@@ -1318,76 +1533,148 @@ function openGenreColors(){
 }
 function closeGenreColors(){ document.getElementById('genre-colors-overlay').classList.remove('show'); }
 
-const EMOJI_CHOICES = ['🕯️','🪴','🏺','⏳','🦉','🌵','🖼️','🕰️','🐚','🧸','🐉','🦄','🐲','🌙','⭐','🍄','🔮','🌸','🍁','🎭','🧿','🪄','🦋','🐸','🕊️','🪶','🎋','🍯','🧵','🪩'];
+
 
 let editingOrnamentId = null;
 
-function openOrnaments(){
+let flashOrnamentId = null;
+let targetSlotForNewOrnament = null;
+function openOrnaments(preselectId, targetSlot){
   editingOrnamentId = null;
+  flashOrnamentId = preselectId || null;
+  if(targetSlot!==undefined && targetSlot!==null) targetSlotForNewOrnament = targetSlot;
   renderOrnamentsScreen();
   document.getElementById('ornaments-overlay').classList.add('show');
 }
-function closeOrnaments(){ document.getElementById('ornaments-overlay').classList.remove('show'); renderShelf(); }
+function closeOrnaments(){
+  targetSlotForNewOrnament = null;
+  document.getElementById('ornaments-overlay').classList.remove('show');
+  renderShelf();
+}
 
 function renderOrnamentsScreen(){
   const list = document.getElementById('ornament-list');
   const hint = document.getElementById('ornament-edit-hint');
-  if(!userOrnaments.length){
-    list.innerHTML = `<div class="ornament-empty-note">No ornaments yet — add one below.</div>`;
-  } else {
-    list.innerHTML = '';
-    userOrnaments.forEach(o=>{
-      const tile = document.createElement('div');
-      tile.className = 'ornament-tile' + (editingOrnamentId===o.id ? ' selected' : '');
+  const customInput = document.getElementById('custom-emoji-input');
+  const customError = document.getElementById('custom-emoji-error');
+  if(customInput) customInput.value = '';
+  if(customError) customError.style.display = 'none';
+  list.innerHTML = '';
+  const maxSlot = maxOrnamentSlot();
+  for(let i=0; i<=maxSlot; i++){
+    const o = ornamentAtSlot(i);
+    const tile = document.createElement('div');
+    if(o){
+      tile.className = 'ornament-tile' + (editingOrnamentId===o.id ? ' selected' : '') + (flashOrnamentId===o.id ? ' flash' : '');
       if(o.type==='photo'){ tile.style.backgroundImage = `url(${o.value})`; }
       else{ tile.textContent = o.value; }
-      tile.onclick = (ev)=>{
-        if(ev.target.classList.contains('ornament-remove')) return;
-        editingOrnamentId = (editingOrnamentId===o.id) ? null : o.id;
-        renderOrnamentsScreen();
-      };
       const removeBtn = document.createElement('button');
       removeBtn.className = 'ornament-remove';
       removeBtn.textContent = '✕';
       removeBtn.onclick = (ev)=>{ ev.stopPropagation(); removeOrnament(o.id); };
       tile.appendChild(removeBtn);
-      list.appendChild(tile);
-    });
+      const replaceBtn = document.createElement('button');
+      replaceBtn.className = 'ornament-replace';
+      replaceBtn.textContent = '🔄';
+      replaceBtn.title = 'Replace this ornament';
+      replaceBtn.onclick = (ev)=>{
+        ev.stopPropagation();
+        editingOrnamentId = (editingOrnamentId===o.id) ? null : o.id;
+        renderOrnamentsScreen();
+      };
+      tile.appendChild(replaceBtn);
+      const leftBtn = document.createElement('button');
+      leftBtn.className = 'ornament-move ornament-move-left';
+      leftBtn.textContent = '‹';
+      leftBtn.title = 'Move to shelf '+i;
+      leftBtn.disabled = i===0;
+      leftBtn.onclick = (ev)=>{ ev.stopPropagation(); moveOrnamentToSlot(o.id, i-1); };
+      tile.appendChild(leftBtn);
+      const rightBtn = document.createElement('button');
+      rightBtn.className = 'ornament-move ornament-move-right';
+      rightBtn.textContent = '›';
+      rightBtn.title = 'Move to shelf '+(i+2);
+      rightBtn.onclick = (ev)=>{ ev.stopPropagation(); moveOrnamentToSlot(o.id, i+1); };
+      tile.appendChild(rightBtn);
+    } else {
+      tile.className = 'ornament-tile ornament-tile-empty';
+      tile.textContent = '?';
+      tile.title = 'Empty — tap to add an ornament here';
+      tile.onclick = ()=>{ targetSlotForNewOrnament = i; renderOrnamentsScreen(); };
+    }
+    const label = document.createElement('div');
+    label.className = 'ornament-slot-label';
+    label.textContent = 'Shelf '+(i+1);
+    tile.appendChild(label);
+    list.appendChild(tile);
+  }
+  if(flashOrnamentId){
+    const flashedTile = [...list.children].find(t=>t.classList.contains('flash'));
+    if(flashedTile) flashedTile.scrollIntoView({block:'center', behavior:'smooth'});
+    flashOrnamentId = null;
   }
 
   if(editingOrnamentId){
     hint.style.display = '';
-    hint.textContent = 'Tap a new emoji or photo below to replace the selected ornament — or tap it again to cancel.';
+    hint.innerHTML = 'Tap a new emoji or photo below to replace the selected ornament — or tap it again to cancel. <span id="add-new-instead-link" style="text-decoration:underline;cursor:pointer;">Add a new ornament instead</span>';
+    document.getElementById('add-new-instead-link').onclick = ()=>{ editingOrnamentId = null; renderOrnamentsScreen(); };
   } else {
     hint.style.display = 'none';
   }
-
-  const picker = document.getElementById('ornament-emoji-picker');
-  picker.innerHTML = '';
-  EMOJI_CHOICES.forEach(e=>{
-    const btn = document.createElement('button');
-    btn.className = 'emoji-choice';
-    btn.textContent = e;
-    btn.onclick = ()=>addEmojiOrnament(e);
-    picker.appendChild(btn);
-  });
 }
 
 function addEmojiOrnament(emoji){
   if(editingOrnamentId){
     const o = userOrnaments.find(x=>x.id===editingOrnamentId);
     if(o){ o.type='emoji'; o.value=emoji; }
+    pendingOrnamentFocusId = editingOrnamentId;
     editingOrnamentId = null;
   } else {
-    userOrnaments.push({id:'o'+Date.now()+Math.random().toString(36).slice(2,6), type:'emoji', value:emoji});
+    const slot = (targetSlotForNewOrnament!==null) ? targetSlotForNewOrnament : nextOrnamentSlot();
+    const id = 'o'+Date.now()+Math.random().toString(36).slice(2,6);
+    userOrnaments.push({id, type:'emoji', value:emoji, slot});
+    pendingOrnamentFocusId = id;
+    targetSlotForNewOrnament = null;
   }
   persistOrnaments();
   renderOrnamentsScreen();
+}
+function looksLikeEmoji(str){
+  // Real emoji (including multi-codepoint sequences with ZWJ/skin-tone/variation selectors)
+  // don't contain plain letters, digits, or whitespace — reject anything that does.
+  if(/[a-zA-Z0-9\s]/.test(str)) return false;
+  return /\p{Extended_Pictographic}/u.test(str);
+}
+function addCustomEmojiOrnament(){
+  const input = document.getElementById('custom-emoji-input');
+  const errorEl = document.getElementById('custom-emoji-error');
+  const val = input.value.trim();
+  if(!val) return;
+  if(!looksLikeEmoji(val)){
+    errorEl.textContent = '"'+val+'" isn\'t an emoji — switch your keyboard to 🌐/😀 first, then pick one.';
+    errorEl.style.display = '';
+    input.value = '';
+    return;
+  }
+  errorEl.style.display = 'none';
+  addEmojiOrnament(val);
+  input.value = '';
 }
 
 function removeOrnament(id){
   userOrnaments = userOrnaments.filter(o=>o.id!==id);
   if(editingOrnamentId===id) editingOrnamentId = null;
+  persistOrnaments();
+  renderOrnamentsScreen();
+}
+function moveOrnamentToSlot(id, newSlot){
+  if(newSlot < 0) return;
+  const a = userOrnaments.find(o=>o.id===id);
+  if(!a) return;
+  const b = userOrnaments.find(o=>o.slot===newSlot);
+  if(b){ const tmp = a.slot; a.slot = b.slot; b.slot = tmp; }
+  else { a.slot = newSlot; }
+  pendingOrnamentFocusId = id;
   persistOrnaments();
   renderOrnamentsScreen();
 }
@@ -1410,9 +1697,14 @@ function onOrnamentPhotoChosen(e){
       if(editingOrnamentId){
         const o = userOrnaments.find(x=>x.id===editingOrnamentId);
         if(o){ o.type='photo'; o.value=dataUrl; }
+        pendingOrnamentFocusId = editingOrnamentId;
         editingOrnamentId = null;
       } else {
-        userOrnaments.push({id:'o'+Date.now()+Math.random().toString(36).slice(2,6), type:'photo', value:dataUrl});
+        const slot = (targetSlotForNewOrnament!==null) ? targetSlotForNewOrnament : nextOrnamentSlot();
+        const id = 'o'+Date.now()+Math.random().toString(36).slice(2,6);
+        userOrnaments.push({id, type:'photo', value:dataUrl, slot});
+        pendingOrnamentFocusId = id;
+        targetSlotForNewOrnament = null;
       }
       persistOrnaments();
       renderOrnamentsScreen();
@@ -1452,13 +1744,32 @@ function exportCsv(){
   recordBackup();
 }
 
+let pendingConfirmCallback = null;
+function showConfirm(message, onConfirm){
+  pendingConfirmCallback = onConfirm;
+  document.getElementById('confirm-message').textContent = message;
+  document.getElementById('confirm-overlay').classList.add('show');
+}
+function confirmYes(){
+  document.getElementById('confirm-overlay').classList.remove('show');
+  const cb = pendingConfirmCallback;
+  pendingConfirmCallback = null;
+  if(cb) cb();
+}
+function confirmNo(){
+  document.getElementById('confirm-overlay').classList.remove('show');
+  pendingConfirmCallback = null;
+}
+
 function clearLibrary(){
-  if(!confirm('This removes every book from this device. Make sure you have an export saved first — continue?')) return;
-  if(!confirm('Really clear the whole library? This can\'t be undone.')) return;
-  books = [];
-  persist();
-  closeSettings();
-  renderShelf();
+  showConfirm('This removes every book from this device. Make sure you have an export saved first — continue?', ()=>{
+    showConfirm("Really clear the whole library? This can't be undone.", ()=>{
+      books = [];
+      persist();
+      closeSettings();
+      renderShelf();
+    });
+  });
 }
 
 function openStats(){
@@ -1495,20 +1806,19 @@ function renderTabs(){
 function setTab(key){ activeTab=key; currentPage=0; renderShelf(); }
 
 /* ---------- sorting ---------- */
-function withOrnaments(list){
-  if(!userOrnaments.length) return list;
+function maxOrnamentSlot(){
+  return userOrnaments.length ? Math.max(...userOrnaments.map(o=>o.slot)) : 0;
+}
+function withOrnaments(list, startCursor){
+  const cursor = startCursor || 0; // book-pinned ornaments don't consume pool slots — cursor passes through unchanged for filler rows to continue from
   const out = [];
-  list.forEach((b,i)=>{
+  list.forEach(b=>{
     out.push(b);
-    if((i+1) % 3 === 0){
-      const orn = userOrnaments[Math.floor(i/3) % userOrnaments.length];
-      out.push({__ornament: orn});
+    if(b.ornamentAfter){
+      out.push({__ornament: {type:b.ornamentAfter.type, value:b.ornamentAfter.value, id:'bookorn-'+b.id, bookId:b.id}});
     }
   });
-  if(list.length && list.length < 3){
-    out.push({__ornament: userOrnaments[0]});
-  }
-  return out;
+  return {list: out, cursor};
 }
 
 function ensureCustomOrder(){
@@ -1728,75 +2038,26 @@ function renderShelf(){
     goalWrap.style.display='none';
   }
 
-  renderReadingNow();
-
   const container = document.getElementById('shelf-sections');
   const seriesView = document.getElementById('series-view');
+  const wishlistView = document.getElementById('wishlist-view');
 
   if(activeTab==='series'){
-    container.style.display='none'; seriesView.style.display='';
+    container.style.display='none'; seriesView.style.display=''; wishlistView.style.display='none';
     renderSeriesView();
     return;
   }
-  container.style.display=''; seriesView.style.display='none';
-  container.innerHTML='';
-
-  if(!books.length){
-    container.innerHTML = `
-      <div class="shelf-section">
-        <div class="bookcase empty-cabinet">
-          <div class="shelf-scroll"><div class="shelf shelf-compact" id="shelf-0"><div class="shelf-plank"></div></div></div>
-          <div class="shelf-scroll"><div class="shelf shelf-compact" id="shelf-1"><div class="shelf-plank"></div></div></div>
-          <div class="shelf-scroll"><div class="shelf shelf-compact" id="shelf-2"><div class="shelf-plank"></div></div></div>
-          <div class="shelf-scroll"><div class="shelf shelf-compact" id="shelf-3"><div class="shelf-plank"></div></div></div>
-        </div>
-        <div class="empty-state-compact">Your shelf is empty — tap the + to begin.</div>
-      </div>`;
-    const rowHeights = [
-      [88,64,95,74],
-      [70,92,58,82],
-      [65,90,76,60],
-      [92,62,84,70]
-    ];
-    rowHeights.forEach((heights,i)=>{
-      const row = document.getElementById('shelf-'+i);
-      heights.forEach(h=>{
-        const g = document.createElement('div');
-        g.className='spine ghost ghost-compact';
-        g.style.height = h+'%';
-        row.appendChild(g);
-      });
-    });
-    if(userOrnaments.length){
-      const orn1 = document.createElement('div');
-      const pick1 = userOrnaments[0];
-      if(pick1.type==='photo'){ orn1.className='ornament ornament-compact ornament-photo'; orn1.style.backgroundImage=`url(${pick1.value})`; }
-      else { orn1.className='ornament ornament-compact'; orn1.textContent = pick1.value; }
-      orn1.title = 'Tap to customize your ornaments';
-      orn1.onclick = ()=>openOrnaments();
-      document.getElementById('shelf-1').appendChild(orn1);
-    }
-    if(userOrnaments.length > 1){
-      const orn2 = document.createElement('div');
-      const pick2 = userOrnaments[1 % userOrnaments.length];
-      if(pick2.type==='photo'){ orn2.className='ornament ornament-compact ornament-photo'; orn2.style.backgroundImage=`url(${pick2.value})`; }
-      else { orn2.className='ornament ornament-compact'; orn2.textContent = pick2.value; }
-      orn2.title = 'Tap to customize your ornaments';
-      orn2.onclick = ()=>openOrnaments();
-      document.getElementById('shelf-2').appendChild(orn2);
-    }
-    const row2 = document.getElementById('shelf-3');
-    const addBtn = document.createElement('div');
-    addBtn.className='add-spine add-spine-compact';
-    addBtn.textContent='+';
-    addBtn.onclick = ()=>openQuickActions();
-    row2.appendChild(addBtn);
+  if(activeTab==='wishlist'){
+    container.style.display='none'; seriesView.style.display='none'; wishlistView.style.display='';
+    renderWishlistView();
     return;
   }
+  container.style.display=''; seriesView.style.display='none'; wishlistView.style.display='none';
+  container.innerHTML='';
 
   let sectionBooks, ghostAll, sectionLabel, showLegend;
   if(activeTab==='all'){
-    sectionBooks = books.filter(matches);
+    sectionBooks = books.filter(b=>b.status!=='need-to-get' && matches(b));
     ghostAll = false; // ghost determined per-book below
     sectionLabel = 'All shelves';
     showLegend = true;
@@ -1805,11 +2066,6 @@ function renderShelf(){
     ghostAll = false;
     sectionLabel = '📱 Kobo shelf';
     showLegend = true;
-  } else if(activeTab==='wishlist'){
-    sectionBooks = books.filter(b=>b.status==='need-to-get' && matches(b));
-    ghostAll = true;
-    sectionLabel = '🛒 Wishlist — need to get';
-    showLegend = false;
   } else if(activeTab.startsWith('g:')){
     const g = activeTab.slice(2);
     sectionBooks = books.filter(b=>b.status!=='need-to-get' && genreLabel(b)===g && matches(b));
@@ -1823,49 +2079,37 @@ function renderShelf(){
     showLegend = false;
   }
 
-  if(!sectionBooks.length){
+  if(!sectionBooks.length && books.length){
     container.innerHTML = `<div class="empty-state" style="flex:1 1 auto;display:flex;align-items:center;justify-content:center;">No book matches here yet.</div>`;
     return;
-  }
-
-  if(showLegend){
-    const genresPresent = [...new Set(sectionBooks.filter(b=>b.status!=='need-to-get').map(genreLabel))].sort();
-    if(genresPresent.length){
-      const legend = document.createElement('div');
-      legend.className='genre-legend';
-      legend.innerHTML = genresPresent.map(g=>
-        `<span class="genre-legend-item"><span class="genre-dot" style="background:${colorForGenre(g)}"></span>${esc(g)}</span>`
-      ).join('');
-      container.appendChild(legend);
-    }
   }
 
   const secEl = document.createElement('div');
   secEl.className='shelf-section';
   secEl.innerHTML = `
-    <div class="shelf-heading"><h3>${esc(sectionLabel)}</h3><span class="shelf-count">${sectionBooks.length} book${sectionBooks.length===1?'':'s'}</span><span class="shelf-capacity" id="shelf-capacity-label"></span></div>
     <div class="bookcase" id="bookcase-live"></div>
     <div class="bookcase-pager" id="bookcase-pager" style="display:none;">
       <button class="pager-btn" id="pager-prev">‹</button>
       <span class="pager-label" id="pager-label"></span>
       <button class="pager-btn" id="pager-next">›</button>
     </div>
+    ${!books.length ? `<div class="empty-state-compact">Your shelf is empty — tap the + to begin.</div>` : ''}
   `;
   container.appendChild(secEl);
 
   const bookcaseEl = document.getElementById('bookcase-live');
-  const SPINE_STEP = 41; // 38px spine + 3px gap
+  const SPINE_STEP = 17; // 14px spine + 3px gap
   const ORNAMENT_STEP = 67; // 64px ornament + 3px gap
   const ROWS_PER_PAGE = 4; // fixed, matches the empty-state bookcase regardless of screen size
   const availWidth = bookcaseEl.clientWidth - 20; // minus left+right padding
   const capacity = Math.max(1, Math.floor(availWidth / SPINE_STEP)); // used for capacity indicator text
 
   const sorted = sortBooks(sectionBooks);
-  const decorated = withOrnaments(sorted);
+  const {list: decorated, cursor: ornamentCursor} = withOrnaments(sorted, 0);
   const rows = [];
   let currentRow = [], usedWidth = 0;
   decorated.forEach(item=>{
-    const w = item.__ornament ? ORNAMENT_STEP : SPINE_STEP;
+    const w = (item.__ornament || item.__ornamentGap) ? ORNAMENT_STEP : SPINE_STEP;
     if(usedWidth + w > availWidth && currentRow.length){
       rows.push(currentRow);
       currentRow = [];
@@ -1878,11 +2122,17 @@ function renderShelf(){
   if(rows.length===0) rows.push([]);
 
   const lastRowCount = rows[rows.length-1].length;
-  document.getElementById('shelf-capacity-label').textContent =
-    lastRowCount < capacity ? `${lastRowCount}/${capacity} on last shelf` : `last shelf full — next book starts a new one`;
 
   const pages = [];
   for(let i=0;i<rows.length;i+=ROWS_PER_PAGE){ pages.push(rows.slice(i,i+ROWS_PER_PAGE)); }
+  if(pendingOrnamentFocusId){
+    let foundPage = -1;
+    pages.forEach((pg,pi)=>{
+      pg.forEach(row=>{ row.forEach(item=>{ if(item.__ornament && item.__ornament.id===pendingOrnamentFocusId) foundPage = pi; }); });
+    });
+    currentPage = (foundPage>=0) ? foundPage : Math.max(0, pages.length-1); // not found among real-book placements = it's a filler-row ornament, which always lands on the last page
+    pendingOrnamentFocusId = null;
+  }
   if(currentPage >= pages.length) currentPage = pages.length-1;
   if(currentPage < 0) currentPage = 0;
 
@@ -1899,21 +2149,48 @@ function renderShelf(){
   }
 
   // add-tile always appears on the current page, not just the last page overall
-  const ADD_TILE_STEP = 39; // 36px add tile + 3px gap
-  const currentPageRows = (pages[currentPage] || []).map(r=>[...r]);
-  const lastRow = currentPageRows[currentPageRows.length-1];
-  const lastRowWidth = lastRow ? lastRow.reduce((sum,item)=> sum + (item.__ornament ? ORNAMENT_STEP : SPINE_STEP), 0) : 0;
-  if(lastRow && lastRowWidth + ADD_TILE_STEP <= availWidth){
-    lastRow.push({__addTile:true});
-  } else {
-    currentPageRows.push([{__addTile:true}]);
-  }
-
-  // pad out with empty shelf rows so the cabinet always looks fully furnished —
-  // always exactly 4, matching the empty-state bookcase, regardless of screen size
+  const ADD_TILE_STEP = 21; // 18px add tile + 3px gap
   const GHOST_FILLER_HEIGHTS = [72,58,80,64];
-  while(currentPageRows.length < ROWS_PER_PAGE){
-    currentPageRows.push(GHOST_FILLER_HEIGHTS.map(h=>({__ghostFiller:h})));
+  const currentPageRows = (pages[currentPage] || []).map(r=>[...r]);
+
+  if(!books.length){
+    // no real books anywhere
+    currentPageRows.length = 0;
+    const emptyRowSpecs = [{},{},{},{add:true}];
+    let ornIdx = ornamentCursor;
+    emptyRowSpecs.forEach((spec,rowNum)=>{
+      const row = GHOST_FILLER_HEIGHTS.map(h=>({__ghostFiller:h}));
+      const orn = ornamentAtSlot(ornIdx);
+      const decoItem = orn ? {__ornament: orn} : {__ornamentGap:true, slot:ornIdx};
+      const insertAt = [1, 3, 0, 2][rowNum % 4];
+      row.splice(insertAt, 0, decoItem);
+      ornIdx++;
+      if(spec.add) row.push({__addTile:true});
+      currentPageRows.push(row);
+    });
+  } else {
+    const lastRow = currentPageRows[currentPageRows.length-1];
+    const lastRowWidth = lastRow ? lastRow.reduce((sum,item)=> sum + ((item.__ornament || item.__ornamentGap) ? ORNAMENT_STEP : SPINE_STEP), 0) : 0;
+    if(lastRow && lastRowWidth + ADD_TILE_STEP <= availWidth){
+      lastRow.push({__addTile:true});
+    } else {
+      currentPageRows.push([{__addTile:true}]);
+    }
+
+    // pad out with empty shelf rows so the cabinet always looks fully furnished —
+    // always exactly 4, matching the empty-state bookcase, regardless of screen size
+    let fillerRowIndex = ornamentCursor;
+    let fillerRowNum = 0;
+    while(currentPageRows.length < ROWS_PER_PAGE){
+      const fillerRow = GHOST_FILLER_HEIGHTS.map(h=>({__ghostFiller:h}));
+      const orn = ornamentAtSlot(fillerRowIndex);
+      const decoItem = orn ? {__ornament: orn} : {__ornamentGap:true, slot:fillerRowIndex};
+      const insertAt = [1, 3, 0, 2][fillerRowNum % 4]; // vary position per row so decoration doesn't always land in the same spot
+      fillerRow.splice(insertAt, 0, decoItem);
+      currentPageRows.push(fillerRow);
+      fillerRowIndex++;
+      fillerRowNum++;
+    }
   }
 
   currentPageRows.forEach(rowItems=>{
@@ -1928,7 +2205,7 @@ function renderShelf(){
     rowItems.forEach(item=>{
       if(item.__ghostFiller){
         const g = document.createElement('div');
-        g.className='spine ghost';
+        g.className='spine ghost ghost-compact';
         g.style.height = item.__ghostFiller+'px';
         shelfDiv.appendChild(g);
         return;
@@ -1937,20 +2214,34 @@ function renderShelf(){
         const orn = document.createElement('div');
         const data = item.__ornament;
         if(data.type==='photo'){
-          orn.className='ornament ornament-photo';
+          orn.className='ornament ornament-compact ornament-photo';
           orn.style.backgroundImage = `url(${data.value})`;
         } else {
-          orn.className='ornament';
+          orn.className='ornament ornament-compact';
           orn.textContent = data.value;
         }
-        orn.title = 'Tap to customize your ornaments';
-        orn.onclick = ()=>openOrnaments();
+        if(data.bookId){
+          orn.title = 'Tap to change this book\'s ornament';
+          orn.onclick = ()=>openBook(data.bookId);
+        } else {
+          orn.title = 'Tap to change this ornament';
+          orn.onclick = ()=>openOrnaments(data.id);
+        }
         shelfDiv.appendChild(orn);
+        return;
+      }
+      if(item.__ornamentGap){
+        const gap = document.createElement('div');
+        gap.className = 'ornament ornament-compact ornament-ghost';
+        gap.textContent = '?';
+        gap.title = 'Tap to add an ornament here';
+        gap.onclick = ()=>openOrnaments(null, item.slot);
+        shelfDiv.appendChild(gap);
         return;
       }
       if(item.__addTile){
         const addBtn = document.createElement('div');
-        addBtn.className='add-spine';
+        addBtn.className = 'add-spine' + (!books.length ? ' add-spine-compact' : '');
         addBtn.textContent='+';
         addBtn.onclick = ()=>openQuickActions();
         shelfDiv.appendChild(addBtn);
@@ -1966,15 +2257,21 @@ function renderShelf(){
         el.dataset.bookId = b.id;
         attachDragHandlers(el, b.id);
       }
-      el.style.height = heightForId(b.id)+'px';
+      el.style.height = heightForId(b.id)+'px'; // corrected to fit the real title by syncSpineHeights() below
       el.onclick = ()=>{ if(suppressNextClick) return; openBook(b.id); };
       let badge = b.keepsake ? '<div class="spine-badge">✨</div>' : '';
       let formatTag = (!isGhost && b.format==='kobo') ? '<div class="format-tag" title="Kobo / digital">📱</div>' : '';
+      if(badge || formatTag) el.style.paddingTop = '20px'; // only needs the extra clearance when actually present
       let tab = '';
       if(!isGhost){
         if(b.status==='reading') tab = '<div class="spine-tab st-reading" title="Currently reading"></div>';
+        else if(b.status==='rereading') tab = '<div class="spine-tab st-rereading" title="Re-reading"></div>';
+        else if(b.status==='on-hold') tab = '<div class="spine-tab st-onhold" title="On hold / paused"></div>';
         else if(b.status==='read') tab = '<div class="spine-tab st-read" title="Read"></div>';
+        else if(b.status==='dnf') tab = '<div class="spine-tab st-dnf" title="Did not finish"></div>';
+        else if(b.status==='own') tab = '<div class="spine-tab st-own" title="Own it"></div>';
         else if(b.status==='want-to-read') tab = '<div class="spine-tab st-want" title="Want to read"></div>';
+        else if(b.status==='borrowed') tab = '<div class="spine-tab st-borrowed" title="Borrowed"></div>';
       }
       let gotItBtn = '';
       if(isGhost){
@@ -1987,7 +2284,40 @@ function renderShelf(){
       shelfDiv.appendChild(el);
     });
   });
+
+  fitAllSpineTitles();
 }
+
+const TITLE_MAX_FONT_PX = 8.32; // matches the original 0.52rem default (16px root)
+const TITLE_MIN_FONT_PX = 5.2;  // readability floor before we resort to ellipsis at all
+const TITLE_SAFETY_MARGIN_PX = 14; // raised from 7 — shrinking the default top padding let fonts grow larger than in the last confirmed-working case, which ate into this margin's effectiveness
+
+function fitTitleToSpine(spine){
+  const title = spine.querySelector('.spine-title');
+  if(!title) return;
+  const padTop = parseFloat(getComputedStyle(spine).paddingTop) || 0;
+  const available = spine.clientHeight - padTop - TITLE_SAFETY_MARGIN_PX;
+  title.style.maxWidth = Math.max(available, 0) + 'px'; // hard backstop so ellipsis engages if shrinking still isn't enough
+  let fontSize = TITLE_MAX_FONT_PX;
+  title.style.fontSize = fontSize + 'px';
+  let needed = title.scrollWidth; // the title is horizontal pre-rotation now, so this measures the actual element that gets painted — no proxy, no mismatch possible
+  if(available > 0 && needed > available){
+    for(let i=0; i<6 && needed > available && fontSize > TITLE_MIN_FONT_PX; i++){
+      const scale = available / needed;
+      fontSize = Math.max(TITLE_MIN_FONT_PX, fontSize * scale * 0.96);
+      title.style.fontSize = fontSize + 'px';
+      needed = title.scrollWidth;
+    }
+  }
+  // title.scrollWidth becomes the rotated visual HEIGHT; position its center-anchor so the
+  // rotated box starts at padTop instead of sitting centered in the spine (which was creating
+  // a large empty gap above the text, since centering by definition splits space evenly above/below).
+  title.style.top = (padTop + title.scrollWidth/2) + 'px';
+}
+function fitAllSpineTitles(){
+  document.querySelectorAll('.spine[data-book-id]').forEach(fitTitleToSpine);
+}
+
 document.getElementById('filter-input').addEventListener('input', renderShelf);
 
 let resizeTimer;
@@ -2017,35 +2347,23 @@ function saveGoal(){
   renderShelf();
 }
 
-/* ---------- currently reading carousel ---------- */
-function renderReadingNow(){
-  const wrap = document.getElementById('reading-now-wrap');
-  const row = document.getElementById('reading-now-row');
-  const list = books.filter(b=>b.status==='reading');
-  if(!list.length){ wrap.style.display='none'; row.innerHTML=''; return; }
-  wrap.style.display='';
-  row.innerHTML = list.map(b=>{
-    const cur = parseFloat(b.currentPage)||0;
-    const tot = parseFloat(b.totalPages)||0;
-    const pct = tot ? Math.min(100, Math.round((cur/tot)*100)) : 0;
-    const coverStyle = b.cover ? `style="background-image:url(${b.cover})"` : '';
-    return `<div class="reading-card" onclick="openBook('${b.id}')">
-      <div class="rc-cover" ${coverStyle}>${b.cover?'':'📕'}</div>
-      <div class="rc-title">${esc(b.title)}</div>
-      ${tot ? `<div class="rc-bar"><div class="rc-bar-fill" style="width:${pct}%"></div></div><div class="rc-pages">p.${cur} of ${tot}</div>` : ''}
-    </div>`;
-  }).join('');
-}
-
 /* ---------- pick my next read ---------- */
 let pickedBookId = null;
 function pickNextRead(){
-  let pool = books.filter(b=>b.status==='want-to-read');
+  let pool = books.filter(b=>b.status==='want-to-read' || b.status==='own');
   if(!pool.length) pool = books.filter(b=>b.status==='need-to-get');
   if(!pool.length){
-    alert("Nothing waiting to be read yet — add a book to Want to Read (or the wishlist) first.");
+    pickedBookId = null;
+    document.getElementById('pick-content').innerHTML = `
+      <div class="pick-empty" style="padding:20px 10px;color:#5a7484;">Nothing waiting to be read yet — add a book as "Own it" or "Own it, want to read" (or add one to your wishlist) first.</div>
+    `;
+    document.getElementById('start-reading-btn').style.display = 'none';
+    document.getElementById('pick-again-btn').style.display = 'none';
+    document.getElementById('pick-overlay').classList.add('show');
     return;
   }
+  document.getElementById('start-reading-btn').style.display = '';
+  document.getElementById('pick-again-btn').style.display = '';
   const pick = pool[Math.floor(Math.random()*pool.length)];
   pickedBookId = pick.id;
   const coverStyle = pick.cover ? `style="background-image:url(${pick.cover})"` : '';
@@ -2090,6 +2408,33 @@ function renderSeriesView(){
     </div>`;
   }).join('');
   view.innerHTML = cards;
+}
+
+/* ---------- wishlist list ---------- */
+function renderWishlistView(){
+  const view = document.getElementById('wishlist-view');
+  const filterVal = document.getElementById('filter-input').value.trim().toLowerCase();
+  const list = books.filter(b=>{
+    if(b.status!=='need-to-get') return false;
+    if(!filterVal) return true;
+    return (b.title||'').toLowerCase().includes(filterVal) || (b.author||'').toLowerCase().includes(filterVal) || (b.series||'').toLowerCase().includes(filterVal);
+  }).sort((a,b)=>(a.title||'').localeCompare(b.title||''));
+  if(!list.length){
+    view.innerHTML = `<div class="empty-state">Nothing on your wishlist yet — tap 🛒 to add a book you want to get.</div>`;
+    return;
+  }
+  view.innerHTML = list.map(b=>{
+    const meta = [b.author, b.series ? (b.series + (b.seriesNum ? ' #'+b.seriesNum : '')) : '', genreLabel(b)].filter(Boolean).join(' · ');
+    return `<div class="wishlist-row">
+      <div class="wishlist-row-text" onclick="openBook('${b.id}')">
+        <div class="wishlist-row-title">${esc(b.title)}</div>
+        ${meta ? `<div class="wishlist-row-meta">${esc(meta)}</div>` : ''}
+        ${b.notes ? `<div class="wishlist-row-notes">${esc(b.notes)}</div>` : ''}
+      </div>
+      <button class="wishlist-got-it" onclick="markAsBought('${b.id}')" title="Got it — move to your shelf">✅ Got it</button>
+      <button class="wishlist-remove" onclick="removeWishlistItem('${b.id}')" title="Remove from wishlist">✕</button>
+    </div>`;
+  }).join('');
 }
 
 /* ---------- stats ---------- */
@@ -2191,17 +2536,35 @@ function onGenreChange(){
 function onStatusChange(){
   const s = document.getElementById('f-status').value;
   document.getElementById('date-read-wrap').style.display = s==='read' ? '' : 'none';
-  document.getElementById('progress-wrap').style.display = s==='reading' ? '' : 'none';
+  document.getElementById('progress-wrap').style.display = (s==='reading' || s==='rereading' || s==='on-hold') ? '' : 'none';
 }
 
+let addingWishlistMode = false;
 function openAdd(){
   editingId = null;
+  addingWishlistMode = false;
   pendingCover = '';
   currentFlames = 0;
   document.getElementById('sheet-heading').textContent = 'Add a book';
   document.getElementById('sheet-sub').textContent = 'Fill in the details below';
   document.getElementById('delete-btn').style.display='none';
   clearManualFields();
+  document.querySelectorAll('.wishlist-hide').forEach(el=>el.style.display='');
+  document.getElementById('save-btn').textContent = 'Save to shelf';
+  document.getElementById('overlay').classList.add('show');
+  setTimeout(()=>document.getElementById('f-title').focus(), 80);
+}
+function openAddWishlist(){
+  editingId = null;
+  addingWishlistMode = true;
+  pendingCover = '';
+  currentFlames = 0;
+  document.getElementById('sheet-heading').textContent = '🛒 Add to wishlist';
+  document.getElementById('sheet-sub').textContent = "Books you don't own yet — just enough to remember what to look for";
+  document.getElementById('delete-btn').style.display='none';
+  clearManualFields();
+  document.querySelectorAll('.wishlist-hide').forEach(el=>el.style.display='none');
+  document.getElementById('save-btn').textContent = '🛒 Add to wishlist';
   document.getElementById('overlay').classList.add('show');
   setTimeout(()=>document.getElementById('f-title').focus(), 80);
 }
@@ -2239,6 +2602,9 @@ function clearManualFields(){
   document.getElementById('cover-preview').style.backgroundImage='';
   document.getElementById('cover-preview').textContent='📕';
   document.getElementById('photo-input').value='';
+  pendingBookOrnament = null;
+  updateBookOrnamentPreview();
+  document.getElementById('book-ornament-picker').style.display = 'none';
   setFlames(0);
 }
 
@@ -2382,6 +2748,9 @@ function openBook(id){
   const b = books.find(x=>x.id===id);
   if(!b) return;
   editingId = id;
+  addingWishlistMode = false;
+  document.querySelectorAll('.wishlist-hide').forEach(el=>el.style.display='');
+  document.getElementById('save-btn').textContent = 'Save to shelf';
   document.getElementById('sheet-heading').textContent = b.title;
   document.getElementById('sheet-sub').textContent = b.author ? 'by '+b.author : '';
   document.getElementById('delete-btn').style.display='';
@@ -2426,6 +2795,9 @@ function openBook(id){
     document.getElementById('cover-preview').textContent='📕';
   }
   setFlames(b.flames || 0);
+  pendingBookOrnament = b.ornamentAfter || null;
+  updateBookOrnamentPreview();
+  document.getElementById('book-ornament-picker').style.display = 'none';
   document.getElementById('overlay').classList.add('show');
 }
 
@@ -2443,7 +2815,7 @@ function saveBook(){
   const series = document.getElementById('f-series').value.trim();
   const seriesNum = document.getElementById('f-series-num').value.trim();
   const seriesTotal = document.getElementById('f-series-total').value.trim();
-  const status = document.getElementById('f-status').value;
+  const status = addingWishlistMode ? 'need-to-get' : document.getElementById('f-status').value;
   const dateRead = document.getElementById('f-date-read').value;
   const bookCurrentPage = document.getElementById('f-current-page').value.trim();
   const totalPages = document.getElementById('f-total-pages').value.trim();
@@ -2455,7 +2827,7 @@ function saveBook(){
   const keepsake = document.getElementById('f-keepsake').checked;
   const keepsakeText = document.getElementById('f-keepsake-text').value.trim();
 
-  const fields = {title,author,genre,genreCustom,format,series,seriesNum,seriesTotal,status,dateRead,currentPage:bookCurrentPage,totalPages,isbn,recommend,moods,quote,notes,keepsake,keepsakeText,keepsakePhoto:pendingKeepsakePhoto,flames:currentFlames,cover:pendingCover};
+  const fields = {title,author,genre,genreCustom,format,series,seriesNum,seriesTotal,status,dateRead,currentPage:bookCurrentPage,totalPages,isbn,recommend,moods,quote,notes,keepsake,keepsakeText,keepsakePhoto:pendingKeepsakePhoto,flames:currentFlames,cover:pendingCover,ornamentAfter:pendingBookOrnament};
   const isNewBook = !editingId;
   if(editingId){
     const b = books.find(x=>x.id===editingId);
@@ -2471,11 +2843,22 @@ function saveBook(){
 
 function deleteCurrent(){
   if(!editingId) return;
-  if(!confirm('Take this book off the shelf?')) return;
-  books = books.filter(b=>b.id!==editingId);
-  persist();
-  closeSheet();
-  renderShelf();
+  const id = editingId;
+  showConfirm('Take this book off the shelf?', ()=>{
+    books = books.filter(b=>b.id!==id);
+    persist();
+    closeSheet();
+    renderShelf();
+  });
+}
+function removeWishlistItem(id){
+  const b = books.find(x=>x.id===id);
+  if(!b) return;
+  showConfirm(`Remove "${b.title}" from your wishlist?`, ()=>{
+    books = books.filter(x=>x.id!==id);
+    persist();
+    renderShelf();
+  });
 }
 
 function persist(){
@@ -2485,8 +2868,13 @@ function persist(){
 /* ---------- print / export / import ---------- */
 function statusLabel(s){
   if(s==='reading') return 'Currently reading';
+  if(s==='rereading') return 'Re-reading';
+  if(s==='on-hold') return 'On hold / paused';
   if(s==='read') return 'Read';
+  if(s==='dnf') return 'Did not finish';
+  if(s==='own') return 'Own it';
   if(s==='want-to-read') return 'Own it — want to read';
+  if(s==='borrowed') return 'Borrowed';
   if(s==='need-to-get') return "Don't own — need to get";
   return '';
 }
@@ -2565,6 +2953,11 @@ applyBackground();
 populateGenreSelect();
 renderMoodChips();
 renderShelf();
+if(document.fonts){
+  document.fonts.ready.then(fitAllSpineTitles);
+  document.fonts.addEventListener('loadingdone', fitAllSpineTitles);
+  setTimeout(fitAllSpineTitles, 1200);
+}
 </script>
 </body>
 </html>
