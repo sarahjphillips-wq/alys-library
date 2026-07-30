@@ -32,7 +32,7 @@
     --bg-grad: linear-gradient(180deg,#eaf5fb 0%, #cfe8f5 45%, #b9d9e8 100%);
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{height:100%;}
+  html,body{height:100%;overflow-x:hidden;}
   body{
     font-family:var(--sans);
     background: var(--bg-grad);
@@ -76,7 +76,7 @@
     padding:calc(10px + env(safe-area-inset-top)) 20px 10px;
     box-shadow:0 4px 14px rgba(0,0,0,0.25);
   }
-  .header-left{display:flex;align-items:center;gap:10px;text-align:left;}
+  .header-left{display:flex;align-items:center;gap:10px;text-align:left;min-width:0;}
   .crest{font-size:1.9rem;display:inline-block;filter:drop-shadow(0 0 8px rgba(0,0,0,0.3));}
   h1{
     font-family:var(--display);
@@ -259,7 +259,7 @@
   .genre-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,0.25);}
   body.photo-active .genre-legend-item{color:#16222c;text-shadow:0 1px 6px rgba(255,255,255,0.85);}
 
-  .shelf-scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:6px;-webkit-overflow-scrolling:touch;}
+  .shelf-scroll{overflow-x:auto;overflow-y:visible;padding-bottom:6px;-webkit-overflow-scrolling:touch;}
   .shelf{
     display:flex;
     align-items:flex-end;
@@ -278,19 +278,16 @@
     height:14px;bottom:8px;width:4px;
   }
   .shelf-plank{
-    position:absolute;left:0;right:0;bottom:0;height:22px;
-    background:linear-gradient(180deg,#ffffff 0%,#ffffff 40%,#f0f0f0 75%,#e2e2e2 100%);
+    position:absolute;left:0;right:0;bottom:0;height:16px;
+    background:#ffffff;
     border-radius:0 0 4px 4px;
-    box-shadow:0 8px 16px rgba(0,0,0,0.3),inset 0 2px 2px rgba(255,255,255,0.9),inset 0 -3px 3px rgba(0,0,0,0.1);
+    box-shadow:0 4px 6px rgba(0,0,0,0.25);
   }
-  .shelf-plank::before{
-    content:'';position:absolute;left:0;right:0;top:0;height:3px;
-    background:linear-gradient(90deg,rgba(255,255,255,0.9),rgba(230,230,230,0.6),rgba(255,255,255,0.9));
-  }
+  .shelf-plank::before{ display:none; }
   .spine{
     position:relative;
     flex:0 0 auto;
-    width:14px;
+    width:22px;
     border-radius:3px 3px 1px 1px;
     display:flex;
     align-items:flex-start;
@@ -303,7 +300,13 @@
   }
   .spine:hover{transform:translateY(-6px);}
   .spine:active{transform:translateY(-2px);}
-  .spine[data-book-id]{touch-action:none;}
+  .spine[data-book-id]{
+    touch-action:none;
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-user-drag:none;
+  }
   .spine.dragging{
     z-index:50;transition:none !important;
     box-shadow:0 10px 24px rgba(0,0,0,0.4);
@@ -384,12 +387,12 @@
   .ornament{
     flex:0 0 auto;width:64px;
     display:flex;align-items:flex-end;justify-content:center;
-    font-size:3.2rem;padding-bottom:8px;
+    font-size:3.2rem;padding-bottom:20px;
     filter:drop-shadow(0 2px 3px rgba(0,0,0,0.35));
     z-index:2;cursor:pointer;
   }
   .ornament:active{transform:scale(0.94);}
-  .ornament.ornament-compact{width:48px;height:88px;font-size:3rem;padding-bottom:6px;}
+  .ornament.ornament-compact{width:48px;height:88px;font-size:3rem;padding-bottom:18px;}
   .ornament.ornament-photo{
     width:58px;height:58px;margin-bottom:16px;
     background-size:cover;background-position:center;
@@ -512,13 +515,14 @@
   .pager-btn:disabled{opacity:0.35;cursor:default;}
   .pager-label{font-family:var(--serif);font-size:0.75rem;color:#5a7484;letter-spacing:0.04em;}
   .add-spine-compact{width:18px;height:88%;align-self:flex-end;}
-  .spine.ghost-compact{width:14px;border-width:1.5px;}
+  .spine.ghost-compact{width:22px;border-width:1.5px;}
 
   /* MODAL */
   .overlay{
     display:none;position:fixed;inset:0;background:rgba(15,25,35,0.6);
     backdrop-filter:blur(3px);z-index:50;align-items:flex-end;justify-content:center;
   }
+  #confirm-overlay{z-index:200;}
   .overlay.show{display:flex;}
   @media(min-width:600px){.overlay{align-items:center;}}
   .sheet{
@@ -542,10 +546,10 @@
     .sheet::before{display:none;}
   }
 
-  /* FULL-PAGE VARIANT (Add/Edit Book, Settings, Stats, Color Picker, Genre Colors, Ornaments) */
-  #overlay, #settings-overlay, #stats-overlay, #genre-colors-overlay, #ornaments-overlay{align-items:stretch;justify-content:stretch;background:var(--bg-grad);backdrop-filter:none;}
+  /* FULL-PAGE VARIANT (Add/Edit Book, Settings, Stats, Color Picker, Genre Colors, Ornaments, Wishlist, Series) */
+  #overlay, #settings-overlay, #stats-overlay, #genre-colors-overlay, #ornaments-overlay, #wishlist-overlay, #series-overlay{align-items:stretch;justify-content:stretch;background:var(--bg-grad);backdrop-filter:none;}
   #picker-overlay{align-items:stretch;justify-content:stretch;background:var(--bg-grad);backdrop-filter:none;}
-  #overlay .sheet, #settings-overlay .sheet, #stats-overlay .sheet, #picker-overlay .sheet, #genre-colors-overlay .sheet, #ornaments-overlay .sheet{
+  #overlay .sheet, #settings-overlay .sheet, #stats-overlay .sheet, #picker-overlay .sheet, #genre-colors-overlay .sheet, #ornaments-overlay .sheet, #wishlist-overlay .sheet, #series-overlay .sheet{
     width:100%;max-width:100%;height:100%;max-height:100%;
     border-radius:0;border:none;box-shadow:none;
     padding:0;
@@ -553,7 +557,9 @@
     display:flex;flex-direction:column;
     overflow:hidden;
   }
-  #overlay .sheet::before, #settings-overlay .sheet::before, #stats-overlay .sheet::before, #picker-overlay .sheet::before, #genre-colors-overlay .sheet::before, #ornaments-overlay .sheet::before{display:none;}
+  #overlay .sheet::before, #settings-overlay .sheet::before, #stats-overlay .sheet::before, #picker-overlay .sheet::before, #genre-colors-overlay .sheet::before, #ornaments-overlay .sheet::before, #wishlist-overlay .sheet::before, #series-overlay .sheet::before{display:none;}
+
+
 
   .screen-header{
     flex-shrink:0;
@@ -740,20 +746,18 @@
 <div class="wrap">
 
   <div id="shelf-sections"></div>
-  <div id="series-view" style="display:none;flex-shrink:0;"></div>
-  <div id="wishlist-view" style="display:none;flex-shrink:0;"></div>
 
   <section class="panel">
     <div class="controls-compact">
       <button class="search-toggle-btn" id="search-toggle-btn" onclick="toggleSearchBar()" title="Find a book">🔍</button>
       <button class="search-toggle-btn" onclick="openAddWishlist()" title="Add to wishlist">🛒</button>
-      <select class="ctrl-select" id="sort-select" onchange="currentPage=0;renderShelf()" title="Sort by" style="flex:1;">
+      <select class="ctrl-select" id="sort-select" autocomplete="off" onchange="currentPage=0;renderShelf()" title="Sort by" style="flex:1;">
         <option value="custom" selected>Custom order</option>
         <option value="title">Title A–Z</option>
         <option value="author">Author A–Z</option>
         <option value="series">Series</option>
       </select>
-      <select class="ctrl-select" id="tab-select" onchange="setTab(this.value)" title="Shelf" style="flex:1;"></select>
+      <select class="ctrl-select" id="tab-select" autocomplete="off" onchange="setTab(this.value)" title="Shelf" style="flex:1;"></select>
     </div>
     <div class="search-bar-wrap" id="search-bar-wrap" style="display:none;">
       <input class="search-box" id="filter-input" type="text" placeholder="Find a book on the shelf...">
@@ -1124,6 +1128,37 @@
   </div>
 </div>
 
+<!-- SERIES SCREEN -->
+<div class="overlay" id="series-overlay">
+  <div class="sheet">
+    <div class="screen-header">
+      <button class="back-btn" onclick="closeSeriesView()">← Back</button>
+      <h2>📚 Series</h2>
+    </div>
+    <div class="screen-content">
+    <div id="series-list"></div>
+    <div class="bookcase-pager" id="series-pager" style="display:none;">
+      <button class="pager-btn" id="series-pager-prev">‹</button>
+      <span class="pager-label" id="series-pager-label"></span>
+      <button class="pager-btn" id="series-pager-next">›</button>
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- WISHLIST SCREEN -->
+<div class="overlay" id="wishlist-overlay">
+  <div class="sheet">
+    <div class="screen-header">
+      <button class="back-btn" onclick="closeWishlist()">← Back</button>
+      <h2>🛒 Wishlist</h2>
+    </div>
+    <div class="screen-content">
+    <div id="wishlist-list"></div>
+    </div>
+  </div>
+</div>
+
 <!-- STATS SCREEN -->
 <div class="overlay" id="stats-overlay">
   <div class="sheet" style="max-width:600px;">
@@ -1308,7 +1343,7 @@ function migrateOldData(){
   return '[]';
 }
 
-const GENRES = ['Fantasy','Romantasy','Sci-Fi','Romance','Mystery & Thriller','Horror','Young Adult','Contemporary','Classics','Non-Fiction','Graphic Novel / Manga','Other'];
+const GENRES = ['Fantasy','Romantasy','Sci-Fi','Romance','Mystery & Thriller','Crime','Horror','Young Adult','Contemporary','Historical Fiction','Classics','Comedy','Dystopian','Non-Fiction','Graphic Novel / Manga','Other'];
 const MOODS = ['Cozy','Dark & gritty','Funny','Emotional / cried','Fast-paced','Slow burn','Spicy','Clean / sweet','Made me think','Comfort read'];
 let currentMoods = [];
 
@@ -1317,8 +1352,9 @@ const BG_DEFAULT = {grad:'linear-gradient(180deg,#eaf5fb 0%, #cfe8f5 45%, #b9d9e
 const SPINE_COLORS = ['#7ea9c2','#9cc6dd','#5b8a63','#c9a13b','#8f7fc4','#c1573f','#4c7a63','#3d6c86'];
 const GENRE_COLORS = {
   'Fantasy':'#7ea9c2', 'Romantasy':'#b48fd0', 'Sci-Fi':'#4a9aa8', 'Romance':'#d98fb0',
-  'Mystery & Thriller':'#5c6b73', 'Horror':'#8c3a3a', 'Young Adult':'#e0a458',
-  'Contemporary':'#6b8f71', 'Classics':'#a99257', 'Non-Fiction':'#587792',
+  'Mystery & Thriller':'#5c6b73', 'Crime':'#4a4e57', 'Horror':'#8c3a3a', 'Young Adult':'#e0a458',
+  'Contemporary':'#6b8f71', 'Historical Fiction':'#9c7a4a', 'Classics':'#a99257',
+  'Comedy':'#d9a441', 'Dystopian':'#5a6b52', 'Non-Fiction':'#587792',
   'Graphic Novel / Manga':'#c1573f', 'Other':'#8f7fc4'
 };
 const GENRE_COLOR_KEY = 'alys_library_genre_colors_v1';
@@ -1550,6 +1586,24 @@ function closeOrnaments(){
   targetSlotForNewOrnament = null;
   document.getElementById('ornaments-overlay').classList.remove('show');
   renderShelf();
+}
+function openWishlist(){
+  renderWishlistView();
+  document.getElementById('wishlist-overlay').classList.add('show');
+}
+function closeWishlist(){
+  document.getElementById('wishlist-overlay').classList.remove('show');
+  setTab('all');
+}
+let seriesPage = 0;
+function openSeriesView(){
+  seriesPage = 0;
+  document.getElementById('series-overlay').classList.add('show');
+  renderSeriesView();
+}
+function closeSeriesView(){
+  document.getElementById('series-overlay').classList.remove('show');
+  setTab('all');
 }
 
 function renderOrnamentsScreen(){
@@ -1803,7 +1857,23 @@ function renderTabs(){
     `<option value="${esc(t.key)}" ${activeTab===t.key?'selected':''}>${esc(t.label)}</option>`
   ).join('');
 }
-function setTab(key){ activeTab=key; currentPage=0; renderShelf(); }
+function setTab(key){
+  activeTab=key; currentPage=0; renderShelf();
+  fixHorizontalDrift();
+}
+function fixHorizontalDrift(){
+  const reset = ()=>{
+    if(window.scrollX !== 0) window.scrollTo(0, window.scrollY);
+    if(document.documentElement.scrollLeft !== 0) document.documentElement.scrollLeft = 0;
+    if(document.body.scrollLeft !== 0) document.body.scrollLeft = 0;
+  };
+  reset();
+  requestAnimationFrame(reset);
+  setTimeout(reset, 50);
+  setTimeout(reset, 200);
+  setTimeout(reset, 500);
+}
+setInterval(fixHorizontalDrift, 300);
 
 /* ---------- sorting ---------- */
 function maxOrnamentSlot(){
@@ -2039,20 +2109,18 @@ function renderShelf(){
   }
 
   const container = document.getElementById('shelf-sections');
-  const seriesView = document.getElementById('series-view');
-  const wishlistView = document.getElementById('wishlist-view');
 
   if(activeTab==='series'){
-    container.style.display='none'; seriesView.style.display=''; wishlistView.style.display='none';
-    renderSeriesView();
+    openSeriesView();
+    fixHorizontalDrift();
     return;
   }
   if(activeTab==='wishlist'){
-    container.style.display='none'; seriesView.style.display='none'; wishlistView.style.display='';
-    renderWishlistView();
+    openWishlist();
+    fixHorizontalDrift();
     return;
   }
-  container.style.display=''; seriesView.style.display='none'; wishlistView.style.display='none';
+  container.style.display='';
   container.innerHTML='';
 
   let sectionBooks, ghostAll, sectionLabel, showLegend;
@@ -2079,7 +2147,9 @@ function renderShelf(){
     showLegend = false;
   }
 
-  if(!sectionBooks.length && books.length){
+  const showEmptyBookcase = !books.length || (activeTab==='all' && !sectionBooks.length);
+
+  if(!sectionBooks.length && books.length && !showEmptyBookcase){
     container.innerHTML = `<div class="empty-state" style="flex:1 1 auto;display:flex;align-items:center;justify-content:center;">No book matches here yet.</div>`;
     return;
   }
@@ -2093,24 +2163,27 @@ function renderShelf(){
       <span class="pager-label" id="pager-label"></span>
       <button class="pager-btn" id="pager-next">›</button>
     </div>
-    ${!books.length ? `<div class="empty-state-compact">Your shelf is empty — tap the + to begin.</div>` : ''}
+    ${showEmptyBookcase ? `<div class="empty-state-compact">Your shelf is empty — tap the + to begin.</div>` : ''}
   `;
   container.appendChild(secEl);
 
   const bookcaseEl = document.getElementById('bookcase-live');
-  const SPINE_STEP = 17; // 14px spine + 3px gap
+  const SPINE_STEP = 25; // 22px spine + 3px gap
   const ORNAMENT_STEP = 67; // 64px ornament + 3px gap
   const ROWS_PER_PAGE = 4; // fixed, matches the empty-state bookcase regardless of screen size
   const availWidth = bookcaseEl.clientWidth - 20; // minus left+right padding
   const capacity = Math.max(1, Math.floor(availWidth / SPINE_STEP)); // used for capacity indicator text
 
+  const ADD_TILE_STEP = 21; // 18px add tile + 3px gap
+  const GHOST_FILLER_HEIGHTS = [72,58,80,64];
   const sorted = sortBooks(sectionBooks);
-  const {list: decorated, cursor: ornamentCursor} = withOrnaments(sorted, 0);
+  const {list: decorated} = withOrnaments(sorted, 0);
+  const ROW_CONTENT_LIMIT = availWidth - ORNAMENT_STEP - ADD_TILE_STEP; // reserve room for one ornament + the add-tile on every row
   const rows = [];
   let currentRow = [], usedWidth = 0;
   decorated.forEach(item=>{
-    const w = (item.__ornament || item.__ornamentGap) ? ORNAMENT_STEP : SPINE_STEP;
-    if(usedWidth + w > availWidth && currentRow.length){
+    const w = item.__ornament ? ORNAMENT_STEP : SPINE_STEP;
+    if(usedWidth + w > ROW_CONTENT_LIMIT && currentRow.length){
       rows.push(currentRow);
       currentRow = [];
       usedWidth = 0;
@@ -2121,8 +2194,6 @@ function renderShelf(){
   if(currentRow.length) rows.push(currentRow);
   if(rows.length===0) rows.push([]);
 
-  const lastRowCount = rows[rows.length-1].length;
-
   const pages = [];
   for(let i=0;i<rows.length;i+=ROWS_PER_PAGE){ pages.push(rows.slice(i,i+ROWS_PER_PAGE)); }
   if(pendingOrnamentFocusId){
@@ -2130,7 +2201,7 @@ function renderShelf(){
     pages.forEach((pg,pi)=>{
       pg.forEach(row=>{ row.forEach(item=>{ if(item.__ornament && item.__ornament.id===pendingOrnamentFocusId) foundPage = pi; }); });
     });
-    currentPage = (foundPage>=0) ? foundPage : Math.max(0, pages.length-1); // not found among real-book placements = it's a filler-row ornament, which always lands on the last page
+    currentPage = (foundPage>=0) ? foundPage : Math.max(0, pages.length-1);
     pendingOrnamentFocusId = null;
   }
   if(currentPage >= pages.length) currentPage = pages.length-1;
@@ -2148,50 +2219,37 @@ function renderShelf(){
     nextBtn.onclick = ()=>{ currentPage++; renderShelf(); };
   }
 
-  // add-tile always appears on the current page, not just the last page overall
-  const ADD_TILE_STEP = 21; // 18px add tile + 3px gap
-  const GHOST_FILLER_HEIGHTS = [72,58,80,64];
   const currentPageRows = (pages[currentPage] || []).map(r=>[...r]);
+  while(currentPageRows.length < ROWS_PER_PAGE){ currentPageRows.push([]); }
 
-  if(!books.length){
-    // no real books anywhere
-    currentPageRows.length = 0;
-    const emptyRowSpecs = [{},{},{},{add:true}];
-    let ornIdx = ornamentCursor;
-    emptyRowSpecs.forEach((spec,rowNum)=>{
-      const row = GHOST_FILLER_HEIGHTS.map(h=>({__ghostFiller:h}));
-      const orn = ornamentAtSlot(ornIdx);
-      const decoItem = orn ? {__ornament: orn} : {__ornamentGap:true, slot:ornIdx};
-      const insertAt = [1, 3, 0, 2][rowNum % 4];
-      row.splice(insertAt, 0, decoItem);
-      ornIdx++;
-      if(spec.add) row.push({__addTile:true});
-      currentPageRows.push(row);
-    });
-  } else {
-    const lastRow = currentPageRows[currentPageRows.length-1];
-    const lastRowWidth = lastRow ? lastRow.reduce((sum,item)=> sum + ((item.__ornament || item.__ornamentGap) ? ORNAMENT_STEP : SPINE_STEP), 0) : 0;
-    if(lastRow && lastRowWidth + ADD_TILE_STEP <= availWidth){
-      lastRow.push({__addTile:true});
-    } else {
-      currentPageRows.push([{__addTile:true}]);
-    }
-
-    // pad out with empty shelf rows so the cabinet always looks fully furnished —
-    // always exactly 4, matching the empty-state bookcase, regardless of screen size
-    let fillerRowIndex = ornamentCursor;
-    let fillerRowNum = 0;
-    while(currentPageRows.length < ROWS_PER_PAGE){
-      const fillerRow = GHOST_FILLER_HEIGHTS.map(h=>({__ghostFiller:h}));
-      const orn = ornamentAtSlot(fillerRowIndex);
-      const decoItem = orn ? {__ornament: orn} : {__ornamentGap:true, slot:fillerRowIndex};
-      const insertAt = [1, 3, 0, 2][fillerRowNum % 4]; // vary position per row so decoration doesn't always land in the same spot
-      fillerRow.splice(insertAt, 0, decoItem);
-      currentPageRows.push(fillerRow);
-      fillerRowIndex++;
-      fillerRowNum++;
-    }
+  // find the last row with real content to host the add-tile; row 0 if the shelf is fully empty
+  let addTileRow = 0;
+  for(let i=currentPageRows.length-1;i>=0;i--){
+    if(currentPageRows[i].some(it=>!it.__ornament)){ addTileRow = i; break; }
   }
+
+  const ORNAMENT_POSITION_FRACTIONS = [0.15, 0.7, 0.05, 0.45]; // where along the row the ornament lands, varied per row so it doesn't always sit at the same spot
+  currentPageRows.forEach((rowItems, rowNum)=>{
+    const hasAddTile = rowNum === addTileRow;
+
+    // pad leftover width with ghost book placeholders FIRST, so the row has real length to position the ornament within
+    const realWidth = rowItems.reduce((sum,it)=> sum + (it.__ornament ? ORNAMENT_STEP : SPINE_STEP), 0);
+    let leftover = availWidth - realWidth - ORNAMENT_STEP - (hasAddTile ? ADD_TILE_STEP : 0);
+    let ghostIdx = 0;
+    while(leftover >= SPINE_STEP){
+      rowItems.push({__ghostFiller: GHOST_FILLER_HEIGHTS[ghostIdx % GHOST_FILLER_HEIGHTS.length]});
+      leftover -= SPINE_STEP;
+      ghostIdx++;
+    }
+
+    // now insert the ornament at a position scaled to the row's actual length, so it's genuinely spread out
+    const orn = ornamentAtSlot(rowNum);
+    const decoItem = orn ? {__ornament: orn} : {__ornamentGap:true, slot:rowNum};
+    const insertAt = Math.min(rowItems.length, Math.floor(rowItems.length * ORNAMENT_POSITION_FRACTIONS[rowNum % 4]));
+    rowItems.splice(insertAt, 0, decoItem);
+
+    if(hasAddTile) rowItems.push({__addTile:true});
+  });
 
   currentPageRows.forEach(rowItems=>{
     const scrollDiv = document.createElement('div');
@@ -2241,51 +2299,57 @@ function renderShelf(){
       }
       if(item.__addTile){
         const addBtn = document.createElement('div');
-        addBtn.className = 'add-spine' + (!books.length ? ' add-spine-compact' : '');
+        addBtn.className = 'add-spine' + (showEmptyBookcase ? ' add-spine-compact' : '');
         addBtn.textContent='+';
         addBtn.onclick = ()=>openQuickActions();
         shelfDiv.appendChild(addBtn);
         return;
       }
-      const b = item;
-      const isGhost = ghostAll || b.status==='need-to-get';
-      const el = document.createElement('div');
-      el.className='spine'+(isGhost?' ghost':'');
-      if(!isGhost){
-        const c = colorForGenre(genreLabel(b));
-        el.style.background = `linear-gradient(180deg, ${c}, ${c}dd)`;
-        el.dataset.bookId = b.id;
-        attachDragHandlers(el, b.id);
-      }
-      el.style.height = heightForId(b.id)+'px'; // corrected to fit the real title by syncSpineHeights() below
-      el.onclick = ()=>{ if(suppressNextClick) return; openBook(b.id); };
-      let badge = b.keepsake ? '<div class="spine-badge">✨</div>' : '';
-      let formatTag = (!isGhost && b.format==='kobo') ? '<div class="format-tag" title="Kobo / digital">📱</div>' : '';
-      if(badge || formatTag) el.style.paddingTop = '20px'; // only needs the extra clearance when actually present
-      let tab = '';
-      if(!isGhost){
-        if(b.status==='reading') tab = '<div class="spine-tab st-reading" title="Currently reading"></div>';
-        else if(b.status==='rereading') tab = '<div class="spine-tab st-rereading" title="Re-reading"></div>';
-        else if(b.status==='on-hold') tab = '<div class="spine-tab st-onhold" title="On hold / paused"></div>';
-        else if(b.status==='read') tab = '<div class="spine-tab st-read" title="Read"></div>';
-        else if(b.status==='dnf') tab = '<div class="spine-tab st-dnf" title="Did not finish"></div>';
-        else if(b.status==='own') tab = '<div class="spine-tab st-own" title="Own it"></div>';
-        else if(b.status==='want-to-read') tab = '<div class="spine-tab st-want" title="Want to read"></div>';
-        else if(b.status==='borrowed') tab = '<div class="spine-tab st-borrowed" title="Borrowed"></div>';
-      }
-      let gotItBtn = '';
-      if(isGhost){
-        gotItBtn = `<button class="got-it-btn" title="Mark as bought">✅</button>`;
-      }
-      el.innerHTML = `${tab}${formatTag}${badge}<div class="spine-title">${esc(b.title)}</div>${gotItBtn}`;
-      if(isGhost){
-        el.querySelector('.got-it-btn').onclick = (ev)=>{ ev.stopPropagation(); markAsBought(b.id); };
-      }
-      shelfDiv.appendChild(el);
+      shelfDiv.appendChild(createSpineEl(item, {ghostAll}));
     });
   });
 
   fitAllSpineTitles();
+}
+
+function createSpineEl(b, opts){
+  opts = opts || {};
+  const ghostAll = !!opts.ghostAll;
+  const draggable = opts.draggable !== false;
+  const isGhost = ghostAll || b.status==='need-to-get';
+  const el = document.createElement('div');
+  el.className='spine'+(isGhost?' ghost':'');
+  if(!isGhost){
+    const c = colorForGenre(genreLabel(b));
+    el.style.background = `linear-gradient(180deg, ${c}, ${c}dd)`;
+    el.dataset.bookId = b.id;
+    if(draggable) attachDragHandlers(el, b.id);
+  }
+  el.style.height = heightForId(b.id)+'px'; // corrected to fit the real title by syncSpineHeights() below
+  el.onclick = ()=>{ if(suppressNextClick) return; openBook(b.id); };
+  let badge = b.keepsake ? '<div class="spine-badge">✨</div>' : '';
+  let formatTag = (!isGhost && b.format==='kobo') ? '<div class="format-tag" title="Kobo / digital">📱</div>' : '';
+  if(badge || formatTag) el.style.paddingTop = '20px'; // only needs the extra clearance when actually present
+  let tab = '';
+  if(!isGhost){
+    if(b.status==='reading') tab = '<div class="spine-tab st-reading" title="Currently reading"></div>';
+    else if(b.status==='rereading') tab = '<div class="spine-tab st-rereading" title="Re-reading"></div>';
+    else if(b.status==='on-hold') tab = '<div class="spine-tab st-onhold" title="On hold / paused"></div>';
+    else if(b.status==='read') tab = '<div class="spine-tab st-read" title="Read"></div>';
+    else if(b.status==='dnf') tab = '<div class="spine-tab st-dnf" title="Did not finish"></div>';
+    else if(b.status==='own') tab = '<div class="spine-tab st-own" title="Own it"></div>';
+    else if(b.status==='want-to-read') tab = '<div class="spine-tab st-want" title="Want to read"></div>';
+    else if(b.status==='borrowed') tab = '<div class="spine-tab st-borrowed" title="Borrowed"></div>';
+  }
+  let gotItBtn = '';
+  if(isGhost){
+    gotItBtn = `<button class="got-it-btn" title="Mark as bought">✅</button>`;
+  }
+  el.innerHTML = `${tab}${formatTag}${badge}<div class="spine-title">${esc(b.title)}</div>${gotItBtn}`;
+  if(isGhost){
+    el.querySelector('.got-it-btn').onclick = (ev)=>{ ev.stopPropagation(); markAsBought(b.id); };
+  }
+  return el;
 }
 
 const TITLE_MAX_FONT_PX = 8.32; // matches the original 0.52rem default (16px root)
@@ -2384,8 +2448,10 @@ function startPickedBook(){
 }
 
 /* ---------- series tracker ---------- */
+const SERIES_PER_PAGE = 3;
 function renderSeriesView(){
-  const view = document.getElementById('series-view');
+  const view = document.getElementById('series-list');
+  const pagerEl = document.getElementById('series-pager');
   const map = new Map();
   books.forEach(b=>{
     if(!b.series) return;
@@ -2394,25 +2460,60 @@ function renderSeriesView(){
   });
   if(!map.size){
     view.innerHTML = `<div class="empty-state">No series tracked yet — add a series name to a book to start.</div>`;
+    pagerEl.style.display = 'none';
     return;
   }
-  const cards = [...map.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([name, list])=>{
+  const allSeries = [...map.entries()].sort((a,b)=>a[0].localeCompare(b[0]));
+  const totalPages = Math.max(1, Math.ceil(allSeries.length / SERIES_PER_PAGE));
+  if(seriesPage >= totalPages) seriesPage = totalPages - 1;
+  if(seriesPage < 0) seriesPage = 0;
+  const pageSeries = allSeries.slice(seriesPage*SERIES_PER_PAGE, seriesPage*SERIES_PER_PAGE + SERIES_PER_PAGE);
+
+  view.innerHTML = '';
+  pageSeries.forEach(([name, list])=>{
     const total = Math.max(0, ...list.map(b=>parseFloat(b.seriesTotal)||0));
     const readCount = list.filter(b=>b.status==='read').length;
     const haveCount = list.length;
     const pct = total ? Math.min(100, Math.round((haveCount/total)*100)) : 0;
-    return `<div class="series-card">
+    const sorted = [...list].sort((a,b)=> (parseFloat(a.seriesNum)||999) - (parseFloat(b.seriesNum)||999) || (a.title||'').localeCompare(b.title||''));
+
+    const card = document.createElement('div');
+    card.className = 'series-card';
+    card.innerHTML = `
       <div class="sc-title">${esc(name)}</div>
       ${total ? `<div class="sc-bar"><div class="sc-bar-fill" style="width:${pct}%"></div></div>` : ''}
       <div class="sc-meta">${haveCount}${total?' of '+total:''} collected &nbsp;·&nbsp; ${readCount} read</div>
-    </div>`;
-  }).join('');
-  view.innerHTML = cards;
+    `;
+    const scrollDiv = document.createElement('div');
+    scrollDiv.className = 'shelf-scroll';
+    scrollDiv.style.marginTop = '8px';
+    const shelfDiv = document.createElement('div');
+    shelfDiv.className = 'shelf';
+    shelfDiv.innerHTML = '<div class="shelf-plank"></div>';
+    scrollDiv.appendChild(shelfDiv);
+    sorted.forEach(b=>{ shelfDiv.appendChild(createSpineEl(b, {draggable:false})); });
+    card.appendChild(scrollDiv);
+    view.appendChild(card);
+  });
+  fitAllSpineTitles();
+
+  if(totalPages > 1){
+    pagerEl.style.display = '';
+    document.getElementById('series-pager-label').textContent = `Page ${seriesPage+1} of ${totalPages}`;
+    const prevBtn = document.getElementById('series-pager-prev');
+    const nextBtn = document.getElementById('series-pager-next');
+    prevBtn.disabled = seriesPage===0;
+    nextBtn.disabled = seriesPage===totalPages-1;
+    prevBtn.onclick = ()=>{ seriesPage--; renderSeriesView(); };
+    nextBtn.onclick = ()=>{ seriesPage++; renderSeriesView(); };
+  } else {
+    pagerEl.style.display = 'none';
+  }
 }
 
 /* ---------- wishlist list ---------- */
 function renderWishlistView(){
-  const view = document.getElementById('wishlist-view');
+  const view = document.getElementById('wishlist-list');
   const filterVal = document.getElementById('filter-input').value.trim().toLowerCase();
   const list = books.filter(b=>{
     if(b.status!=='need-to-get') return false;
@@ -2837,7 +2938,7 @@ function saveBook(){
   }
   persist();
   closeSheet();
-  if(isNewBook){ activeTab = 'all'; currentPage = 0; }
+  if(isNewBook){ activeTab = (status==='need-to-get') ? 'wishlist' : 'all'; currentPage = 0; }
   renderShelf();
 }
 
