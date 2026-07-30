@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#bfe3f0">
 <title>Alys's Library</title>
-<link rel="icon" type="image/png" sizes="32x32" href="icons/alys-library-favicon-32.png">
-<link rel="apple-touch-icon" href="icons/alys-library-apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="alys-library-favicon-32.png">
+<link rel="apple-touch-icon" href="alys-library-apple-touch-icon.png">
 <link rel="manifest" href="alys-library-manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cinzel+Decorative:wght@700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1154,6 +1154,9 @@
       <h2>🛒 Wishlist</h2>
     </div>
     <div class="screen-content">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
+      <button class="btn-small" style="flex:0 0 auto;padding:8px 14px;" onclick="printWishlist()">🖨️ Print</button>
+    </div>
     <div id="wishlist-list"></div>
     </div>
   </div>
@@ -3008,6 +3011,31 @@ function printReport(){
     <h1>${esc(libTitle)}</h1>
     <div class="pr-sub">${books.length} book${books.length===1?'':'s'} · printed ${dateStr}</div>
     ${rows || '<p>No books on the shelf yet.</p>'}
+  `;
+  window.print();
+}
+
+function printWishlist(){
+  const libTitle = document.getElementById('lib-title').textContent;
+  const list = books.filter(b=>b.status==='need-to-get').sort((a,b)=>(a.title||'').localeCompare(b.title||''));
+  const rows = list.map(b=>{
+    const genre = genreLabel(b);
+    const series = b.series ? `${esc(b.series)}${b.seriesNum?' #'+esc(String(b.seriesNum)):''}` : '';
+    const meta = [genre, series].filter(Boolean).join(' &nbsp;·&nbsp; ');
+    return `<div class="pr-book">
+      <div>
+        <div class="pr-title">${esc(b.title)}</div>
+        ${b.author ? `<div class="pr-author">by ${esc(b.author)}</div>` : ''}
+        ${meta ? `<div class="pr-meta">${meta}</div>` : ''}
+        ${b.notes ? `<div class="pr-notes">${esc(b.notes)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  const dateStr = new Date().toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('print-report').innerHTML = `
+    <h1>${esc(libTitle)} — Wishlist</h1>
+    <div class="pr-sub">${list.length} book${list.length===1?'':'s'} to get · printed ${dateStr}</div>
+    ${rows || '<p>Nothing on the wishlist yet.</p>'}
   `;
   window.print();
 }
