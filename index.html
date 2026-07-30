@@ -75,6 +75,7 @@
   /* HEADER */
   header{
     flex-shrink:0;
+    position:relative;z-index:1;
     display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
     background:linear-gradient(135deg,var(--ink3),var(--steel));
     padding:calc(10px + env(safe-area-inset-top)) 20px 10px;
@@ -88,9 +89,7 @@
     color:var(--parchment);
     letter-spacing:0.02em;
     text-shadow:none;
-    cursor:text;
   }
-  h1[contenteditable]:focus{outline:none;border-bottom:1px dashed var(--parchment);}
   .subtitle{
     font-family:var(--serif);
     font-size:0.62rem;
@@ -98,6 +97,7 @@
     text-transform:uppercase;
     color:rgba(244,248,251,0.75);
     margin-top:2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
   .header-actions{display:flex;gap:8px;flex-shrink:0;}
   .settings-btn, .stats-btn{
@@ -218,7 +218,7 @@
   .search-box{flex:1;min-width:160px;}
   .search-box::placeholder{color:rgba(28,43,58,0.45);}
   .search-box:focus, select.ctrl-select:focus{border-color:var(--steel);background:rgba(255,255,255,0.9);}
-  select.ctrl-select{padding-right:24px;min-width:0;background-image:linear-gradient(45deg,transparent 50%,var(--steel) 50%),linear-gradient(135deg,var(--steel) 50%,transparent 50%);background-position:calc(100% - 12px) center, calc(100% - 7px) center;background-size:5px 5px,5px 5px;background-repeat:no-repeat;}
+  select.ctrl-select{padding-right:30px;min-width:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236f8798' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-position:right 12px center;background-size:11px 7px;background-repeat:no-repeat;}
 
   /* GENRE / SHELF TABS */
   .tab-scroll{margin-top:4px;}
@@ -259,6 +259,14 @@
   }
   .backup-status.ok{display:block;background:rgba(91,138,99,0.12);color:#3d6b47;border:1px solid rgba(91,138,99,0.3);}
   .backup-status.warn{display:block;background:rgba(193,87,63,0.12);color:#a34a35;border:1px solid rgba(193,87,63,0.3);}
+  .backup-nudge{
+    display:flex;align-items:center;gap:10px;justify-content:space-between;
+    font-size:0.8rem;padding:10px 14px;border-radius:12px;margin-bottom:12px;
+    background:rgba(193,87,63,0.12);color:#a34a35;border:1px solid rgba(193,87,63,0.3);
+  }
+  .backup-nudge-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .backup-nudge-actions .btn-small{padding:6px 12px;font-size:0.76rem;}
+  .backup-nudge-dismiss{background:none;border:none;color:inherit;opacity:0.6;font-size:0.9rem;cursor:pointer;padding:2px 4px;}
   .genre-legend-item{display:flex;align-items:center;gap:5px;font-size:0.7rem;color:#5a7484;}
   .genre-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,0.25);}
   body.photo-active .genre-legend-item{color:#16222c;text-shadow:0 1px 6px rgba(255,255,255,0.85);}
@@ -310,8 +318,6 @@
     -webkit-user-select:none;
     user-select:none;
     -webkit-user-drag:none;
-    outline:2px solid red;
-    outline-offset:-1px;
   }
   .spine.ghost{
     background:none !important;
@@ -533,7 +539,9 @@
   }
 
   /* FULL-PAGE VARIANT (Add/Edit Book, Settings, Stats, Color Picker, Genre Colors, Ornaments, Wishlist, Series) */
-  #overlay, #settings-overlay, #stats-overlay, #genre-colors-overlay, #ornaments-overlay, #wishlist-overlay, #series-overlay{align-items:stretch;justify-content:stretch;background:var(--bg-grad);backdrop-filter:none;}
+  #overlay, #stats-overlay, #genre-colors-overlay, #ornaments-overlay, #wishlist-overlay, #series-overlay{align-items:stretch;justify-content:stretch;background:var(--bg-grad);backdrop-filter:none;}
+  #settings-overlay{align-items:stretch;justify-content:stretch;background:transparent;backdrop-filter:none;}
+  #settings-overlay .sheet{background:transparent;}
   #picker-overlay{align-items:stretch;justify-content:stretch;background:var(--bg-grad);backdrop-filter:none;}
   #overlay .sheet, #settings-overlay .sheet, #stats-overlay .sheet, #picker-overlay .sheet, #genre-colors-overlay .sheet, #ornaments-overlay .sheet, #wishlist-overlay .sheet, #series-overlay .sheet{
     width:100%;max-width:100%;height:100%;max-height:100%;
@@ -619,7 +627,16 @@
     background:rgba(255,255,255,0.7);font-family:var(--sans);font-size:0.92rem;
     color:var(--text-dark);outline:none;resize:vertical;
   }
-  select.field-select{background-image:linear-gradient(45deg,transparent 50%,var(--steel) 50%),linear-gradient(135deg,var(--steel) 50%,transparent 50%);background-position:calc(100% - 16px) center, calc(100% - 11px) center;background-size:5px 5px,5px 5px;background-repeat:no-repeat;min-width:0;}
+  select.field-select{
+    background-image:
+      linear-gradient(to left, rgba(111,135,152,0.16) 0, rgba(111,135,152,0.16) 36px, transparent 36px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236f8798' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position: right center, right 14px center;
+    background-size: 36px 100%, 11px 7px;
+    padding-right:44px;
+    min-width:0;
+  }
   input:focus, textarea:focus, select.field-select:focus{border-color:var(--amethyst);}
   .field-row{display:flex;gap:10px;}
   .field-row > div{flex:1;min-width:0;}
@@ -662,6 +679,7 @@
   .footer-note{font-family:var(--serif);font-size:0.68rem;color:rgba(28,43,58,0.5);letter-spacing:0.05em;}
   .bottom-bar{
     flex-shrink:0;
+    position:relative;z-index:1;
     display:flex;justify-content:center;gap:6px;flex-wrap:nowrap;
     padding:8px 12px calc(8px + env(safe-area-inset-bottom));
     background:linear-gradient(135deg,var(--ink3),var(--steel));
@@ -725,8 +743,8 @@
   <div class="header-left">
     <span class="crest">🐉</span>
     <div style="min-width:0;overflow:hidden;">
-      <h1 id="lib-title" contenteditable="true" spellcheck="false">Alys's Library</h1>
-      <div class="subtitle">Your Personal Collection</div>
+      <h1 id="lib-title" spellcheck="false">Alys's Library</h1>
+      <div class="subtitle" id="header-subtitle">Your Personal Collection</div>
     </div>
   </div>
   <div class="header-actions">
@@ -736,6 +754,14 @@
   </div>
 </header>
 <div class="wrap">
+
+  <div id="backup-nudge-banner" class="backup-nudge" style="display:none;">
+    <span id="backup-nudge-text"></span>
+    <div class="backup-nudge-actions">
+      <button class="btn-small primary" onclick="exportData()">Export backup</button>
+      <button class="backup-nudge-dismiss" onclick="dismissBackupNudge()" title="Dismiss">✕</button>
+    </div>
+  </div>
 
   <div id="shelf-sections"></div>
 
@@ -752,13 +778,13 @@
       <select class="ctrl-select" id="tab-select" autocomplete="off" onchange="setTab(this.value)" title="Shelf" style="flex:1;"></select>
     </div>
     <div class="search-bar-wrap" id="search-bar-wrap" style="display:none;">
-      <input class="search-box" id="filter-input" type="text" placeholder="Find a book on the shelf...">
+      <input class="search-box" id="filter-input" type="text" placeholder="Find a book on the shelf..." onkeydown="handleSearchEnter(event)">
       <button class="search-close-btn" onclick="closeSearchBar()">✕</button>
     </div>
   </section>
 
   <footer>
-    <div class="footer-note">tap a spine to open it &nbsp;·&nbsp; tap an ornament to customize it &nbsp;·&nbsp; tap the title above to rename your library</div>
+    <div class="footer-note">tap a spine to open it &nbsp;·&nbsp; tap an ornament to customize it</div>
   </footer>
 </div>
 
@@ -812,6 +838,7 @@
           <div class="field-label" style="margin-top:0;">Title</div>
           <input type="text" id="f-title" placeholder="The book's title" onblur="lookupByTitle()">
           <div id="title-lookup-status" style="font-size:0.72rem;color:#5a7484;margin-top:4px;min-height:14px;"></div>
+          <div id="title-lookup-results" style="display:none;margin-top:6px;flex-direction:column;gap:6px;"></div>
         </div>
       </div>
       <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="onPhotoChosen(event)">
@@ -840,7 +867,7 @@
       <div class="field-row" style="margin-top:12px;">
         <div>
           <div class="field-label">Series</div>
-          <input type="text" id="f-series" placeholder="Series name (optional)">
+          <input type="text" id="f-series" placeholder="Series name (optional)" onblur="lookupBySeries()">
         </div>
         <div style="max-width:80px;">
           <div class="field-label">Book #</div>
@@ -851,10 +878,13 @@
           <input type="number" id="f-series-total" placeholder="of?" min="0">
         </div>
       </div>
+      <div id="series-lookup-status" style="font-size:0.72rem;color:#5a7484;margin-top:4px;min-height:14px;"></div>
+      <div id="series-lookup-results" style="display:none;margin-top:6px;flex-direction:column;gap:6px;"></div>
 
       <div class="wishlist-hide">
         <div class="field-label">Status</div>
         <select class="field-select" id="f-status" onchange="onStatusChange()">
+          <option value="" disabled>Choose a status…</option>
           <option value="reading">Currently reading</option>
           <option value="rereading">Re-reading</option>
           <option value="on-hold">On hold / paused</option>
@@ -882,7 +912,7 @@
       </div>
 
       <div class="field-label">ISBN</div>
-      <input type="text" id="f-isbn" placeholder="Filled automatically by search or scan">
+      <input type="text" id="f-isbn" placeholder="Tap to scan the barcode, or type it in" inputmode="numeric" onfocus="handleIsbnFocus()" oninput="sanitizeIsbnInput()">
 
       <div class="wishlist-hide">
         <div class="field-label">How much do you love it?</div>
@@ -1016,12 +1046,9 @@
     <section class="panel">
       <div class="panel-label" style="margin-top:0;">Your data</div>
       <div id="backup-status" class="backup-status"></div>
-      <div class="sheet-actions" style="flex-wrap:wrap;">
-        <button class="btn btn-ghost" onclick="exportData()">Export backup (.json)</button>
-        <button class="btn btn-ghost" onclick="exportCsv()">Export spreadsheet (.csv)</button>
-      </div>
+      <div class="byline" style="margin:6px 0 10px;">Export backup and restore backup are also available at the bottom of the main screen.</div>
       <div class="sheet-actions">
-        <button class="btn btn-ghost" onclick="document.getElementById('import-file').click()">Restore backup</button>
+        <button class="btn btn-ghost" onclick="exportCsv()">Export spreadsheet (.csv)</button>
         <button class="btn btn-ghost" onclick="printReport()">Print report</button>
       </div>
     </section>
@@ -1099,6 +1126,10 @@
     </div>
     <div class="screen-content">
     <div class="byline">These appear scattered between your books, like knickknacks on a real shelf</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <button class="btn-small" id="ornament-pool-main-btn" style="flex:1;" onclick="switchOrnamentPool('main')">📚 Main shelf</button>
+      <button class="btn-small" id="ornament-pool-kobo-btn" style="flex:1;" onclick="switchOrnamentPool('kobo')">📱 Kobo shelf</button>
+    </div>
     <div class="panel-sub-label" style="margin-top:0;">Currently on your shelves</div>
     <div class="ornament-grid" id="ornament-list"></div>
     <div class="ornament-empty-note" id="ornament-edit-hint" style="display:none;color:var(--amethyst);"></div>
@@ -1213,14 +1244,16 @@ const ORNAMENTS_KEY='alys_library_ornaments_v1';
 const DEFAULT_ORNAMENT_EMOJIS = ['🕯️','🪴'];
 let userOrnaments = JSON.parse(localStorage.getItem(ORNAMENTS_KEY) || 'null')
   || DEFAULT_ORNAMENT_EMOJIS.map(e=>({id:'o'+Math.random().toString(36).slice(2,8), type:'emoji', value:e}));
-// Migration: assign a stable slot to any ornament saved before slots existed, so this
-// only ever runs once per person and their existing shelf arrangement is preserved as-is.
-if(userOrnaments.some(o=>o.slot===undefined)){
-  userOrnaments.forEach((o,i)=>{ if(o.slot===undefined) o.slot = i; });
+// Migration: assign a stable slot (and the 'main' pool, so existing ornaments keep showing
+// on the main/genre shelves exactly as before) to any ornament saved before these existed.
+// The Kobo shelf gets its own separate pool that starts empty — see the Kobo ornament note below.
+if(userOrnaments.some(o=>o.slot===undefined || o.pool===undefined)){
+  userOrnaments.forEach((o,i)=>{ if(o.slot===undefined) o.slot = i; if(o.pool===undefined) o.pool = 'main'; });
   localStorage.setItem(ORNAMENTS_KEY, JSON.stringify(userOrnaments));
 }
-function nextOrnamentSlot(){
-  const used = new Set(userOrnaments.map(o=>o.slot));
+function ornamentsInPool(pool){ return userOrnaments.filter(o=>o.pool===pool); }
+function nextOrnamentSlot(pool){
+  const used = new Set(ornamentsInPool(pool).map(o=>o.slot));
   let s = 0;
   while(used.has(s)) s++;
   return s;
@@ -1228,16 +1261,19 @@ function nextOrnamentSlot(){
 function repairOrnamentSlotsIfBroken(){
   // If slot numbers have drifted past what can actually be displayed (only ~4 decoration
   // spots exist when there are few/no books), ornaments silently vanish. Compact them back
-  // into a dense range, preserving relative order, so every ornament is visible again.
-  if(userOrnaments.length && maxOrnamentSlot() >= 4){
-    const sorted = [...userOrnaments].sort((a,b)=>a.slot-b.slot);
-    sorted.forEach((o,i)=>{ o.slot = i; });
-    persistOrnaments();
-  }
+  // into a dense range per pool, preserving relative order, so every ornament is visible again.
+  ['main','kobo'].forEach(pool=>{
+    const inPool = ornamentsInPool(pool);
+    if(inPool.length && Math.max(...inPool.map(o=>o.slot)) >= 4){
+      const sorted = [...inPool].sort((a,b)=>a.slot-b.slot);
+      sorted.forEach((o,i)=>{ o.slot = i; });
+    }
+  });
+  persistOrnaments();
 }
 repairOrnamentSlotsIfBroken();
-function ornamentAtSlot(slot){
-  return userOrnaments.find(o=>o.slot===slot);
+function ornamentAtSlot(slot, pool){
+  return userOrnaments.find(o=>o.slot===slot && o.pool===pool);
 }
 function persistOrnaments(){ localStorage.setItem(ORNAMENTS_KEY, JSON.stringify(userOrnaments)); }
 let books = JSON.parse(localStorage.getItem(STORAGE_KEY) || migrateOldData());
@@ -1441,14 +1477,6 @@ function loadTitle(){
   const t = localStorage.getItem(TITLE_KEY);
   if(t) document.getElementById('lib-title').textContent = t;
 }
-document.getElementById('lib-title').addEventListener('blur', e=>{
-  const val = e.target.textContent.trim() || "Alys's Library";
-  e.target.textContent = val;
-  localStorage.setItem(TITLE_KEY, val);
-});
-document.getElementById('lib-title').addEventListener('keydown', e=>{
-  if(e.key==='Enter'){ e.preventDefault(); e.target.blur(); }
-});
 
 /* ---------- background ---------- */
 function paletteFromHue(hue){
@@ -1554,9 +1582,31 @@ function onBgPhotoChosen(e){
   reader.readAsDataURL(file);
 }
 const LAST_BACKUP_KEY = 'alys_library_last_backup_v1';
+const BACKUP_BASELINE_KEY = 'alys_library_backup_baseline_v1';
+const BACKUP_NUDGE_THRESHOLD = 10; // show the reminder once this many books have piled up unbacked-up
+let backupNudgeDismissed = false;
 function recordBackup(){
   localStorage.setItem(LAST_BACKUP_KEY, new Date().toISOString());
+  localStorage.setItem(BACKUP_BASELINE_KEY, String(books.length));
+  backupNudgeDismissed = false;
   renderBackupStatus();
+  renderBackupNudge();
+}
+function dismissBackupNudge(){
+  backupNudgeDismissed = true;
+  renderBackupNudge();
+}
+function renderBackupNudge(){
+  const el = document.getElementById('backup-nudge-banner');
+  if(!el) return;
+  const baseline = parseInt(localStorage.getItem(BACKUP_BASELINE_KEY) || '0', 10);
+  const sinceBackup = books.length - baseline;
+  if(backupNudgeDismissed || sinceBackup < BACKUP_NUDGE_THRESHOLD){
+    el.style.display = 'none';
+    return;
+  }
+  document.getElementById('backup-nudge-text').textContent = `📚 You've added ${sinceBackup} books since your last backup — export a copy to keep your shelf safe.`;
+  el.style.display = 'flex';
 }
 function renderBackupStatus(){
   const el = document.getElementById('backup-status');
@@ -1572,15 +1622,18 @@ function renderBackupStatus(){
     el.className = 'backup-status warn';
     return;
   }
-  const days = Math.floor((Date.now() - new Date(last).getTime()) / 86400000);
+  const lastDate = new Date(last);
+  const formattedDate = lastDate.toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'});
+  const formattedTime = lastDate.toLocaleTimeString(undefined, {hour:'numeric', minute:'2-digit'});
+  const days = Math.floor((Date.now() - lastDate.getTime()) / 86400000);
   if(days < 1){
-    el.textContent = '✅ Backed up today.';
+    el.textContent = `✅ Backed up today at ${formattedTime} (${formattedDate}).`;
     el.className = 'backup-status ok';
   } else if(days < 14){
-    el.textContent = `✅ Backed up ${days} day${days===1?'':'s'} ago.`;
+    el.textContent = `✅ Last backup: ${formattedDate} (${days} day${days===1?'':'s'} ago).`;
     el.className = 'backup-status ok';
   } else {
-    el.textContent = `⏰ Last backup was ${days} days ago — worth exporting a fresh copy.`;
+    el.textContent = `⏰ Last backup: ${formattedDate} (${days} days ago) — worth exporting a fresh copy.`;
     el.className = 'backup-status warn';
   }
 }
@@ -1608,9 +1661,11 @@ let editingOrnamentId = null;
 
 let flashOrnamentId = null;
 let targetSlotForNewOrnament = null;
-function openOrnaments(preselectId, targetSlot){
+let currentOrnamentPool = 'main';
+function openOrnaments(preselectId, targetSlot, pool){
   editingOrnamentId = null;
   flashOrnamentId = preselectId || null;
+  currentOrnamentPool = pool || 'main';
   if(targetSlot!==undefined && targetSlot!==null) targetSlotForNewOrnament = targetSlot;
   renderOrnamentsScreen();
   document.getElementById('ornaments-overlay').classList.add('show');
@@ -1639,6 +1694,13 @@ function closeSeriesView(){
   setTab('all');
 }
 
+function switchOrnamentPool(pool){
+  currentOrnamentPool = pool;
+  editingOrnamentId = null;
+  targetSlotForNewOrnament = null;
+  renderOrnamentsScreen();
+}
+
 function renderOrnamentsScreen(){
   const list = document.getElementById('ornament-list');
   const hint = document.getElementById('ornament-edit-hint');
@@ -1646,10 +1708,12 @@ function renderOrnamentsScreen(){
   const customError = document.getElementById('custom-emoji-error');
   if(customInput) customInput.value = '';
   if(customError) customError.style.display = 'none';
+  document.getElementById('ornament-pool-main-btn').className = 'btn-small' + (currentOrnamentPool==='main' ? ' primary' : '');
+  document.getElementById('ornament-pool-kobo-btn').className = 'btn-small' + (currentOrnamentPool==='kobo' ? ' primary' : '');
   list.innerHTML = '';
-  const maxSlot = maxOrnamentSlot();
+  const maxSlot = maxOrnamentSlot(currentOrnamentPool);
   for(let i=0; i<=maxSlot; i++){
-    const o = ornamentAtSlot(i);
+    const o = ornamentAtSlot(i, currentOrnamentPool);
     const tile = document.createElement('div');
     if(o){
       tile.className = 'ornament-tile' + (editingOrnamentId===o.id ? ' selected' : '') + (flashOrnamentId===o.id ? ' flash' : '');
@@ -1717,9 +1781,9 @@ function addEmojiOrnament(emoji){
     pendingOrnamentFocusId = editingOrnamentId;
     editingOrnamentId = null;
   } else {
-    const slot = (targetSlotForNewOrnament!==null) ? targetSlotForNewOrnament : nextOrnamentSlot();
+    const slot = (targetSlotForNewOrnament!==null) ? targetSlotForNewOrnament : nextOrnamentSlot(currentOrnamentPool);
     const id = 'o'+Date.now()+Math.random().toString(36).slice(2,6);
-    userOrnaments.push({id, type:'emoji', value:emoji, slot});
+    userOrnaments.push({id, type:'emoji', value:emoji, slot, pool:currentOrnamentPool});
     pendingOrnamentFocusId = id;
     targetSlotForNewOrnament = null;
   }
@@ -1758,7 +1822,7 @@ function moveOrnamentToSlot(id, newSlot){
   if(newSlot < 0) return;
   const a = userOrnaments.find(o=>o.id===id);
   if(!a) return;
-  const b = userOrnaments.find(o=>o.slot===newSlot);
+  const b = userOrnaments.find(o=>o.slot===newSlot && o.pool===a.pool);
   if(b){ const tmp = a.slot; a.slot = b.slot; b.slot = tmp; }
   else { a.slot = newSlot; }
   pendingOrnamentFocusId = id;
@@ -1787,9 +1851,9 @@ function onOrnamentPhotoChosen(e){
         pendingOrnamentFocusId = editingOrnamentId;
         editingOrnamentId = null;
       } else {
-        const slot = (targetSlotForNewOrnament!==null) ? targetSlotForNewOrnament : nextOrnamentSlot();
+        const slot = (targetSlotForNewOrnament!==null) ? targetSlotForNewOrnament : nextOrnamentSlot(currentOrnamentPool);
         const id = 'o'+Date.now()+Math.random().toString(36).slice(2,6);
-        userOrnaments.push({id, type:'photo', value:dataUrl, slot});
+        userOrnaments.push({id, type:'photo', value:dataUrl, slot, pool:currentOrnamentPool});
         pendingOrnamentFocusId = id;
         targetSlotForNewOrnament = null;
       }
@@ -1909,8 +1973,9 @@ function fixHorizontalDrift(){
 setInterval(fixHorizontalDrift, 300);
 
 /* ---------- sorting ---------- */
-function maxOrnamentSlot(){
-  return userOrnaments.length ? Math.max(...userOrnaments.map(o=>o.slot)) : 0;
+function maxOrnamentSlot(pool){
+  const inPool = ornamentsInPool(pool);
+  return inPool.length ? Math.max(...inPool.map(o=>o.slot)) : 0;
 }
 function withOrnaments(list, startCursor){
   const cursor = startCursor || 0; // book-pinned ornaments don't consume pool slots — cursor passes through unchanged for filler rows to continue from
@@ -1969,6 +2034,9 @@ function renderShelf(){
   const readThisYear = books.filter(b=>b.status==='read' && b.dateRead && new Date(b.dateRead).getFullYear()===thisYear).length;
   const goalData = JSON.parse(localStorage.getItem(GOAL_KEY) || 'null');
   const goal = (goalData && goalData.year===thisYear) ? goalData.goal : 0;
+  document.getElementById('header-subtitle').textContent = goal
+    ? `${readThisYear} of ${goal} books this year`
+    : 'Your Personal Collection';
   document.getElementById('year-pill').textContent = goal
     ? `📖 ${readThisYear} / ${goal} read in ${thisYear}`
     : `📖 ${readThisYear} read in ${thisYear}`;
@@ -2019,6 +2087,8 @@ function renderShelf(){
     showLegend = false;
   }
 
+  currentSearchMatches = filterVal ? sectionBooks : null;
+
   const showEmptyBookcase = !books.length || (activeTab==='all' && !sectionBooks.length);
 
   if(!sectionBooks.length && books.length && !showEmptyBookcase){
@@ -2050,7 +2120,7 @@ function renderShelf(){
   const GHOST_FILLER_HEIGHTS = [72,58,80,64];
   const sorted = sortBooks(sectionBooks);
   const {list: decorated} = withOrnaments(sorted, 0);
-  const ROW_CONTENT_LIMIT = availWidth - ORNAMENT_STEP - ADD_TILE_STEP; // reserve room for one ornament + the add-tile on every row
+  const ROW_CONTENT_LIMIT = availWidth - ORNAMENT_STEP; // reserve room for one ornament on every row (the add-tile only needs room on whichever row actually gets it, handled below)
   const rows = [];
   let currentRow = [], usedWidth = 0;
   decorated.forEach(item=>{
@@ -2100,6 +2170,16 @@ function renderShelf(){
     if(currentPageRows[i].some(it=>!it.__ornament)){ addTileRow = i; break; }
   }
 
+  // that row was packed only reserving room for an ornament, not the add-tile too — if it's now too full to fit both, give the add-tile the next row instead
+  {
+    const rowRealWidth = currentPageRows[addTileRow].reduce((sum,it)=> sum + (it.__ornament ? ORNAMENT_STEP : SPINE_STEP), 0);
+    if(rowRealWidth + ORNAMENT_STEP + ADD_TILE_STEP > availWidth && addTileRow + 1 < currentPageRows.length){
+      addTileRow += 1;
+    }
+  }
+
+  const shelfOrnamentPool = (activeTab==='kobo') ? 'kobo' : 'main';
+
   const ORNAMENT_POSITION_FRACTIONS = [0.15, 0.7, 0.05, 0.45]; // where along the row the ornament lands, varied per row so it doesn't always sit at the same spot
   currentPageRows.forEach((rowItems, rowNum)=>{
     const hasAddTile = rowNum === addTileRow;
@@ -2115,7 +2195,7 @@ function renderShelf(){
     }
 
     // now insert the ornament at a position scaled to the row's actual length, so it's genuinely spread out
-    const orn = ornamentAtSlot(rowNum);
+    const orn = ornamentAtSlot(rowNum, shelfOrnamentPool);
     const decoItem = orn ? {__ornament: orn} : {__ornamentGap:true, slot:rowNum};
     const insertAt = Math.min(rowItems.length, Math.floor(rowItems.length * ORNAMENT_POSITION_FRACTIONS[rowNum % 4]));
     rowItems.splice(insertAt, 0, decoItem);
@@ -2155,7 +2235,7 @@ function renderShelf(){
           orn.onclick = ()=>openBook(data.bookId);
         } else {
           orn.title = 'Tap to change this ornament';
-          orn.onclick = ()=>openOrnaments(data.id);
+          orn.onclick = ()=>openOrnaments(data.id, null, data.pool);
         }
         shelfDiv.appendChild(orn);
         return;
@@ -2165,7 +2245,7 @@ function renderShelf(){
         gap.className = 'ornament ornament-compact ornament-ghost';
         gap.textContent = '?';
         gap.title = 'Tap to add an ornament here';
-        gap.onclick = ()=>openOrnaments(null, item.slot);
+        gap.onclick = ()=>openOrnaments(null, item.slot, shelfOrnamentPool);
         shelfDiv.appendChild(gap);
         return;
       }
@@ -2182,6 +2262,7 @@ function renderShelf(){
   });
 
   fitAllSpineTitles();
+  renderBackupNudge();
 }
 
 function createSpineEl(b, opts){
@@ -2248,6 +2329,16 @@ window.addEventListener('resize', ()=>{
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(renderShelf, 200);
 });
+
+let currentSearchMatches = null;
+function handleSearchEnter(e){
+  if(e.key !== 'Enter') return;
+  if(currentSearchMatches && currentSearchMatches.length === 1){
+    const id = currentSearchMatches[0].id;
+    closeSearchBar();
+    openBook(id);
+  }
+}
 
 function toggleSearchBar(){
   const wrap = document.getElementById('search-bar-wrap');
@@ -2533,6 +2624,8 @@ function clearManualFields(){
   document.getElementById('f-title').value='';
   document.getElementById('f-author').value='';
   document.getElementById('title-lookup-status').textContent='';
+  document.getElementById('title-lookup-results').style.display='none';
+  document.getElementById('title-lookup-results').innerHTML='';
   lastLookedUpTitle = '';
   populateGenreSelect();
   document.getElementById('f-genre').value='Fantasy';
@@ -2542,13 +2635,18 @@ function clearManualFields(){
   document.getElementById('f-series').value='';
   document.getElementById('f-series-num').value='';
   document.getElementById('f-series-total').value='';
-  document.getElementById('f-status').value='want-to-read';
+  document.getElementById('series-lookup-status').textContent='';
+  document.getElementById('series-lookup-results').style.display='none';
+  document.getElementById('series-lookup-results').innerHTML='';
+  lastLookedUpSeries = '';
+  document.getElementById('f-status').value='';
   document.getElementById('f-date-read').value='';
   document.getElementById('date-read-wrap').style.display='none';
   document.getElementById('f-current-page').value='';
   document.getElementById('f-total-pages').value='';
   document.getElementById('progress-wrap').style.display='none';
   document.getElementById('f-isbn').value='';
+  isbnFieldAutoScanUsed = false;
   document.getElementById('f-recommend').value='';
   currentMoods = [];
   renderMoodChips();
@@ -2638,6 +2736,21 @@ function onKeepsakePhotoChosen(e){
 
 /* ---------- barcode scanning ---------- */
 let zxingReader = null;
+let isbnFieldAutoScanUsed = false;
+function handleIsbnFocus(){
+  const el = document.getElementById('f-isbn');
+  if(!isbnFieldAutoScanUsed && !el.value.trim()){
+    isbnFieldAutoScanUsed = true;
+    el.blur();
+    scanBarcode();
+  }
+}
+function sanitizeIsbnInput(){
+  const el = document.getElementById('f-isbn');
+  const cleaned = el.value.replace(/[^0-9Xx]/g,'').toUpperCase();
+  if(cleaned !== el.value) el.value = cleaned;
+}
+
 async function scanBarcode(){
   const overlay = document.getElementById('scan-overlay');
   const video = document.getElementById('scan-video');
@@ -2671,12 +2784,24 @@ function stopScan(){
 }
 const GOOGLE_BOOKS_API_KEY = 'AIzaSyAwMgLKNxQI3hnVFIWlH6cinPCYTe-fErk';
 
+// Turns a Google Books API failure into something a person can actually act on.
+// Pass a numeric HTTP status for a bad response, or nothing at all for a network/fetch failure.
+function friendlyBooksError(status){
+  if(status===undefined || status===null) return "Couldn't reach Google Books — check your connection and try again.";
+  if(status===429) return 'Google Books is getting a lot of requests right now — try again in a moment.';
+  if(status===403) return "Google Books turned down this request — try again shortly.";
+  if(status>=500) return 'Google Books is temporarily unavailable — try again in a moment.';
+  return "Google Books couldn't complete that search — try again in a moment.";
+}
+
 async function lookupIsbn(isbn){
+  const statusEl = document.getElementById('title-lookup-status');
   try{
     const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(isbn)}&key=${GOOGLE_BOOKS_API_KEY}`);
+    if(!res.ok){ statusEl.textContent = friendlyBooksError(res.status); return; }
     const data = await res.json();
     const item = (data.items||[])[0];
-    if(!item){ return; }
+    if(!item){ statusEl.textContent = "Couldn't find that ISBN — fill in the details manually."; return; }
     const info = item.volumeInfo || {};
     document.getElementById('f-title').value = info.title || '';
     document.getElementById('f-author').value = (info.authors||[])[0] || '';
@@ -2686,51 +2811,150 @@ async function lookupIsbn(isbn){
       pendingCover = cover;
       updateCoverPreview();
     }
-  }catch(e){}
+  }catch(e){
+    statusEl.textContent = friendlyBooksError();
+  }
 }
 
 let lastLookedUpTitle = '';
 async function lookupByTitle(){
   const statusEl = document.getElementById('title-lookup-status');
+  const resultsEl = document.getElementById('title-lookup-results');
   const title = document.getElementById('f-title').value.trim();
-  if(!title){ statusEl.textContent=''; return; }
+  if(!title){ statusEl.textContent=''; resultsEl.style.display='none'; resultsEl.innerHTML=''; return; }
+  // already searched this exact title, skip the network call
+  if(title === lastLookedUpTitle){ return; }
+  statusEl.textContent = 'Searching…';
+  resultsEl.style.display='none';
+  resultsEl.innerHTML='';
+  try{
+    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}&maxResults=8&key=${GOOGLE_BOOKS_API_KEY}`);
+    if(!res.ok){ statusEl.textContent = friendlyBooksError(res.status); return; }
+    const data = await res.json();
+    const items = (data.items||[]).filter(it=>it.volumeInfo && it.volumeInfo.title);
+    lastLookedUpTitle = title;
+    if(!items.length){ statusEl.textContent = 'No match found'; return; }
+    if(items.length===1){
+      fillFromVolumeInfo(items[0].volumeInfo);
+      return;
+    }
+    statusEl.textContent = `Found ${items.length} matches — tap the right one`;
+    resultsEl.style.display = 'flex';
+    items.forEach(it=>{
+      const info = it.volumeInfo || {};
+      const details = [info.authors && info.authors[0], info.publishedDate ? info.publishedDate.slice(0,4) : null, info.pageCount ? info.pageCount+' pages' : null].filter(Boolean).join(' · ');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn-small';
+      btn.style.cssText = 'text-align:left;width:100%;white-space:normal;line-height:1.3;';
+      btn.textContent = info.title + (details ? ' — ' + details : '');
+      btn.onclick = ()=> pickTitleResult(info);
+      resultsEl.appendChild(btn);
+    });
+  }catch(e){
+    statusEl.textContent = friendlyBooksError();
+  }
+}
+
+function fillFromVolumeInfo(info){
+  const statusEl = document.getElementById('title-lookup-status');
   const authorEl = document.getElementById('f-author');
   const isbnEl = document.getElementById('f-isbn');
   const pagesEl = document.getElementById('f-total-pages');
-  // already searched this exact title, skip the network call
-  if(title === lastLookedUpTitle){ statusEl.textContent=''; return; }
-  statusEl.textContent = 'Searching…';
-  try{
-    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}&key=${GOOGLE_BOOKS_API_KEY}`);
-    if(!res.ok){ statusEl.textContent = `Search failed (${res.status})`; return; }
-    const data = await res.json();
-    const item = (data.items||[])[0];
-    if(!item){ statusEl.textContent = 'No match found'; lastLookedUpTitle = title; return; }
-    const info = item.volumeInfo || {};
-    let filledAnything = false;
-    if(!authorEl.value.trim() && (info.authors||[])[0]){ authorEl.value = info.authors[0]; filledAnything = true; }
-    if(!isbnEl.value.trim()){
-      const ids = info.industryIdentifiers || [];
-      const isbn13 = ids.find(i=>i.type==='ISBN_13');
-      const isbn10 = ids.find(i=>i.type==='ISBN_10');
-      const foundIsbn = (isbn13||isbn10||{}).identifier;
-      if(foundIsbn){ isbnEl.value = foundIsbn; filledAnything = true; }
-    }
-    if(!pagesEl.value.trim() && info.pageCount){ pagesEl.value = info.pageCount; filledAnything = true; }
-    if(!pendingCover){
-      let cover = (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) || '';
-      if(cover) cover = cover.replace('http://','https://');
-      if(cover){
-        pendingCover = cover;
-        updateCoverPreview();
-        filledAnything = true;
-      }
-    }
-    lastLookedUpTitle = title;
-    statusEl.textContent = filledAnything ? 'Filled in from "' + (info.title||title) + '"' : 'Found a match, but nothing new to fill in';
-  }catch(e){
-    statusEl.textContent = 'Search failed: ' + (e.message || 'network error');
+  let filledAnything = false;
+  if(!authorEl.value.trim() && (info.authors||[])[0]){ authorEl.value = info.authors[0]; filledAnything = true; }
+  if(!isbnEl.value.trim()){
+    const ids = info.industryIdentifiers || [];
+    const isbn13 = ids.find(i=>i.type==='ISBN_13');
+    const isbn10 = ids.find(i=>i.type==='ISBN_10');
+    const foundIsbn = (isbn13||isbn10||{}).identifier;
+    if(foundIsbn){ isbnEl.value = foundIsbn; filledAnything = true; }
   }
+  if(!pagesEl.value.trim() && info.pageCount){ pagesEl.value = info.pageCount; filledAnything = true; }
+  if(!pendingCover){
+    let cover = (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) || '';
+    if(cover) cover = cover.replace('http://','https://');
+    if(cover){
+      pendingCover = cover;
+      updateCoverPreview();
+      filledAnything = true;
+    }
+  }
+  statusEl.textContent = filledAnything ? 'Filled in from "' + (info.title||lastLookedUpTitle) + '"' : 'Found a match, but nothing new to fill in';
+}
+
+function pickTitleResult(info){
+  // picking a specific edition overrides whatever an earlier auto-fill guessed
+  document.getElementById('f-author').value = '';
+  document.getElementById('f-isbn').value = '';
+  document.getElementById('f-total-pages').value = '';
+  pendingCover = '';
+  updateCoverPreview();
+  fillFromVolumeInfo(info);
+  document.getElementById('title-lookup-results').style.display = 'none';
+  document.getElementById('title-lookup-results').innerHTML = '';
+}
+
+let lastLookedUpSeries = '';
+async function lookupBySeries(){
+  const statusEl = document.getElementById('series-lookup-status');
+  const resultsEl = document.getElementById('series-lookup-results');
+  const series = document.getElementById('f-series').value.trim();
+  if(!series){ statusEl.textContent=''; resultsEl.style.display='none'; resultsEl.innerHTML=''; return; }
+  // already searched this exact series, skip the network call
+  if(series === lastLookedUpSeries){ return; }
+  statusEl.textContent = 'Searching…';
+  resultsEl.style.display='none';
+  resultsEl.innerHTML='';
+  try{
+    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(series)}&maxResults=12&key=${GOOGLE_BOOKS_API_KEY}`);
+    if(!res.ok){ statusEl.textContent = friendlyBooksError(res.status); return; }
+    const data = await res.json();
+    const items = (data.items || []).filter(it => it.volumeInfo && it.volumeInfo.title);
+    lastLookedUpSeries = series;
+    if(!items.length){ statusEl.textContent = 'No matching books found'; return; }
+    statusEl.textContent = `Found ${items.length} book${items.length===1?'':'s'} — tap one to fill in its details`;
+    resultsEl.style.display = 'flex';
+    items.forEach(it=>{
+      const info = it.volumeInfo || {};
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn-small';
+      btn.style.cssText = 'text-align:left;width:100%;white-space:normal;line-height:1.3;';
+      btn.textContent = info.title + (info.authors && info.authors[0] ? ' — ' + info.authors[0] : '');
+      btn.onclick = ()=> pickSeriesResult(info);
+      resultsEl.appendChild(btn);
+    });
+  }catch(e){
+    statusEl.textContent = friendlyBooksError();
+  }
+}
+
+function pickSeriesResult(info){
+  const titleEl = document.getElementById('f-title');
+  const authorEl = document.getElementById('f-author');
+  const isbnEl = document.getElementById('f-isbn');
+  const pagesEl = document.getElementById('f-total-pages');
+
+  titleEl.value = info.title || titleEl.value;
+  if((info.authors||[])[0]) authorEl.value = info.authors[0];
+  if(info.pageCount) pagesEl.value = info.pageCount;
+  const ids = info.industryIdentifiers || [];
+  const isbn13 = ids.find(i=>i.type==='ISBN_13');
+  const isbn10 = ids.find(i=>i.type==='ISBN_10');
+  const foundIsbn = (isbn13||isbn10||{}).identifier;
+  if(foundIsbn) isbnEl.value = foundIsbn;
+  let cover = (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) || '';
+  if(cover){
+    cover = cover.replace('http://','https://');
+    pendingCover = cover;
+    updateCoverPreview();
+  }
+  // this title's now filled in manually, so the title-blur lookup shouldn't immediately overwrite it again
+  lastLookedUpTitle = titleEl.value.trim();
+  document.getElementById('series-lookup-status').textContent = 'Filled in from "' + info.title + '"';
+  document.getElementById('series-lookup-results').style.display = 'none';
+  document.getElementById('series-lookup-results').innerHTML = '';
 }
 
 /* ---------- open / save / delete ---------- */
@@ -2803,6 +3027,7 @@ function saveBook(){
   const seriesNum = document.getElementById('f-series-num').value.trim();
   const seriesTotal = document.getElementById('f-series-total').value.trim();
   const status = addingWishlistMode ? 'need-to-get' : document.getElementById('f-status').value;
+  if(!status){ document.getElementById('f-status').focus(); return; }
   const dateRead = document.getElementById('f-date-read').value;
   const bookCurrentPage = document.getElementById('f-current-page').value.trim();
   const totalPages = document.getElementById('f-total-pages').value.trim();
@@ -2816,7 +3041,19 @@ function saveBook(){
 
   const fields = {title,author,genre,genreCustom,format,series,seriesNum,seriesTotal,status,dateRead,currentPage:bookCurrentPage,totalPages,isbn,recommend,moods,quote,notes,keepsake,keepsakeText,keepsakePhoto:pendingKeepsakePhoto,flames:currentFlames,cover:pendingCover,ornamentAfter:pendingBookOrnament};
   const isNewBook = !editingId;
-  if(editingId){
+
+  if(isNewBook){
+    const dupe = books.find(b=> b.title.trim().toLowerCase()===title.toLowerCase() && (b.author||'').trim().toLowerCase()===author.toLowerCase());
+    if(dupe){
+      showConfirm(`You already have "${title}" on your shelf. Add it anyway?`, ()=> commitSaveBook(fields, isNewBook));
+      return;
+    }
+  }
+  commitSaveBook(fields, isNewBook);
+}
+
+function commitSaveBook(fields, isNewBook){
+  if(!isNewBook){
     const b = books.find(x=>x.id===editingId);
     Object.assign(b, fields);
   } else {
@@ -2824,7 +3061,7 @@ function saveBook(){
   }
   persist();
   closeSheet();
-  if(isNewBook){ activeTab = (status==='need-to-get') ? 'wishlist' : 'all'; currentPage = 0; }
+  if(isNewBook){ activeTab = (fields.status==='need-to-get') ? 'wishlist' : 'all'; currentPage = 0; }
   renderShelf();
 }
 
@@ -2932,6 +3169,7 @@ function exportData(){
   a.click();
   URL.revokeObjectURL(url);
   recordBackup();
+  closeSettings();
 }
 
 function importData(e){
