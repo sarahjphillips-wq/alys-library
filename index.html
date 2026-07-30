@@ -306,6 +306,8 @@
     -webkit-user-select:none;
     user-select:none;
     -webkit-user-drag:none;
+    outline:2px solid red;
+    outline-offset:-1px;
   }
   .spine.dragging{
     z-index:50;transition:none !important;
@@ -352,19 +354,6 @@
     position:absolute;top:3px;right:2px;font-size:0.6rem;
     filter:drop-shadow(0 1px 1px rgba(0,0,0,0.4));
   }
-  .spine-tab{
-    position:absolute;top:-9px;left:50%;transform:translateX(-50%);
-    width:15px;height:11px;border-radius:3px 3px 0 0;
-    box-shadow:0 -1px 3px rgba(0,0,0,0.2);
-  }
-  .spine-tab.st-read{background:#5b8a63;}
-  .spine-tab.st-want{background:#c9a13b;}
-  .spine-tab.st-reading{background:#4a86ad;}
-  .spine-tab.st-rereading{background:#8a5ba8;}
-  .spine-tab.st-onhold{background:#c98a3a;}
-  .spine-tab.st-dnf{background:#8a5a52;}
-  .spine-tab.st-own{background:#8a97a3;}
-  .spine-tab.st-borrowed{background:#3a9a8a;}
   .add-spine{
     flex:0 0 auto;width:18px;height:95px;
     border:none;
@@ -708,7 +697,12 @@
   #print-report{display:none;}
   @media print{
     body{background:white !important;}
+    header{display:none !important;}
     .wrap{display:none !important;}
+    .bottom-bar{display:none !important;}
+    .overlay{display:none !important;}
+    .scan-overlay{display:none !important;}
+    #bg-scrim{display:none !important;}
     #print-report{
       display:block !important;
       color:#1a232b;font-family:var(--serif);padding:20px;
@@ -818,7 +812,7 @@
         <div class="cover-preview" id="cover-preview" onclick="document.getElementById('photo-input').click()">📕</div>
         <div style="flex:1;">
           <div class="field-label" style="margin-top:0;">Title</div>
-          <input type="text" id="f-title" placeholder="The book's title">
+          <input type="text" id="f-title" placeholder="The book's title" onblur="lookupByTitle()">
         </div>
       </div>
       <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="onPhotoChosen(event)">
@@ -2333,22 +2327,11 @@ function createSpineEl(b, opts){
   let badge = b.keepsake ? '<div class="spine-badge">✨</div>' : '';
   let formatTag = (!isGhost && b.format==='kobo') ? '<div class="format-tag" title="Kobo / digital">📱</div>' : '';
   if(badge || formatTag) el.style.paddingTop = '20px'; // only needs the extra clearance when actually present
-  let tab = '';
-  if(!isGhost){
-    if(b.status==='reading') tab = '<div class="spine-tab st-reading" title="Currently reading"></div>';
-    else if(b.status==='rereading') tab = '<div class="spine-tab st-rereading" title="Re-reading"></div>';
-    else if(b.status==='on-hold') tab = '<div class="spine-tab st-onhold" title="On hold / paused"></div>';
-    else if(b.status==='read') tab = '<div class="spine-tab st-read" title="Read"></div>';
-    else if(b.status==='dnf') tab = '<div class="spine-tab st-dnf" title="Did not finish"></div>';
-    else if(b.status==='own') tab = '<div class="spine-tab st-own" title="Own it"></div>';
-    else if(b.status==='want-to-read') tab = '<div class="spine-tab st-want" title="Want to read"></div>';
-    else if(b.status==='borrowed') tab = '<div class="spine-tab st-borrowed" title="Borrowed"></div>';
-  }
   let gotItBtn = '';
   if(isGhost){
     gotItBtn = `<button class="got-it-btn" title="Mark as bought">✅</button>`;
   }
-  el.innerHTML = `${tab}${formatTag}${badge}<div class="spine-title">${esc(b.title)}</div>${gotItBtn}`;
+  el.innerHTML = `${formatTag}${badge}<div class="spine-title">${esc(b.title)}</div>${gotItBtn}`;
   if(isGhost){
     el.querySelector('.got-it-btn').onclick = (ev)=>{ ev.stopPropagation(); markAsBought(b.id); };
   }
@@ -2835,6 +2818,40 @@ async function lookupIsbn(isbn){
       pendingCover = cover;
       document.getElementById('cover-preview').style.backgroundImage = `url(${pendingCover})`;
       document.getElementById('cover-preview').textContent='';
+    }
+  }catch(e){}
+}
+
+async function lookupByTitle(){
+  const title = document.getElementById('f-title').value.trim();
+  if(!title) return;
+  const authorEl = document.getElementById('f-author');
+  const isbnEl = document.getElementById('f-isbn');
+  const pagesEl = document.getElementById('f-total-pages');
+  // nothing left to fill in, skip the network call
+  if(authorEl.value.trim() && isbnEl.value.trim() && pagesEl.value.trim() && pendingCover) return;
+  try{
+    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}`);
+    const data = await res.json();
+    const item = (data.items||[])[0];
+    if(!item) return;
+    const info = item.volumeInfo || {};
+    if(!authorEl.value.trim()) authorEl.value = (info.authors||[])[0] || '';
+    if(!isbnEl.value.trim()){
+      const ids = info.industryIdentifiers || [];
+      const isbn13 = ids.find(i=>i.type==='ISBN_13');
+      const isbn10 = ids.find(i=>i.type==='ISBN_10');
+      isbnEl.value = (isbn13||isbn10||{}).identifier || '';
+    }
+    if(!pagesEl.value.trim() && info.pageCount) pagesEl.value = info.pageCount;
+    if(!pendingCover){
+      let cover = (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) || '';
+      if(cover) cover = cover.replace('http://','https://');
+      if(cover){
+        pendingCover = cover;
+        document.getElementById('cover-preview').style.backgroundImage = `url(${pendingCover})`;
+        document.getElementById('cover-preview').textContent='';
+      }
     }
   }catch(e){}
 }
