@@ -12,6 +12,7 @@
 <link rel="apple-touch-icon" href="alys-library-apple-touch-icon.png">
 <link rel="manifest" href="alys-library-manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cinzel+Decorative:wght@700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 <style>
   :root{
     --ink:#1c2b3a;
@@ -729,7 +730,7 @@
 <header>
   <div class="header-left">
     <span class="crest">🐉</span>
-    <div>
+    <div style="min-width:0;overflow:hidden;">
       <h1 id="lib-title" contenteditable="true" spellcheck="false">Alys's Library</h1>
       <div class="subtitle">Your Personal Collection</div>
     </div>
@@ -816,13 +817,13 @@
         <div style="flex:1;">
           <div class="field-label" style="margin-top:0;">Title</div>
           <input type="text" id="f-title" placeholder="The book's title" onblur="lookupByTitle()">
+          <div id="title-lookup-status" style="font-size:0.72rem;color:#5a7484;margin-top:4px;min-height:14px;"></div>
         </div>
       </div>
       <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="onPhotoChosen(event)">
       <div class="photo-hint" onclick="document.getElementById('photo-input').click()">📷 Tap the cover to take or choose a photo of your book</div>
       <div class="field-label">Author</div>
       <input type="text" id="f-author" placeholder="Who wrote it">
-      <div id="title-lookup-status" style="font-size:0.72rem;color:#5a7484;margin-top:4px;min-height:14px;"></div>
 
       <div class="field-row">
         <div>
@@ -1323,7 +1324,6 @@ let currentFlames = 0;
 let activeTab = 'all';
 let currentPage = 0;
 let pendingOrnamentFocusId = null; // set whenever an ornament is added/moved, so the next renderShelf() jumps to whichever page it landed on
-let scanStream = null;
 
 function migrateOldData(){
   // one-time migration from the previous single-shelf version, if present
@@ -2771,42 +2771,37 @@ function onKeepsakePhotoChosen(e){
 }
 
 /* ---------- barcode scanning ---------- */
+let zxingReader = null;
 async function scanBarcode(){
-  if(!('BarcodeDetector' in window)){
-    alert("This browser can't scan barcodes directly. You can search by title above, or type the ISBN in by hand instead.");
-    return;
-  }
   const overlay = document.getElementById('scan-overlay');
   const video = document.getElementById('scan-video');
+  const hint = document.getElementById('scan-hint');
+  hint.textContent = 'Line up the barcode on the back of the book';
   overlay.classList.add('show');
   try{
-    scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
-    video.srcObject = scanStream;
-    const detector = new BarcodeDetector({formats:['ean_13','upc_a']});
-    const loop = async ()=>{
-      if(!scanStream) return;
-      try{
-        const codes = await detector.detect(video);
-        if(codes.length){
-          const isbn = codes[0].rawValue;
-          stopScan();
-          openAdd();
-          document.getElementById('f-isbn').value = isbn;
-          lookupIsbn(isbn);
-          return;
-        }
-      }catch(e){}
-      requestAnimationFrame(loop);
-    };
-    requestAnimationFrame(loop);
+    if(!zxingReader){
+      const hints = new Map();
+      hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.UPC_A]);
+      zxingReader = new ZXing.BrowserMultiFormatReader(hints);
+    }
+    await zxingReader.decodeFromVideoDevice(undefined, video, (result)=>{
+      if(result){
+        const isbn = result.getText();
+        stopScan();
+        openAdd();
+        document.getElementById('f-isbn').value = isbn;
+        lookupIsbn(isbn);
+      }
+      // errors fire on every frame where nothing is found yet — that's expected, not a failure
+    });
   }catch(err){
-    document.getElementById('scan-hint').textContent = "Couldn't access the camera — check your permissions, or type the ISBN in manually.";
+    hint.textContent = "Couldn't access the camera — check your permissions, or type the ISBN in manually.";
   }
 }
 function stopScan(){
   const overlay = document.getElementById('scan-overlay');
   overlay.classList.remove('show');
-  if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream=null; }
+  if(zxingReader){ zxingReader.reset(); }
 }
 const GOOGLE_BOOKS_API_KEY = 'AIzaSyAwMgLKNxQI3hnVFIWlH6cinPCYTe-fErk';
 
