@@ -819,6 +819,7 @@
       <div class="photo-hint" onclick="document.getElementById('photo-input').click()">📷 Tap the cover to take or choose a photo of your book</div>
       <div class="field-label">Author</div>
       <input type="text" id="f-author" placeholder="Who wrote it">
+      <div id="title-lookup-status" style="font-size:0.72rem;color:#5a7484;margin-top:4px;min-height:14px;"></div>
 
       <div class="field-row">
         <div>
@@ -2659,6 +2660,7 @@ function openAddWishlist(){
 function clearManualFields(){
   document.getElementById('f-title').value='';
   document.getElementById('f-author').value='';
+  document.getElementById('title-lookup-status').textContent='';
   populateGenreSelect();
   document.getElementById('f-genre').value='Fantasy';
   document.getElementById('f-genre-other').value='';
@@ -2823,27 +2825,32 @@ async function lookupIsbn(isbn){
 }
 
 async function lookupByTitle(){
+  const statusEl = document.getElementById('title-lookup-status');
   const title = document.getElementById('f-title').value.trim();
-  if(!title) return;
+  if(!title){ statusEl.textContent=''; return; }
   const authorEl = document.getElementById('f-author');
   const isbnEl = document.getElementById('f-isbn');
   const pagesEl = document.getElementById('f-total-pages');
   // nothing left to fill in, skip the network call
-  if(authorEl.value.trim() && isbnEl.value.trim() && pagesEl.value.trim() && pendingCover) return;
+  if(authorEl.value.trim() && isbnEl.value.trim() && pagesEl.value.trim() && pendingCover){ statusEl.textContent=''; return; }
+  statusEl.textContent = 'Searching…';
   try{
     const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}`);
+    if(!res.ok){ statusEl.textContent = `Search failed (${res.status})`; return; }
     const data = await res.json();
     const item = (data.items||[])[0];
-    if(!item) return;
+    if(!item){ statusEl.textContent = 'No match found'; return; }
     const info = item.volumeInfo || {};
-    if(!authorEl.value.trim()) authorEl.value = (info.authors||[])[0] || '';
+    let filledAnything = false;
+    if(!authorEl.value.trim() && (info.authors||[])[0]){ authorEl.value = info.authors[0]; filledAnything = true; }
     if(!isbnEl.value.trim()){
       const ids = info.industryIdentifiers || [];
       const isbn13 = ids.find(i=>i.type==='ISBN_13');
       const isbn10 = ids.find(i=>i.type==='ISBN_10');
-      isbnEl.value = (isbn13||isbn10||{}).identifier || '';
+      const foundIsbn = (isbn13||isbn10||{}).identifier;
+      if(foundIsbn){ isbnEl.value = foundIsbn; filledAnything = true; }
     }
-    if(!pagesEl.value.trim() && info.pageCount) pagesEl.value = info.pageCount;
+    if(!pagesEl.value.trim() && info.pageCount){ pagesEl.value = info.pageCount; filledAnything = true; }
     if(!pendingCover){
       let cover = (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) || '';
       if(cover) cover = cover.replace('http://','https://');
@@ -2851,9 +2858,13 @@ async function lookupByTitle(){
         pendingCover = cover;
         document.getElementById('cover-preview').style.backgroundImage = `url(${pendingCover})`;
         document.getElementById('cover-preview').textContent='';
+        filledAnything = true;
       }
     }
-  }catch(e){}
+    statusEl.textContent = filledAnything ? 'Filled in from "' + (info.title||title) + '"' : 'Found a match, but nothing new to fill in';
+  }catch(e){
+    statusEl.textContent = 'Search failed: ' + (e.message || 'network error');
+  }
 }
 
 /* ---------- open / save / delete ---------- */
@@ -2877,6 +2888,7 @@ function openBook(id){
   document.getElementById('delete-btn').style.display='';
   document.getElementById('f-title').value = b.title || '';
   document.getElementById('f-author').value = b.author || '';
+  document.getElementById('title-lookup-status').textContent='';
   populateGenreSelect();
   document.getElementById('f-genre').value = GENRES.includes(b.genre) ? b.genre : 'Other';
   document.getElementById('f-genre-other').value = b.genreCustom || '';
