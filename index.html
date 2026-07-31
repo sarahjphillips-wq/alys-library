@@ -178,11 +178,29 @@
     width:32px;height:32px;font-size:0.85rem;cursor:pointer;
   }
 
+  .cr-row{
+    display:flex;align-items:center;gap:10px;cursor:pointer;
+    background:rgba(255,255,255,0.55);border:1px solid rgba(111,135,152,0.3);border-radius:12px;
+    padding:12px 14px;margin-bottom:10px;
+  }
+  .cr-row-text{flex:1;min-width:0;}
+  .cr-row-title{font-family:var(--serif);font-size:0.95rem;color:var(--text-dark);}
+  .cr-row-meta{font-size:0.72rem;color:#5a7484;margin-top:3px;}
+  .cr-bar{height:7px;border-radius:5px;background:rgba(111,135,152,0.2);overflow:hidden;margin-top:8px;}
+  .cr-bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent-bright),var(--accent));}
+  .cr-pct-row{display:flex;justify-content:space-between;margin-top:4px;}
+  .cr-pct{font-size:0.72rem;font-weight:700;color:var(--ink2);}
+  .cr-pages{font-size:0.72rem;color:#5a7484;}
+
   .stats-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
   .stats-label{width:120px;flex-shrink:0;font-size:0.78rem;color:var(--text-dark);}
   .stats-bar-track{flex:1;height:16px;border-radius:6px;background:rgba(111,135,152,0.15);overflow:hidden;}
   .stats-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent-bright),var(--accent));border-radius:6px;}
   .stats-count{width:26px;text-align:right;font-size:0.75rem;color:#5a7484;flex-shrink:0;}
+  .highlight-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px;font-size:0.85rem;}
+  .highlight-row .hl-label{color:var(--text-dark);font-weight:600;}
+  .highlight-row .hl-value{color:#5a7484;text-align:right;}
+  .highlight-row:last-child{margin-bottom:0;}
 
   /* CONTROLS */
   .controls{
@@ -357,6 +375,13 @@
     position:absolute;top:3px;right:2px;font-size:0.6rem;
     filter:drop-shadow(0 1px 1px rgba(0,0,0,0.4));
   }
+  .spine-progress-dot{
+    position:absolute;bottom:5px;right:4px;
+    width:7px;height:7px;border-radius:50%;
+    background:var(--text-light);
+    box-shadow:0 0 0 1.5px rgba(0,0,0,0.25);
+    pointer-events:none;
+  }
   .add-spine{
     flex:0 0 auto;width:18px;height:95px;
     border:none;
@@ -403,13 +428,13 @@
   }
 
   .ornament-grid{
-    display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 16px;
+    display:flex;flex-wrap:wrap;gap:24px 20px;margin:14px 0 20px;
   }
   .ornament-tile{
-    position:relative;width:52px;height:52px;margin-top:16px;
+    position:relative;width:62px;height:62px;margin-top:20px;
     background:rgba(255,255,255,0.55);border:1.5px solid rgba(111,135,152,0.35);
-    border-radius:10px;display:flex;align-items:center;justify-content:center;
-    font-size:1.6rem;background-size:cover;background-position:center;
+    border-radius:12px;display:flex;align-items:center;justify-content:center;
+    font-size:1.8rem;background-size:cover;background-position:center;
     cursor:pointer;
   }
   .ornament-slot-label{
@@ -539,11 +564,9 @@
   }
 
   /* FULL-PAGE VARIANT (Add/Edit Book, Settings, Stats, Color Picker, Genre Colors, Ornaments, Wishlist, Series) */
-  #overlay, #stats-overlay, #genre-colors-overlay, #ornaments-overlay, #wishlist-overlay, #series-overlay{align-items:stretch;justify-content:stretch;background:var(--bg-grad);backdrop-filter:none;}
-  #settings-overlay{align-items:stretch;justify-content:stretch;background:transparent;backdrop-filter:none;}
-  #settings-overlay .sheet{background:transparent;}
+  #overlay, #settings-overlay, #stats-overlay, #genre-colors-overlay, #ornaments-overlay, #wishlist-overlay, #series-overlay, #series-picker-overlay, #currently-reading-overlay, #mood-picker-overlay{align-items:stretch;justify-content:stretch;background:var(--bg-grad);backdrop-filter:none;}
   #picker-overlay{align-items:stretch;justify-content:stretch;background:var(--bg-grad);backdrop-filter:none;}
-  #overlay .sheet, #settings-overlay .sheet, #stats-overlay .sheet, #picker-overlay .sheet, #genre-colors-overlay .sheet, #ornaments-overlay .sheet, #wishlist-overlay .sheet, #series-overlay .sheet{
+  #overlay .sheet, #settings-overlay .sheet, #stats-overlay .sheet, #picker-overlay .sheet, #genre-colors-overlay .sheet, #ornaments-overlay .sheet, #wishlist-overlay .sheet, #series-overlay .sheet, #series-picker-overlay .sheet, #currently-reading-overlay .sheet, #mood-picker-overlay .sheet{
     width:100%;max-width:100%;height:100%;max-height:100%;
     border-radius:0;border:none;box-shadow:none;
     padding:0;
@@ -552,7 +575,7 @@
     min-width:0;
     overflow:hidden;
   }
-  #overlay .sheet::before, #settings-overlay .sheet::before, #stats-overlay .sheet::before, #picker-overlay .sheet::before, #genre-colors-overlay .sheet::before, #ornaments-overlay .sheet::before, #wishlist-overlay .sheet::before, #series-overlay .sheet::before{display:none;}
+  #overlay .sheet::before, #settings-overlay .sheet::before, #stats-overlay .sheet::before, #picker-overlay .sheet::before, #genre-colors-overlay .sheet::before, #ornaments-overlay .sheet::before, #wishlist-overlay .sheet::before, #series-overlay .sheet::before, #series-picker-overlay .sheet::before, #currently-reading-overlay .sheet::before, #mood-picker-overlay .sheet::before{display:none;}
 
 
 
@@ -638,16 +661,42 @@
     min-width:0;
   }
   input:focus, textarea:focus, select.field-select:focus{border-color:var(--amethyst);}
+  .mood-summary-row{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    width:100%;padding:11px 13px;border-radius:10px;border:1.5px solid #c7d2d8;
+    background:rgba(255,255,255,0.7);font-family:var(--sans);font-size:0.92rem;
+    color:#5a7484;cursor:pointer;
+  }
+  .mood-summary-row .msr-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .mood-summary-row .msr-text.has-value{color:var(--text-dark);}
+  .mood-summary-row .msr-chevron{flex-shrink:0;color:#6f8798;font-size:1rem;}
+  .read-date-row{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    background:rgba(255,255,255,0.6);border:1px solid rgba(111,135,152,0.3);border-radius:8px;
+    padding:8px 10px;margin-top:6px;font-size:0.85rem;color:var(--text-dark);
+  }
+  .read-date-remove{
+    flex-shrink:0;background:none;color:#c1573f;border:1.5px solid rgba(193,87,63,0.4);border-radius:6px;
+    width:26px;height:26px;font-size:0.75rem;cursor:pointer;
+  }
+  .read-dates-empty{font-size:0.78rem;color:#5a7484;font-style:italic;margin-top:4px;}
   .field-row{display:flex;gap:10px;}
   .field-row > div{flex:1;min-width:0;}
   .cover-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:6px;}
   .photo-hint{font-size:0.7rem;color:#5a7484;margin:2px 0 4px;cursor:pointer;text-decoration:underline;}
   .cover-preview{
+    position:relative;
     width:64px;height:96px;border-radius:5px;background:#dde5ea;flex-shrink:0;
     background-size:cover;background-position:center;
     box-shadow:0 3px 8px rgba(0,0,0,0.2);
     display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#8fa2ac;
     cursor:pointer;
+  }
+  .cover-camera-badge{
+    position:absolute;bottom:-5px;right:-5px;width:24px;height:24px;border-radius:50%;
+    background:var(--steel,#5a7484);color:#fff;border:2px solid #fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.75rem;box-shadow:0 2px 4px rgba(0,0,0,0.3);
   }
   .chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px;}
   .chip{
@@ -751,6 +800,7 @@
     <button class="stats-btn" onclick="openStats()" title="Reading stats">📊</button>
     <button class="settings-btn" onclick="openSettings()" title="Background & settings">⚙️</button>
     <button class="settings-btn" onclick="pickNextRead()" title="Pick my next read">🎲</button>
+    <button class="settings-btn" onclick="openCurrentlyReading()" title="Currently reading">📖</button>
   </div>
 </header>
 <div class="wrap">
@@ -784,7 +834,7 @@
   </section>
 
   <footer>
-    <div class="footer-note">tap a spine to open it &nbsp;·&nbsp; tap an ornament to customize it</div>
+    <div class="footer-note">tap a spine to open it &nbsp;·&nbsp; tap an ornament to customise it</div>
   </footer>
 </div>
 
@@ -795,7 +845,7 @@
     <p id="confirm-message" style="font-size:0.95rem;line-height:1.4;margin:10px 0 20px;"></p>
     <div class="sheet-actions" style="flex-direction:column;">
       <button class="btn btn-danger" id="confirm-yes-btn" onclick="confirmYes()">Yes</button>
-      <button class="btn btn-ghost" onclick="confirmNo()">Cancel</button>
+      <button class="btn btn-ghost" id="confirm-cancel-btn" onclick="confirmNo()">Cancel</button>
     </div>
   </div>
 </div>
@@ -833,7 +883,10 @@
 
     <div id="manual-block">
       <div class="cover-row">
-        <div class="cover-preview" id="cover-preview" onclick="document.getElementById('photo-input').click()">📕</div>
+        <div class="cover-preview" id="cover-preview" onclick="document.getElementById('photo-input').click()">
+          <span id="cover-preview-icon">📕</span>
+          <span class="cover-camera-badge">📷</span>
+        </div>
         <div style="flex:1;">
           <div class="field-label" style="margin-top:0;">Title</div>
           <input type="text" id="f-title" placeholder="The book's title" onblur="lookupByTitle()">
@@ -842,9 +895,20 @@
         </div>
       </div>
       <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="onPhotoChosen(event)">
-      <div class="photo-hint" onclick="document.getElementById('photo-input').click()">📷 Tap the cover to take or choose a photo of your book</div>
       <button class="btn-small" id="cover-remove-btn" style="display:none;margin-top:6px;" onclick="removeCoverPhoto()">Remove photo</button>
-      <div class="field-label">Author</div>
+
+      <div class="wishlist-hide" style="margin-left:78px;">
+        <div class="field-label" style="text-align:center;">How much do you love it?</div>
+        <div class="flame-row" id="flame-row" style="justify-content:center;">
+          <span class="flame" data-v="1">❤️</span>
+          <span class="flame" data-v="2">❤️</span>
+          <span class="flame" data-v="3">❤️</span>
+          <span class="flame" data-v="4">❤️</span>
+          <span class="flame" data-v="5">❤️</span>
+        </div>
+      </div>
+
+      <div class="field-label" style="margin-top:4px;">Author</div>
       <input type="text" id="f-author" placeholder="Who wrote it">
 
       <div class="field-row">
@@ -857,6 +921,7 @@
           <select class="field-select" id="f-format">
             <option value="physical">Physical book</option>
             <option value="kobo">Kobo / digital</option>
+            <option value="audiobook">Audiobook</option>
           </select>
         </div>
       </div>
@@ -879,7 +944,6 @@
         </div>
       </div>
       <div id="series-lookup-status" style="font-size:0.72rem;color:#5a7484;margin-top:4px;min-height:14px;"></div>
-      <div id="series-lookup-results" style="display:none;margin-top:6px;flex-direction:column;gap:6px;"></div>
 
       <div class="wishlist-hide">
         <div class="field-label">Status</div>
@@ -906,24 +970,17 @@
           </div>
         </div>
         <div id="date-read-wrap" style="display:none;margin-top:10px;">
-          <div class="field-label" style="margin-top:0;">Date finished</div>
-          <input type="date" id="f-date-read">
+          <div class="field-label" style="margin-top:0;">Read dates</div>
+          <div id="read-dates-list"></div>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <input type="date" id="f-date-read-add" style="flex:1;">
+            <button type="button" class="btn-small" onclick="addReadDate()">+ Add</button>
+          </div>
         </div>
       </div>
 
       <div class="field-label">ISBN</div>
-      <input type="text" id="f-isbn" placeholder="Tap to scan the barcode, or type it in" inputmode="numeric" onfocus="handleIsbnFocus()" oninput="sanitizeIsbnInput()">
-
-      <div class="wishlist-hide">
-        <div class="field-label">How much do you love it?</div>
-        <div class="flame-row" id="flame-row">
-          <span class="flame" data-v="1">❤️</span>
-          <span class="flame" data-v="2">❤️</span>
-          <span class="flame" data-v="3">❤️</span>
-          <span class="flame" data-v="4">❤️</span>
-          <span class="flame" data-v="5">❤️</span>
-        </div>
-      </div>
+      <input type="text" id="f-isbn" placeholder="Type it in manually" inputmode="numeric" oninput="sanitizeIsbnInput()">
 
       <div class="wishlist-hide">
         <div class="field-label">Would you recommend it?</div>
@@ -937,11 +994,14 @@
 
       <div class="wishlist-hide">
         <div class="field-label">Vibe / mood tags</div>
-        <div class="chip-row" id="mood-row"></div>
+        <div class="mood-summary-row" onclick="openMoodPicker()">
+          <span class="msr-text" id="mood-summary-text">Tap to choose...</span>
+          <span class="msr-chevron">›</span>
+        </div>
       </div>
 
       <div class="wishlist-hide">
-        <div class="field-label">Favorite quote</div>
+        <div class="field-label">Favourite quote</div>
         <textarea id="f-quote" rows="2" placeholder="A line worth remembering..."></textarea>
       </div>
 
@@ -1032,15 +1092,9 @@
     </section>
 
     <section class="panel">
-      <div class="panel-label" style="margin-top:0;">Genre colors</div>
-      <div class="byline" style="margin-bottom:10px;">Change what color each genre shows up as on the shelf</div>
-      <button class="btn-small primary" style="width:100%;" onclick="openGenreColors()">🎨 Change genre colors</button>
-    </section>
-
-    <section class="panel">
-      <div class="panel-label" style="margin-top:0;">Shelf ornaments</div>
-      <div class="byline" style="margin-bottom:10px;">The little knickknacks that appear between your books</div>
-      <button class="btn-small primary" style="width:100%;" onclick="openOrnaments()">🏺 Manage shelf ornaments</button>
+      <div class="panel-label" style="margin-top:0;">Genre colours</div>
+      <div class="byline" style="margin-bottom:10px;">Change what colour each genre shows up as on the shelf</div>
+      <button class="btn-small primary" style="width:100%;" onclick="openGenreColors()">🎨 Change genre colours</button>
     </section>
 
     <section class="panel">
@@ -1105,14 +1159,14 @@
   <div class="sheet">
     <div class="screen-header">
       <button class="back-btn" onclick="closeGenreColors()">← Back</button>
-      <h2>🎨 Genre colors</h2>
+      <h2>🎨 Genre colours</h2>
     </div>
     <div class="screen-content">
-    <div class="byline">Tap a color to change what each genre looks like on the shelf</div>
+    <div class="byline">Tap a colour to change what each genre looks like on the shelf</div>
     <div id="genre-color-list"></div>
     </div>
     <div class="screen-footer">
-      <button class="btn btn-ghost" onclick="resetGenreColors()">Reset genre colors</button>
+      <button class="btn btn-ghost" onclick="resetGenreColors()">Reset genre colours</button>
     </div>
   </div>
 </div>
@@ -1126,9 +1180,10 @@
     </div>
     <div class="screen-content">
     <div class="byline">These appear scattered between your books, like knickknacks on a real shelf</div>
-    <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <button class="btn-small" id="ornament-pool-main-btn" style="flex:1;" onclick="switchOrnamentPool('main')">📚 Main shelf</button>
-      <button class="btn-small" id="ornament-pool-kobo-btn" style="flex:1;" onclick="switchOrnamentPool('kobo')">📱 Kobo shelf</button>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+      <button class="btn-small" id="ornament-pool-main-btn" style="flex:1;min-width:100px;" onclick="switchOrnamentPool('main')">📚 Main shelf</button>
+      <button class="btn-small" id="ornament-pool-kobo-btn" style="flex:1;min-width:100px;" onclick="switchOrnamentPool('kobo')">📱 Kobo shelf</button>
+      <button class="btn-small" id="ornament-pool-audiobook-btn" style="flex:1;min-width:100px;" onclick="switchOrnamentPool('audiobook')">🎧 Audiobook shelf</button>
     </div>
     <div class="panel-sub-label" style="margin-top:0;">Currently on your shelves</div>
     <div class="ornament-grid" id="ornament-list"></div>
@@ -1173,6 +1228,20 @@
 </div>
 
 <!-- WISHLIST SCREEN -->
+<!-- SERIES LOOKUP RESULTS SCREEN -->
+<div class="overlay" id="series-picker-overlay">
+  <div class="sheet">
+    <div class="screen-header">
+      <button class="back-btn" onclick="closeSeriesPicker()">← Back</button>
+      <h2>📚 Series results</h2>
+    </div>
+    <div class="screen-content">
+    <div class="byline" id="series-picker-status" style="margin-bottom:12px;"></div>
+    <div id="series-picker-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="wishlist-overlay">
   <div class="sheet">
     <div class="screen-header">
@@ -1188,6 +1257,36 @@
   </div>
 </div>
 
+<!-- CURRENTLY READING -->
+<div class="overlay" id="currently-reading-overlay">
+  <div class="sheet">
+    <div class="screen-header">
+      <button class="back-btn" onclick="closeCurrentlyReading()">← Back</button>
+      <h2>📖 Currently Reading</h2>
+    </div>
+    <div class="screen-content">
+    <div id="currently-reading-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MOOD PICKER -->
+<div class="overlay" id="mood-picker-overlay">
+  <div class="sheet">
+    <div class="screen-header">
+      <button class="back-btn" onclick="closeMoodPicker()">← Back</button>
+      <h2>Vibe / mood tags</h2>
+    </div>
+    <div class="screen-content">
+    <div class="byline">Tap all that fit — pick as many as you like</div>
+    <div class="chip-row" id="mood-row"></div>
+    </div>
+    <div class="screen-footer">
+      <button class="btn btn-primary" onclick="closeMoodPicker()">Done</button>
+    </div>
+  </div>
+</div>
+
 <!-- STATS SCREEN -->
 <div class="overlay" id="stats-overlay">
   <div class="sheet" style="max-width:600px;">
@@ -1196,20 +1295,28 @@
       <h2>📊 Reading stats</h2>
     </div>
     <div class="screen-content">
-    <div class="byline">A look at the shelf as a whole</div>
     <div class="stat-row">
       <div class="stat-pill" id="count-pill"></div>
       <div class="stat-pill" id="year-pill" onclick="openSettings()" style="cursor:pointer;" title="Tap to set a reading goal"></div>
+      <div class="stat-pill" id="rating-pill"></div>
     </div>
     <div class="goal-bar-wrap" id="goal-bar-wrap" style="display:none;">
       <div class="goal-bar"><div class="goal-bar-fill" id="goal-bar-fill"></div></div>
     </div>
-    <div class="field-label" style="margin-top:16px;">Filter by genre</div>
-    <select class="field-select" id="stats-genre-filter" onchange="renderStatsView()"></select>
+    <div class="field-row" style="margin-top:16px;">
+      <div>
+        <div class="field-label" style="margin-top:0;">Filter by genre</div>
+        <select class="field-select" id="stats-genre-filter" onchange="renderStatsView()"></select>
+      </div>
+      <div>
+        <div class="field-label" style="margin-top:0;">Year</div>
+        <select class="field-select" id="stats-year-filter" onchange="renderStatsView()"></select>
+      </div>
+    </div>
     <div id="stats-view" style="margin-top:16px;clear:both;"></div>
     </div>
     <div class="screen-footer">
-      <button class="btn btn-ghost" onclick="printStats()">🖨️ Print these stats</button>
+      <button class="btn btn-ghost" style="flex:0 0 auto;padding-left:28px;padding-right:28px;" onclick="printStats()">🖨️ Print these stats</button>
     </div>
   </div>
 </div>
@@ -1230,13 +1337,14 @@
     <div id="pick-content" style="margin-top:16px;"></div>
     <div class="sheet-actions">
       <button class="btn btn-ghost" id="pick-again-btn" onclick="pickNextRead()">Pick again</button>
-      <button class="btn btn-primary" id="start-reading-btn" onclick="startPickedBook()">Start reading</button>
+      <button class="btn btn-primary" id="start-reading-btn" onclick="startPickedBook()">Save</button>
     </div>
   </div>
 </div>
 
 <script>
 const STORAGE_KEY='alys_library_books_v2';
+const ORNAMENT_SLOTS_PER_PAGE = 4; // total decoration spots per pool — the shelf only ever displays slots 0..this-1, repeated identically on every page
 const TITLE_KEY='alys_library_title_v1';
 const BG_KEY='alys_library_bg_v1';
 const GOAL_KEY='alys_library_goal_v1';
@@ -1256,13 +1364,13 @@ function nextOrnamentSlot(pool){
   const used = new Set(ornamentsInPool(pool).map(o=>o.slot));
   let s = 0;
   while(used.has(s)) s++;
-  return s;
+  return s < ORNAMENT_SLOTS_PER_PAGE ? s : null;
 }
 function repairOrnamentSlotsIfBroken(){
   // If slot numbers have drifted past what can actually be displayed (only ~4 decoration
   // spots exist when there are few/no books), ornaments silently vanish. Compact them back
   // into a dense range per pool, preserving relative order, so every ornament is visible again.
-  ['main','kobo'].forEach(pool=>{
+  ['main','kobo','audiobook'].forEach(pool=>{
     const inPool = ornamentsInPool(pool);
     if(inPool.length && Math.max(...inPool.map(o=>o.slot)) >= 4){
       const sorted = [...inPool].sort((a,b)=>a.slot-b.slot);
@@ -1277,20 +1385,31 @@ function ornamentAtSlot(slot, pool){
 }
 function persistOrnaments(){ localStorage.setItem(ORNAMENTS_KEY, JSON.stringify(userOrnaments)); }
 let books = JSON.parse(localStorage.getItem(STORAGE_KEY) || migrateOldData());
+(function migrateReadDates(){
+  let changed = false;
+  books.forEach(b=>{
+    if(!Array.isArray(b.readDates)){
+      b.readDates = b.dateRead ? [b.dateRead] : [];
+      changed = true;
+    }
+  });
+  if(changed) localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+})();
 let editingId = null;
 let pendingCover = '';
 let pendingBookOrnament = null; // {type:'emoji'|'photo', value:'...'} or null
 
 function updateCoverPreview(){
   const el = document.getElementById('cover-preview');
+  const icon = document.getElementById('cover-preview-icon');
   const removeBtn = document.getElementById('cover-remove-btn');
   if(pendingCover){
     el.style.backgroundImage = `url(${pendingCover})`;
-    el.textContent = '';
+    icon.style.display = 'none';
     removeBtn.style.display = '';
   } else {
     el.style.backgroundImage = '';
-    el.textContent = '📕';
+    icon.style.display = '';
     removeBtn.style.display = 'none';
   }
 }
@@ -1413,8 +1532,9 @@ function migrateOldData(){
 }
 
 const GENRES = ['Fantasy','Romantasy','Sci-Fi','Romance','Mystery & Thriller','Crime','Horror','Young Adult','Contemporary','Historical Fiction','Classics','Comedy','Dystopian','Non-Fiction','Graphic Novel / Manga','Other'];
-const MOODS = ['Cozy','Dark & gritty','Funny','Emotional / cried','Fast-paced','Slow burn','Spicy','Clean / sweet','Made me think','Comfort read'];
+const MOODS = ['Cosy','Dark','Funny','Emotional','Spicy','Sweet','Comfort read','Slow burn','Adventurous','Hopeful','Tense','Reflective'];
 let currentMoods = [];
+let currentReadDates = [];
 
 const BG_DEFAULT = {grad:'linear-gradient(180deg,#eaf5fb 0%, #cfe8f5 45%, #b9d9e8 100%)', swatch:'linear-gradient(135deg,#eaf5fb,#b9d9e8)'};
 
@@ -1580,6 +1700,7 @@ function onBgPhotoChosen(e){
     img.src = evt.target.result;
   };
   reader.readAsDataURL(file);
+  e.target.value = '';
 }
 const LAST_BACKUP_KEY = 'alys_library_last_backup_v1';
 const BACKUP_BASELINE_KEY = 'alys_library_backup_baseline_v1';
@@ -1683,6 +1804,21 @@ function closeWishlist(){
   document.getElementById('wishlist-overlay').classList.remove('show');
   setTab('all');
 }
+function openCurrentlyReading(){
+  renderCurrentlyReadingView();
+  document.getElementById('currently-reading-overlay').classList.add('show');
+}
+function closeCurrentlyReading(){
+  document.getElementById('currently-reading-overlay').classList.remove('show');
+}
+function openMoodPicker(){
+  renderMoodChips();
+  document.getElementById('mood-picker-overlay').classList.add('show');
+}
+function closeMoodPicker(){
+  document.getElementById('mood-picker-overlay').classList.remove('show');
+  updateMoodSummary();
+}
 let seriesPage = 0;
 function openSeriesView(){
   seriesPage = 0;
@@ -1710,6 +1846,7 @@ function renderOrnamentsScreen(){
   if(customError) customError.style.display = 'none';
   document.getElementById('ornament-pool-main-btn').className = 'btn-small' + (currentOrnamentPool==='main' ? ' primary' : '');
   document.getElementById('ornament-pool-kobo-btn').className = 'btn-small' + (currentOrnamentPool==='kobo' ? ' primary' : '');
+  document.getElementById('ornament-pool-audiobook-btn').className = 'btn-small' + (currentOrnamentPool==='audiobook' ? ' primary' : '');
   list.innerHTML = '';
   const maxSlot = maxOrnamentSlot(currentOrnamentPool);
   for(let i=0; i<=maxSlot; i++){
@@ -1745,6 +1882,7 @@ function renderOrnamentsScreen(){
       rightBtn.className = 'ornament-move ornament-move-right';
       rightBtn.textContent = '›';
       rightBtn.title = 'Move to shelf '+(i+2);
+      rightBtn.disabled = i>=ORNAMENT_SLOTS_PER_PAGE-1;
       rightBtn.onclick = (ev)=>{ ev.stopPropagation(); moveOrnamentToSlot(o.id, i+1); };
       tile.appendChild(rightBtn);
     } else {
@@ -1782,6 +1920,7 @@ function addEmojiOrnament(emoji){
     editingOrnamentId = null;
   } else {
     const slot = (targetSlotForNewOrnament!==null) ? targetSlotForNewOrnament : nextOrnamentSlot(currentOrnamentPool);
+    if(slot===null){ showMessage('All 4 spots are full — remove or swap one first.'); return; }
     const id = 'o'+Date.now()+Math.random().toString(36).slice(2,6);
     userOrnaments.push({id, type:'emoji', value:emoji, slot, pool:currentOrnamentPool});
     pendingOrnamentFocusId = id;
@@ -1796,19 +1935,32 @@ function looksLikeEmoji(str){
   if(/[a-zA-Z0-9\s]/.test(str)) return false;
   return /\p{Extended_Pictographic}/u.test(str);
 }
+function splitIntoEmojis(str){
+  // Splits on actual emoji boundaries (so multi-codepoint emoji like flags, ZWJ sequences,
+  // and skin-tone variants stay intact as one piece) rather than splitting by raw character.
+  try{
+    const seg = new Intl.Segmenter(undefined, {granularity:'grapheme'});
+    return [...seg.segment(str)].map(s=>s.segment);
+  }catch(e){
+    return Array.from(str);
+  }
+}
 function addCustomEmojiOrnament(){
   const input = document.getElementById('custom-emoji-input');
   const errorEl = document.getElementById('custom-emoji-error');
   const val = input.value.trim();
   if(!val) return;
-  if(!looksLikeEmoji(val)){
+  const pieces = splitIntoEmojis(val).filter(p=>p.trim());
+  if(!pieces.length || pieces.some(p=>!looksLikeEmoji(p))){
     errorEl.textContent = '"'+val+'" isn\'t an emoji — switch your keyboard to 🌐/😀 first, then pick one.';
     errorEl.style.display = '';
     input.value = '';
     return;
   }
   errorEl.style.display = 'none';
-  addEmojiOrnament(val);
+  // each emoji gets its own ornament — the first fills whichever slot was targeted
+  // (or replaces the ornament being edited); the rest each take the next open slot.
+  pieces.forEach(p=> addEmojiOrnament(p));
   input.value = '';
 }
 
@@ -1852,6 +2004,7 @@ function onOrnamentPhotoChosen(e){
         editingOrnamentId = null;
       } else {
         const slot = (targetSlotForNewOrnament!==null) ? targetSlotForNewOrnament : nextOrnamentSlot(currentOrnamentPool);
+        if(slot===null){ showMessage('All 4 spots are full — remove or swap one first.'); return; }
         const id = 'o'+Date.now()+Math.random().toString(36).slice(2,6);
         userOrnaments.push({id, type:'photo', value:dataUrl, slot, pool:currentOrnamentPool});
         pendingOrnamentFocusId = id;
@@ -1878,10 +2031,10 @@ function csvEscape(val){
   return '"' + s.replace(/"/g, '""') + '"';
 }
 function exportCsv(){
-  const headers = ['Title','Author','Genre','Format','Series','Series #','Series total','Status','Date finished','Current page','Total pages','ISBN','Recommend','Mood tags','Favorite quote','Notes','Love rating','Keepsake','Keepsake note'];
+  const headers = ['Title','Author','Genre','Format','Series','Series #','Series total','Status','Read dates','Current page','Total pages','ISBN','Recommend','Mood tags','Favourite quote','Notes','Love rating','Keepsake','Keepsake note'];
   const rows = books.map(b=>[
     b.title, b.author, genreLabel(b), b.format, b.series, b.seriesNum, b.seriesTotal,
-    statusLabel(b.status), b.dateRead, b.currentPage, b.totalPages, b.isbn, b.recommend,
+    statusLabel(b.status), (b.readDates||[]).join('; '), b.currentPage, b.totalPages, b.isbn, b.recommend,
     (b.moods||[]).join(', '), b.quote, b.notes, b.flames, b.keepsake?'Yes':'', b.keepsakeText
   ]);
   const csv = [headers, ...rows].map(r=>r.map(csvEscape).join(',')).join('\r\n');
@@ -1899,6 +2052,15 @@ let pendingConfirmCallback = null;
 function showConfirm(message, onConfirm){
   pendingConfirmCallback = onConfirm;
   document.getElementById('confirm-message').textContent = message;
+  document.getElementById('confirm-yes-btn').style.display = '';
+  document.getElementById('confirm-cancel-btn').textContent = 'Cancel';
+  document.getElementById('confirm-overlay').classList.add('show');
+}
+function showMessage(message){
+  pendingConfirmCallback = null;
+  document.getElementById('confirm-message').textContent = message;
+  document.getElementById('confirm-yes-btn').style.display = 'none';
+  document.getElementById('confirm-cancel-btn').textContent = 'OK';
   document.getElementById('confirm-overlay').classList.add('show');
 }
 function confirmYes(){
@@ -1925,6 +2087,7 @@ function clearLibrary(){
 
 function openStats(){
   populateStatsGenreFilter();
+  populateStatsYearFilter();
   renderStatsView();
   document.getElementById('stats-overlay').classList.add('show');
 }
@@ -1937,7 +2100,7 @@ function closeQuickActions(){ document.getElementById('quick-actions-overlay').c
 function genresInUse(){
   const set = new Set();
   books.forEach(b=>{
-    if(b.status==='need-to-get' || b.format==='kobo') return;
+    if(b.status==='need-to-get' || b.format==='kobo' || b.format==='audiobook') return;
     set.add(genreLabel(b));
   });
   return GENRES.filter(g=>set.has(g));
@@ -1946,9 +2109,9 @@ function genreLabel(b){
   return (b.genre==='Other' && b.genreCustom) ? b.genreCustom : (b.genre || 'Other');
 }
 function renderTabs(){
-  const tabs = [{key:'all',label:'All shelves'}]
+  const tabs = [{key:'all',label:'All books'}]
     .concat(genresInUse().map(g=>({key:'g:'+g,label:g})))
-    .concat([{key:'kobo',label:'📱 Kobo'},{key:'wishlist',label:'🛒 Wishlist'},{key:'series',label:'📚 Series'}]);
+    .concat([{key:'kobo',label:'📱 Kobo'},{key:'audiobook',label:'🎧 Audiobook'},{key:'wishlist',label:'🛒 Wishlist'},{key:'series',label:'📚 Series'}]);
   const sel = document.getElementById('tab-select');
   sel.innerHTML = tabs.map(t=>
     `<option value="${esc(t.key)}" ${activeTab===t.key?'selected':''}>${esc(t.label)}</option>`
@@ -2020,7 +2183,14 @@ function renderShelf(){
   const filterVal = document.getElementById('filter-input').value.trim().toLowerCase();
   const matches = b=>{
     if(!filterVal) return true;
-    return (b.title||'').toLowerCase().includes(filterVal) || (b.author||'').toLowerCase().includes(filterVal) || (b.series||'').toLowerCase().includes(filterVal);
+    if((b.title||'').toLowerCase().includes(filterVal)) return true;
+    if((b.author||'').toLowerCase().includes(filterVal)) return true;
+    if((b.series||'').toLowerCase().includes(filterVal)) return true;
+    if((b.moods||[]).some(m=>m.toLowerCase().includes(filterVal))) return true;
+    if((b.notes||'').toLowerCase().includes(filterVal)) return true;
+    if((b.quote||'').toLowerCase().includes(filterVal)) return true;
+    if((b.isbn||'').toLowerCase().includes(filterVal)) return true;
+    return false;
   };
 
   const countPill = document.getElementById('count-pill');
@@ -2031,7 +2201,7 @@ function renderShelf(){
     countPill.style.display='none';
   }
   const thisYear = new Date().getFullYear();
-  const readThisYear = books.filter(b=>b.status==='read' && b.dateRead && new Date(b.dateRead).getFullYear()===thisYear).length;
+  const readThisYear = books.reduce((sum,b)=> sum + (b.readDates||[]).filter(d=>new Date(d).getFullYear()===thisYear).length, 0);
   const goalData = JSON.parse(localStorage.getItem(GOAL_KEY) || 'null');
   const goal = (goalData && goalData.year===thisYear) ? goalData.goal : 0;
   document.getElementById('header-subtitle').textContent = goal
@@ -2065,18 +2235,23 @@ function renderShelf(){
 
   let sectionBooks, ghostAll, sectionLabel, showLegend;
   if(activeTab==='all'){
-    sectionBooks = books.filter(b=>b.status!=='need-to-get' && matches(b));
+    sectionBooks = books.filter(b=>b.status!=='need-to-get' && b.format!=='kobo' && b.format!=='audiobook' && matches(b));
     ghostAll = false; // ghost determined per-book below
-    sectionLabel = 'All shelves';
+    sectionLabel = 'All books';
     showLegend = true;
   } else if(activeTab==='kobo'){
     sectionBooks = books.filter(b=>b.status!=='need-to-get' && b.format==='kobo' && matches(b));
     ghostAll = false;
     sectionLabel = '📱 Kobo shelf';
     showLegend = true;
+  } else if(activeTab==='audiobook'){
+    sectionBooks = books.filter(b=>b.status!=='need-to-get' && b.format==='audiobook' && matches(b));
+    ghostAll = false;
+    sectionLabel = '🎧 Audiobook shelf';
+    showLegend = true;
   } else if(activeTab.startsWith('g:')){
     const g = activeTab.slice(2);
-    sectionBooks = books.filter(b=>b.status!=='need-to-get' && genreLabel(b)===g && matches(b));
+    sectionBooks = books.filter(b=>b.status!=='need-to-get' && b.format!=='kobo' && b.format!=='audiobook' && genreLabel(b)===g && matches(b));
     ghostAll = false;
     sectionLabel = g;
     showLegend = false;
@@ -2112,7 +2287,7 @@ function renderShelf(){
   const bookcaseEl = document.getElementById('bookcase-live');
   const SPINE_STEP = 25; // 22px spine + 3px gap
   const ORNAMENT_STEP = 67; // 64px ornament + 3px gap
-  const ROWS_PER_PAGE = 4; // fixed, matches the empty-state bookcase regardless of screen size
+  const ROWS_PER_PAGE = ORNAMENT_SLOTS_PER_PAGE; // shared with the ornaments screen, so both agree on how many decoration slots exist
   const availWidth = bookcaseEl.clientWidth - 20; // minus left+right padding
   const capacity = Math.max(1, Math.floor(availWidth / SPINE_STEP)); // used for capacity indicator text
 
@@ -2143,7 +2318,7 @@ function renderShelf(){
     pages.forEach((pg,pi)=>{
       pg.forEach(row=>{ row.forEach(item=>{ if(item.__ornament && item.__ornament.id===pendingOrnamentFocusId) foundPage = pi; }); });
     });
-    currentPage = (foundPage>=0) ? foundPage : Math.max(0, pages.length-1);
+    if(foundPage>=0) currentPage = foundPage; // only book-pinned ornaments are ever found here — pool ornaments repeat on every page, so there's nothing to jump to
     pendingOrnamentFocusId = null;
   }
   if(currentPage >= pages.length) currentPage = pages.length-1;
@@ -2178,7 +2353,7 @@ function renderShelf(){
     }
   }
 
-  const shelfOrnamentPool = (activeTab==='kobo') ? 'kobo' : 'main';
+  const shelfOrnamentPool = (activeTab==='kobo') ? 'kobo' : (activeTab==='audiobook') ? 'audiobook' : 'main';
 
   const ORNAMENT_POSITION_FRACTIONS = [0.15, 0.7, 0.05, 0.45]; // where along the row the ornament lands, varied per row so it doesn't always sit at the same spot
   currentPageRows.forEach((rowItems, rowNum)=>{
@@ -2279,13 +2454,20 @@ function createSpineEl(b, opts){
   el.style.height = heightForId(b.id)+'px'; // corrected to fit the real title by syncSpineHeights() below
   el.onclick = ()=>{ openBook(b.id); };
   let badge = b.keepsake ? '<div class="spine-badge">✨</div>' : '';
-  let formatTag = (!isGhost && b.format==='kobo') ? '<div class="format-tag" title="Kobo / digital">📱</div>' : '';
+  let formatTag = '';
+  if(!isGhost && b.format==='kobo') formatTag = '<div class="format-tag" title="Kobo / digital">📱</div>';
+  else if(!isGhost && b.format==='audiobook') formatTag = '<div class="format-tag" title="Audiobook">🎧</div>';
   if(badge || formatTag) el.style.paddingTop = '20px'; // only needs the extra clearance when actually present
   let gotItBtn = '';
   if(isGhost){
     gotItBtn = `<button class="got-it-btn" title="Mark as bought">✅</button>`;
   }
-  el.innerHTML = `${formatTag}${badge}<div class="spine-title">${esc(b.title)}</div>${gotItBtn}`;
+  let progressDot = '';
+  if(!isGhost && (b.status==='reading' || b.status==='rereading' || b.status==='on-hold') && b.currentPage && b.totalPages && Number(b.totalPages) > 0){
+    const pct = Math.max(0, Math.min(100, Math.round((Number(b.currentPage)/Number(b.totalPages))*100)));
+    progressDot = `<div class="spine-progress-dot" title="${pct}% \u00b7 pg ${esc(String(b.currentPage))} of ${esc(String(b.totalPages))}"></div>`;
+  }
+  el.innerHTML = `${formatTag}${badge}<div class="spine-title">${esc(b.title)}</div>${gotItBtn}${progressDot}`;
   if(isGhost){
     el.querySelector('.got-it-btn').onclick = (ev)=>{ ev.stopPropagation(); markAsBought(b.id); };
   }
@@ -2468,7 +2650,14 @@ function renderWishlistView(){
   const list = books.filter(b=>{
     if(b.status!=='need-to-get') return false;
     if(!filterVal) return true;
-    return (b.title||'').toLowerCase().includes(filterVal) || (b.author||'').toLowerCase().includes(filterVal) || (b.series||'').toLowerCase().includes(filterVal);
+    if((b.title||'').toLowerCase().includes(filterVal)) return true;
+    if((b.author||'').toLowerCase().includes(filterVal)) return true;
+    if((b.series||'').toLowerCase().includes(filterVal)) return true;
+    if((b.moods||[]).some(m=>m.toLowerCase().includes(filterVal))) return true;
+    if((b.notes||'').toLowerCase().includes(filterVal)) return true;
+    if((b.quote||'').toLowerCase().includes(filterVal)) return true;
+    if((b.isbn||'').toLowerCase().includes(filterVal)) return true;
+    return false;
   }).sort((a,b)=>(a.title||'').localeCompare(b.title||''));
   if(!list.length){
     view.innerHTML = `<div class="empty-state">Nothing on your wishlist yet — tap 🛒 to add a book you want to get.</div>`;
@@ -2477,15 +2666,52 @@ function renderWishlistView(){
   view.innerHTML = list.map(b=>{
     const meta = [b.author, b.series ? (b.series + (b.seriesNum ? ' #'+b.seriesNum : '')) : '', genreLabel(b)].filter(Boolean).join(' · ');
     return `<div class="wishlist-row">
-      <div class="wishlist-row-text" onclick="openBook('${b.id}')">
+      <div class="wishlist-row-text">
         <div class="wishlist-row-title">${esc(b.title)}</div>
         ${meta ? `<div class="wishlist-row-meta">${esc(meta)}</div>` : ''}
         ${b.notes ? `<div class="wishlist-row-notes">${esc(b.notes)}</div>` : ''}
       </div>
-      <button class="wishlist-got-it" onclick="markAsBought('${b.id}')" title="Got it — move to your shelf">✅ Got it</button>
-      <button class="wishlist-remove" onclick="removeWishlistItem('${b.id}')" title="Remove from wishlist">✕</button>
+      <button class="wishlist-got-it" title="Got it — move to your shelf">✅ Got it</button>
+      <button class="wishlist-remove" title="Remove from wishlist">✕</button>
     </div>`;
   }).join('');
+  // handlers attached as real function references — never built as strings — so a book id
+  // can never break out of an attribute or execute as script (same pattern as createSpineEl)
+  [...view.children].forEach((row, i)=>{
+    const b = list[i];
+    row.querySelector('.wishlist-row-text').onclick = ()=> openBook(b.id);
+    row.querySelector('.wishlist-got-it').onclick = (ev)=>{ ev.stopPropagation(); markAsBought(b.id); };
+    row.querySelector('.wishlist-remove').onclick = (ev)=>{ ev.stopPropagation(); removeWishlistItem(b.id); };
+  });
+}
+
+function renderCurrentlyReadingView(){
+  const view = document.getElementById('currently-reading-list');
+  const list = books.filter(b=> b.status==='reading' || b.status==='rereading' || b.status==='on-hold')
+    .sort((a,b)=>(a.title||'').localeCompare(b.title||''));
+  if(!list.length){
+    view.innerHTML = `<div class="empty-state">Nothing in progress right now.</div>`;
+    return;
+  }
+  view.innerHTML = list.map(b=>{
+    const cp = Number(b.currentPage), tp = Number(b.totalPages);
+    const hasProgress = b.currentPage && b.totalPages && tp > 0;
+    const pct = hasProgress ? Math.max(0, Math.min(100, Math.round((cp/tp)*100))) : 0;
+    const meta = [b.author, statusLabel(b.status)].filter(Boolean).join(' · ');
+    const pagesText = hasProgress ? `pg ${esc(String(b.currentPage))} of ${esc(String(b.totalPages))}` : 'No progress logged yet';
+    return `<div class="cr-row">
+      <div class="cr-row-text">
+        <div class="cr-row-title">${esc(b.title)}</div>
+        ${meta ? `<div class="cr-row-meta">${esc(meta)}</div>` : ''}
+        ${hasProgress ? `<div class="cr-bar"><div class="cr-bar-fill" style="width:${pct}%;"></div></div>
+        <div class="cr-pct-row"><span class="cr-pct">${pct}%</span><span class="cr-pages">${pagesText}</span></div>` : `<div class="cr-pages" style="margin-top:6px;">${pagesText}</div>`}
+      </div>
+    </div>`;
+  }).join('');
+  [...view.children].forEach((row, i)=>{
+    const b = list[i];
+    row.onclick = ()=> openBook(b.id);
+  });
 }
 
 /* ---------- stats ---------- */
@@ -2498,10 +2724,25 @@ function populateStatsGenreFilter(){
   if([...sel.options].some(o=>o.value===current)) sel.value = current;
 }
 
+function statsYearsAvailable(){
+  const years = new Set([new Date().getFullYear()]);
+  books.forEach(b=>{ (b.readDates||[]).forEach(d=>{ const y = new Date(d).getFullYear(); if(!isNaN(y)) years.add(y); }); });
+  return [...years].sort((a,b)=>b-a);
+}
+function populateStatsYearFilter(){
+  const sel = document.getElementById('stats-year-filter');
+  const current = sel.value || String(new Date().getFullYear());
+  const years = statsYearsAvailable();
+  sel.innerHTML = years.map(y=>`<option value="${y}">${y}</option>`).join('');
+  if([...sel.options].some(o=>o.value===current)) sel.value = current;
+}
+
 function printStats(){
   const libTitle = document.getElementById('lib-title').textContent;
   const filterVal = document.getElementById('stats-genre-filter').value || 'all';
   const filteredBooks = filterVal==='all' ? books : books.filter(b=>genreLabel(b)===filterVal);
+  const yearSel = document.getElementById('stats-year-filter');
+  const selectedYear = yearSel && yearSel.value ? parseInt(yearSel.value,10) : new Date().getFullYear();
 
   let genreRows = '';
   if(filterVal==='all'){
@@ -2512,27 +2753,34 @@ function printStats(){
       .join('');
   }
 
-  const thisYear = new Date().getFullYear();
   const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const monthCounts = new Array(12).fill(0);
   filteredBooks.forEach(b=>{
-    if(b.status==='read' && b.dateRead){
-      const d = new Date(b.dateRead);
-      if(d.getFullYear()===thisYear) monthCounts[d.getMonth()]++;
-    }
+    (b.readDates||[]).forEach(dr=>{
+      const d = new Date(dr);
+      if(d.getFullYear()===selectedYear) monthCounts[d.getMonth()]++;
+    });
   });
   const monthRows = monthNames.map((m,i)=>
     `<div class="pr-book" style="padding:8px 0;"><div><div class="pr-title" style="font-size:0.95rem;">${m}</div><div class="pr-meta">${monthCounts[i]} read</div></div></div>`
   ).join('');
 
-  const readThisYear = filteredBooks.filter(b=>b.status==='read' && b.dateRead && new Date(b.dateRead).getFullYear()===thisYear).length;
+  const readsInYear = b => (b.readDates||[]).filter(d=>new Date(d).getFullYear()===selectedYear).length;
+  const yearBooks = filteredBooks.filter(b=>readsInYear(b)>0);
+  const readThisYear = yearBooks.reduce((sum,b)=> sum + readsInYear(b), 0);
+  const pagesRead = yearBooks.reduce((sum,b)=> sum + readsInYear(b) * (Number(b.totalPages)||0), 0);
+  const authorCounts = {};
+  yearBooks.forEach(b=>{ if(b.author) authorCounts[b.author] = (authorCounts[b.author]||0) + readsInYear(b); });
+  const authorEntries = Object.entries(authorCounts).sort((a,b)=> b[1]-a[1] || a[0].localeCompare(b[0]));
+  const favoriteAuthor = authorEntries.length ? authorEntries[0] : null;
+
   const dateStr = new Date().toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'});
   const genreTag = filterVal==='all' ? '' : ` — ${esc(filterVal)}`;
   document.getElementById('print-report').innerHTML = `
     <h1>${esc(libTitle)} — Reading Stats${genreTag}</h1>
-    <div class="pr-sub">${filteredBooks.length} book${filteredBooks.length===1?'':'s'}${filterVal==='all'?' tracked':''} · ${readThisYear} read in ${thisYear} · printed ${dateStr}</div>
+    <div class="pr-sub">${filteredBooks.length} book${filteredBooks.length===1?'':'s'}${filterVal==='all'?' tracked':''} · ${readThisYear} read in ${selectedYear} · ${pagesRead.toLocaleString()} pages read${favoriteAuthor?` · favourite author: ${esc(favoriteAuthor[0])}`:''} · printed ${dateStr}</div>
     ${genreRows ? `<h2 style="font-family:Georgia,serif;font-size:1.1rem;margin:18px 0 4px;">By genre</h2>${genreRows}` : ''}
-    <h2 style="font-family:Georgia,serif;font-size:1.1rem;margin:18px 0 4px;">Read per month, ${thisYear}${genreTag}</h2>
+    <h2 style="font-family:Georgia,serif;font-size:1.1rem;margin:18px 0 4px;">Read per month, ${selectedYear}${genreTag}</h2>
     ${monthRows}
   `;
   window.print();
@@ -2543,6 +2791,35 @@ function renderStatsView(){
   const filterSel = document.getElementById('stats-genre-filter');
   const filterVal = filterSel ? (filterSel.value || 'all') : 'all';
   const filteredBooks = filterVal==='all' ? books : books.filter(b=>genreLabel(b)===filterVal);
+
+  const yearSel = document.getElementById('stats-year-filter');
+  const selectedYear = yearSel && yearSel.value ? parseInt(yearSel.value,10) : new Date().getFullYear();
+
+  const ratedBooks = filteredBooks.filter(b=>b.flames>0);
+  const avgRating = ratedBooks.length ? (ratedBooks.reduce((s,b)=>s+b.flames,0)/ratedBooks.length) : 0;
+  const ratingPill = document.getElementById('rating-pill');
+  if(ratingPill){
+    ratingPill.textContent = ratedBooks.length ? `❤️ ${avgRating.toFixed(1)} avg rating` : '❤️ No ratings yet';
+  }
+
+  const readsInYear = b => (b.readDates||[]).filter(d=>new Date(d).getFullYear()===selectedYear).length;
+  const yearBooks = filteredBooks.filter(b=>readsInYear(b)>0);
+  const pagesRead = yearBooks.reduce((sum,b)=> sum + readsInYear(b) * (Number(b.totalPages)||0), 0);
+  const authorCounts = {};
+  yearBooks.forEach(b=>{ if(b.author) authorCounts[b.author] = (authorCounts[b.author]||0) + readsInYear(b); });
+  const authorEntries = Object.entries(authorCounts).sort((a,b)=> b[1]-a[1] || a[0].localeCompare(b[0]));
+  const favoriteAuthor = authorEntries.length ? authorEntries[0] : null;
+
+  let highlightsSection;
+  if(yearBooks.length){
+    highlightsSection = `<div class="stats-card">
+      <div class="sc-title" style="margin-bottom:10px;">${selectedYear} highlights</div>
+      <div class="highlight-row"><span class="hl-label">Pages read</span><span class="hl-value">${pagesRead.toLocaleString()}</span></div>
+      ${favoriteAuthor ? `<div class="highlight-row"><span class="hl-label">Favourite author</span><span class="hl-value">${esc(favoriteAuthor[0])} (${favoriteAuthor[1]})</span></div>` : ''}
+    </div>`;
+  } else {
+    highlightsSection = `<div class="stats-card"><div class="sc-title" style="margin-bottom:6px;">${selectedYear} highlights</div><div class="highlight-row"><span class="hl-value" style="text-align:left;">No books finished in ${selectedYear} yet</span></div></div>`;
+  }
 
   let genreSection = '';
   if(filterVal==='all'){
@@ -2555,23 +2832,36 @@ function renderStatsView(){
     genreSection = `<div class="stats-card"><div class="sc-title" style="margin-bottom:10px;">By genre</div>${genreRows}</div>`;
   }
 
-  const thisYear = new Date().getFullYear();
+  const moodCounts = {};
+  filteredBooks.forEach(b=>{ (b.moods||[]).forEach(m=>{ moodCounts[m]=(moodCounts[m]||0)+1; }); });
+  let moodSection = '';
+  if(Object.keys(moodCounts).length){
+    const maxMood = Math.max(1, ...Object.values(moodCounts));
+    const moodRows = Object.entries(moodCounts).sort((a,b)=>b[1]-a[1]).map(([m,c])=>`
+      <div class="stats-row"><div class="stats-label">${esc(m)}</div><div class="stats-bar-track"><div class="stats-bar-fill" style="width:${Math.round((c/maxMood)*100)}%"></div></div><div class="stats-count">${c}</div></div>
+    `).join('');
+    const moodTitle = filterVal==='all' ? 'By mood' : `By mood — ${esc(filterVal)}`;
+    moodSection = `<div class="stats-card"><div class="sc-title" style="margin-bottom:10px;">${moodTitle}</div>${moodRows}</div>`;
+  }
+
   const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const monthCounts = new Array(12).fill(0);
   filteredBooks.forEach(b=>{
-    if(b.status==='read' && b.dateRead){
-      const d = new Date(b.dateRead);
-      if(d.getFullYear()===thisYear) monthCounts[d.getMonth()]++;
-    }
+    (b.readDates||[]).forEach(dr=>{
+      const d = new Date(dr);
+      if(d.getFullYear()===selectedYear) monthCounts[d.getMonth()]++;
+    });
   });
   const maxMonth = Math.max(1, ...monthCounts);
   const monthRows = monthNames.map((m,i)=>`
     <div class="stats-row"><div class="stats-label">${m}</div><div class="stats-bar-track"><div class="stats-bar-fill" style="width:${Math.round((monthCounts[i]/maxMonth)*100)}%"></div></div><div class="stats-count">${monthCounts[i]}</div></div>
   `).join('');
-  const monthTitle = filterVal==='all' ? `Read per month, ${thisYear}` : `Read per month, ${thisYear} — ${esc(filterVal)}`;
+  const monthTitle = filterVal==='all' ? `Read per month, ${selectedYear}` : `Read per month, ${selectedYear} — ${esc(filterVal)}`;
 
   view.innerHTML = `
+    ${highlightsSection}
     ${genreSection}
+    ${moodSection}
     <div class="stats-card"><div class="sc-title" style="margin-bottom:10px;">${monthTitle}</div>${monthRows}</div>
   `;
 }
@@ -2636,17 +2926,16 @@ function clearManualFields(){
   document.getElementById('f-series-num').value='';
   document.getElementById('f-series-total').value='';
   document.getElementById('series-lookup-status').textContent='';
-  document.getElementById('series-lookup-results').style.display='none';
-  document.getElementById('series-lookup-results').innerHTML='';
   lastLookedUpSeries = '';
   document.getElementById('f-status').value='';
-  document.getElementById('f-date-read').value='';
+  currentReadDates = [];
+  renderReadDatesList();
+  document.getElementById('f-date-read-add').value='';
   document.getElementById('date-read-wrap').style.display='none';
   document.getElementById('f-current-page').value='';
   document.getElementById('f-total-pages').value='';
   document.getElementById('progress-wrap').style.display='none';
   document.getElementById('f-isbn').value='';
-  isbnFieldAutoScanUsed = false;
   document.getElementById('f-recommend').value='';
   currentMoods = [];
   renderMoodChips();
@@ -2683,11 +2972,53 @@ function setFlames(v){
 function renderMoodChips(){
   const row = document.getElementById('mood-row');
   row.innerHTML = MOODS.map(m=>`<div class="chip ${currentMoods.includes(m)?'on':''}" onclick="toggleMood('${esc(m)}')">${esc(m)}</div>`).join('');
+  updateMoodSummary();
+}
+function updateMoodSummary(){
+  const el = document.getElementById('mood-summary-text');
+  if(!el) return;
+  if(currentMoods.length){
+    el.textContent = currentMoods.join(', ');
+    el.classList.add('has-value');
+  } else {
+    el.textContent = 'Tap to choose...';
+    el.classList.remove('has-value');
+  }
 }
 function toggleMood(m){
   if(currentMoods.includes(m)) currentMoods = currentMoods.filter(x=>x!==m);
   else currentMoods.push(m);
   renderMoodChips();
+}
+
+function renderReadDatesList(){
+  const list = document.getElementById('read-dates-list');
+  if(!list) return;
+  if(!currentReadDates.length){
+    list.innerHTML = `<div class="read-dates-empty">No dates logged yet</div>`;
+    return;
+  }
+  const sorted = [...currentReadDates].sort().reverse();
+  list.innerHTML = sorted.map(d=>{
+    const nice = new Date(d+'T00:00:00').toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'});
+    return `<div class="read-date-row" data-date="${esc(d)}"><span>${esc(nice)}</span><button type="button" class="read-date-remove" title="Remove this date">✕</button></div>`;
+  }).join('');
+  [...list.children].forEach((row,i)=>{
+    const d = sorted[i];
+    row.querySelector('.read-date-remove').onclick = ()=> removeReadDate(d);
+  });
+}
+function addReadDate(){
+  const el = document.getElementById('f-date-read-add');
+  const v = el.value;
+  if(!v) return;
+  if(!currentReadDates.includes(v)) currentReadDates.push(v);
+  el.value = '';
+  renderReadDatesList();
+}
+function removeReadDate(d){
+  currentReadDates = currentReadDates.filter(x=>x!==d);
+  renderReadDatesList();
 }
 
 function onPhotoChosen(e){
@@ -2710,6 +3041,7 @@ function onPhotoChosen(e){
     img.src = evt.target.result;
   };
   reader.readAsDataURL(file);
+  e.target.value = '';
 }
 
 function onKeepsakePhotoChosen(e){
@@ -2732,19 +3064,11 @@ function onKeepsakePhotoChosen(e){
     img.src = evt.target.result;
   };
   reader.readAsDataURL(file);
+  e.target.value = '';
 }
 
 /* ---------- barcode scanning ---------- */
 let zxingReader = null;
-let isbnFieldAutoScanUsed = false;
-function handleIsbnFocus(){
-  const el = document.getElementById('f-isbn');
-  if(!isbnFieldAutoScanUsed && !el.value.trim()){
-    isbnFieldAutoScanUsed = true;
-    el.blur();
-    scanBarcode();
-  }
-}
 function sanitizeIsbnInput(){
   const el = document.getElementById('f-isbn');
   const cleaned = el.value.replace(/[^0-9Xx]/g,'').toUpperCase();
@@ -2805,6 +3129,8 @@ async function lookupIsbn(isbn){
     const info = item.volumeInfo || {};
     document.getElementById('f-title').value = info.title || '';
     document.getElementById('f-author').value = (info.authors||[])[0] || '';
+    lastLookedUpTitle = (info.title || '').trim(); // we already have the exact book from the ISBN — no need for the title field to search again
+    statusEl.textContent = info.title ? `Filled in from "${info.title}"` : '';
     let cover = (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) || '';
     if(cover) cover = cover.replace('http://','https://');
     if(cover){
@@ -2898,43 +3224,57 @@ function pickTitleResult(info){
 let lastLookedUpSeries = '';
 async function lookupBySeries(){
   const statusEl = document.getElementById('series-lookup-status');
-  const resultsEl = document.getElementById('series-lookup-results');
   const series = document.getElementById('f-series').value.trim();
-  if(!series){ statusEl.textContent=''; resultsEl.style.display='none'; resultsEl.innerHTML=''; return; }
+  if(!series){ statusEl.textContent=''; return; }
   // already searched this exact series, skip the network call
   if(series === lastLookedUpSeries){ return; }
   statusEl.textContent = 'Searching…';
-  resultsEl.style.display='none';
-  resultsEl.innerHTML='';
   try{
-    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(series)}&maxResults=12&key=${GOOGLE_BOOKS_API_KEY}`);
+    // fetch a wide batch — beyond giving more books to pick from, the spread of distinct
+    // titles found is also our best (imperfect) way to estimate how many books are in the series
+    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(series)}&maxResults=40&key=${GOOGLE_BOOKS_API_KEY}`);
     if(!res.ok){ statusEl.textContent = friendlyBooksError(res.status); return; }
     const data = await res.json();
     const items = (data.items || []).filter(it => it.volumeInfo && it.volumeInfo.title);
     lastLookedUpSeries = series;
     if(!items.length){ statusEl.textContent = 'No matching books found'; return; }
-    statusEl.textContent = `Found ${items.length} book${items.length===1?'':'s'} — tap one to fill in its details`;
-    resultsEl.style.display = 'flex';
-    items.forEach(it=>{
-      const info = it.volumeInfo || {};
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-small';
-      btn.style.cssText = 'text-align:left;width:100%;white-space:normal;line-height:1.3;';
-      btn.textContent = info.title + (info.authors && info.authors[0] ? ' — ' + info.authors[0] : '');
-      btn.onclick = ()=> pickSeriesResult(info);
-      resultsEl.appendChild(btn);
-    });
+    statusEl.textContent = '';
+    const seenTitles = new Set(items.map(it => it.volumeInfo.title.trim().toLowerCase()));
+    openSeriesPicker(items, seenTitles.size);
   }catch(e){
     statusEl.textContent = friendlyBooksError();
   }
 }
 
-function pickSeriesResult(info){
+function openSeriesPicker(items, estimatedTotal){
+  const listEl = document.getElementById('series-picker-list');
+  const statusEl = document.getElementById('series-picker-status');
+  statusEl.textContent = `Found ${items.length} book${items.length===1?'':'s'} — tap the one you're adding`;
+  listEl.innerHTML = '';
+  items.forEach(it=>{
+    const info = it.volumeInfo || {};
+    const details = [info.authors && info.authors[0], info.publishedDate ? info.publishedDate.slice(0,4) : null, info.pageCount ? info.pageCount+' pages' : null].filter(Boolean).join(' · ');
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'btn btn-ghost';
+    card.style.cssText = 'text-align:left;width:100%;white-space:normal;line-height:1.4;padding:14px 16px;';
+    card.innerHTML = `<div style="font-weight:600;">${esc(info.title)}</div>` + (details ? `<div style="font-size:0.8rem;opacity:0.75;margin-top:2px;">${esc(details)}</div>` : '');
+    card.onclick = ()=> pickSeriesResult(info, estimatedTotal);
+    listEl.appendChild(card);
+  });
+  document.getElementById('series-picker-overlay').classList.add('show');
+}
+function closeSeriesPicker(){
+  document.getElementById('series-picker-overlay').classList.remove('show');
+}
+
+function pickSeriesResult(info, estimatedTotal){
   const titleEl = document.getElementById('f-title');
   const authorEl = document.getElementById('f-author');
   const isbnEl = document.getElementById('f-isbn');
   const pagesEl = document.getElementById('f-total-pages');
+  const seriesNumEl = document.getElementById('f-series-num');
+  const seriesTotalEl = document.getElementById('f-series-total');
 
   titleEl.value = info.title || titleEl.value;
   if((info.authors||[])[0]) authorEl.value = info.authors[0];
@@ -2950,11 +3290,17 @@ function pickSeriesResult(info){
     pendingCover = cover;
     updateCoverPreview();
   }
+  // Book # — only some Google Books entries report their position in the series
+  const orderNumber = info.seriesInfo && (info.seriesInfo.bookDisplayNumber || (info.seriesInfo.volumeSeries && info.seriesInfo.volumeSeries[0] && info.seriesInfo.volumeSeries[0].orderNumber));
+  if(orderNumber && !seriesNumEl.value.trim()) seriesNumEl.value = orderNumber;
+  // Series total — Google Books has no reliable field for this, so it's an estimate based on
+  // how many distinct titles turned up in the search; worth a second glance before trusting it
+  if(estimatedTotal && !seriesTotalEl.value.trim()) seriesTotalEl.value = estimatedTotal;
+
   // this title's now filled in manually, so the title-blur lookup shouldn't immediately overwrite it again
   lastLookedUpTitle = titleEl.value.trim();
-  document.getElementById('series-lookup-status').textContent = 'Filled in from "' + info.title + '"';
-  document.getElementById('series-lookup-results').style.display = 'none';
-  document.getElementById('series-lookup-results').innerHTML = '';
+  document.getElementById('series-lookup-status').textContent = 'Filled in from "' + info.title + '"' + (estimatedTotal ? ' (series total is an estimate — worth double-checking)' : '');
+  closeSeriesPicker();
 }
 
 /* ---------- open / save / delete ---------- */
@@ -2988,7 +3334,9 @@ function openBook(id){
   document.getElementById('f-series-num').value = b.seriesNum || '';
   document.getElementById('f-series-total').value = b.seriesTotal || '';
   document.getElementById('f-status').value = b.status || 'want-to-read';
-  document.getElementById('f-date-read').value = b.dateRead || '';
+  currentReadDates = Array.isArray(b.readDates) ? [...b.readDates] : (b.dateRead ? [b.dateRead] : []);
+  renderReadDatesList();
+  document.getElementById('f-date-read-add').value = '';
   document.getElementById('f-current-page').value = b.currentPage || '';
   document.getElementById('f-total-pages').value = b.totalPages || '';
   onStatusChange();
@@ -3018,7 +3366,13 @@ function closeSheet(){
 
 function saveBook(){
   const title = document.getElementById('f-title').value.trim();
-  if(!title){ document.getElementById('f-title').focus(); return; }
+  if(!title){
+    const el = document.getElementById('f-title');
+    el.scrollIntoView({block:'center', behavior:'smooth'});
+    el.focus();
+    showMessage("This book needs a title before it can go on the shelf.");
+    return;
+  }
   const author = document.getElementById('f-author').value.trim();
   const genre = document.getElementById('f-genre').value;
   const genreCustom = document.getElementById('f-genre-other').value.trim();
@@ -3027,8 +3381,14 @@ function saveBook(){
   const seriesNum = document.getElementById('f-series-num').value.trim();
   const seriesTotal = document.getElementById('f-series-total').value.trim();
   const status = addingWishlistMode ? 'need-to-get' : document.getElementById('f-status').value;
-  if(!status){ document.getElementById('f-status').focus(); return; }
-  const dateRead = document.getElementById('f-date-read').value;
+  if(!status){
+    const el = document.getElementById('f-status');
+    el.scrollIntoView({block:'center', behavior:'smooth'});
+    el.focus();
+    showMessage('Choose a status before saving — reading, own it, want to read, and so on.');
+    return;
+  }
+  const readDates = [...currentReadDates];
   const bookCurrentPage = document.getElementById('f-current-page').value.trim();
   const totalPages = document.getElementById('f-total-pages').value.trim();
   const isbn = document.getElementById('f-isbn').value.trim();
@@ -3039,7 +3399,7 @@ function saveBook(){
   const keepsake = document.getElementById('f-keepsake').checked;
   const keepsakeText = document.getElementById('f-keepsake-text').value.trim();
 
-  const fields = {title,author,genre,genreCustom,format,series,seriesNum,seriesTotal,status,dateRead,currentPage:bookCurrentPage,totalPages,isbn,recommend,moods,quote,notes,keepsake,keepsakeText,keepsakePhoto:pendingKeepsakePhoto,flames:currentFlames,cover:pendingCover,ornamentAfter:pendingBookOrnament};
+  const fields = {title,author,genre,genreCustom,format,series,seriesNum,seriesTotal,status,readDates,currentPage:bookCurrentPage,totalPages,isbn,recommend,moods,quote,notes,keepsake,keepsakeText,keepsakePhoto:pendingKeepsakePhoto,flames:currentFlames,cover:pendingCover,ornamentAfter:pendingBookOrnament};
   const isNewBook = !editingId;
 
   if(isNewBook){
@@ -3053,15 +3413,25 @@ function saveBook(){
 }
 
 function commitSaveBook(fields, isNewBook){
+  let restore = null;
   if(!isNewBook){
     const b = books.find(x=>x.id===editingId);
+    if(!b) return;
+    restore = {target: b, previous: {...b}};
     Object.assign(b, fields);
   } else {
     books.unshift(Object.assign({id: 'b'+Date.now()+Math.random().toString(36).slice(2,7), added: new Date().toISOString(), customOrder: Date.now()}, fields));
   }
-  persist();
+  if(!persist()){
+    if(isNewBook) books.shift();
+    else Object.assign(restore.target, restore.previous);
+    return;
+  }
   closeSheet();
   if(isNewBook){ activeTab = (fields.status==='need-to-get') ? 'wishlist' : 'all'; currentPage = 0; }
+  // clear any leftover search filter — otherwise a book you just saved can be the only
+  // thing left matching an old search, making it look like it landed in the first slot
+  closeSearchBar();
   renderShelf();
 }
 
@@ -3086,7 +3456,13 @@ function removeWishlistItem(id){
 }
 
 function persist(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+    return true;
+  }catch(e){
+    showMessage("There's no room left on this device to save that. Export a backup first, then removing a few cover photos will free up space.");
+    return false;
+  }
 }
 
 /* ---------- print / export / import ---------- */
@@ -3113,7 +3489,8 @@ function printReport(){
     const series = b.series ? `${esc(b.series)}${b.seriesNum?' #'+esc(String(b.seriesNum)):''}` : '';
     const recommendLabel = b.recommend==='yes'?'Recommends it':b.recommend==='no'?'Wouldn\'t recommend':b.recommend==='maybe'?'Maybe recommend':'';
     const moods = (b.moods||[]).join(', ');
-    const meta = [genre, series, statusLabel(b.status), b.format==='kobo'?'Kobo':'', flames, recommendLabel, moods, keepsake].filter(Boolean).join(' &nbsp;·&nbsp; ');
+    const formatLabel = b.format==='kobo' ? 'Kobo' : b.format==='audiobook' ? 'Audiobook' : '';
+    const meta = [genre, series, statusLabel(b.status), formatLabel, flames, recommendLabel, moods, keepsake].filter(Boolean).join(' &nbsp;·&nbsp; ');
     return `<div class="pr-book">
       ${cover}
       <div>
@@ -3177,9 +3554,22 @@ function importData(e){
   if(!file) return;
   const reader = new FileReader();
   reader.onload = evt=>{
+    let data;
     try{
-      const data = JSON.parse(evt.target.result);
-      if(Array.isArray(data.books)){
+      data = JSON.parse(evt.target.result);
+    }catch(err){
+      showMessage("Couldn't read that file.");
+      return;
+    }
+    if(!Array.isArray(data.books)){
+      showMessage("That file doesn't look like a library backup.");
+      return;
+    }
+    const currentCount = books.length;
+    const incomingCount = data.books.length;
+    showConfirm(
+      `Replace your current shelf (${currentCount} book${currentCount===1?'':'s'}) with this backup (${incomingCount} book${incomingCount===1?'':'s'})? This can't be undone unless you have another backup.`,
+      ()=>{
         books = data.books;
         persist();
         if(data.title){
@@ -3187,21 +3577,19 @@ function importData(e){
           localStorage.setItem(TITLE_KEY, data.title);
         }
         renderShelf();
-        alert('Backup restored — welcome back, shelf!');
-      } else {
-        alert("That file doesn't look like a library backup.");
+        showMessage('Backup restored — welcome back, shelf!');
       }
-    }catch(err){
-      alert("Couldn't read that file.");
-    }
+    );
   };
   reader.readAsText(file);
+  e.target.value = '';
 }
 
 loadTitle();
 applyBackground();
 populateGenreSelect();
 renderMoodChips();
+renderReadDatesList();
 renderShelf();
 if(document.fonts){
   document.fonts.ready.then(fitAllSpineTitles);
